@@ -1,9 +1,11 @@
 import { Box, Button, Grid, Paper, Stack, Typography } from "@mui/material";
 import React from "react";
+import UserHeaderPreLogin from "../components/users/UserHeaderPreLogin";
 import UserHeader from "../components/users/UserHeader";
 import RoundCategories from "../components/RoundCategories";
 import FaqSection from "../components/users/FaqSection";
-
+import DoctorCard from "../components/DoctorCard";
+import Header from "../components/users/Header";
 
 
 const HomePage: React.FC = () => {
@@ -40,6 +42,8 @@ const HomePage: React.FC = () => {
     "How many doctors in banglore?",
     "Duration of the call?",
   ];
+
+  
   return (
     <Box
       sx={{
@@ -55,7 +59,8 @@ const HomePage: React.FC = () => {
         mx: "auto",
       }}
     >
-      <UserHeader></UserHeader>
+      <UserHeaderPreLogin></UserHeaderPreLogin>
+      {/* <Header/> */}
       {/* Hero Image */}
       <Box sx={{ py: 10, mx: 1 }}>
         <Grid container spacing={4} alignItems="center">
@@ -129,6 +134,47 @@ const HomePage: React.FC = () => {
         </Grid>
       </Box>
 
+      {/* Doctor list */}
+
+      <Box mx={2} my={4}>
+        <Grid container alignItems="center" justifyContent="space-between" >
+          <Grid item>
+            <Typography variant="h5" component="h2" gutterBottom>
+              Our Doctors
+            </Typography>
+          </Grid>
+          <Grid item>
+            <Button variant="outlined" color="secondary">
+              See all
+            </Button>
+          </Grid>
+        </Grid>
+        <Grid container>
+          {data.map((body,index) => {
+            return (
+              <Grid
+                item
+                xs={6}
+                sm={6}
+                md={3}
+                key={index}
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                
+                <DoctorCard props={body} />
+              </Grid>
+            );
+          })}
+        </Grid>
+      </Box>
+
+    
+          {/* FAQ section */}
       {questions.map((que, index) => {
         return (<FaqSection key={index} prop={que} />);
       })}

@@ -1,24 +1,50 @@
-import { Route, Routes } from "react-router-dom";
+import { BrowserRouter, Outlet, Route, RouterProvider, Routes } from "react-router-dom";
 import "./App.css";
 import AdminRouter from "./routes/AdminRouter";
 import DoctorRouter from "./routes/DoctorRouter";
-import UserRouter from "./routes/UserRouter";
-import Navbar from "./components/users/Navbar";
-import DashboardLayoutBranding from "./Pages/adminPage";
-import UserHeader from "./components/users/UserHeader";
+import { createBrowserRouter } from "react-router-dom";
 import HomePage from "./Pages/HomePage";
+import LoginPage from "./Pages/LoginPage";
+import { Suspense } from "react";
+import AppRouter from "./routes/AppRouter";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   return (
     <>
-      {/* <Routes>
-        <Route path="/admin/*" element={<AdminRouter />} />
-        <Route path="/doctor/*" element={<DoctorRouter />} />
-        <Route path="/*" element={<UserRouter />} />
-      </Routes> */}
-      <HomePage/>
+      <Toaster position="top-center" reverseOrder={true} />
+      <BrowserRouter>
+        <AppRouter />
+      </BrowserRouter>
     </>
+   
   );
-}
+};
+
+// export const appRouter = createBrowserRouter([
+//   {
+//     path: "/",
+//     element: (
+//       <Suspense fallback={<div>Loading...</div>}>
+//         <HomePage/>
+//       </Suspense>
+//     ),   
+//   },
+//   {
+//     path: "/login",
+//     element: (
+//       <Suspense fallback={<div>Loading...</div>}>
+//         <LoginPage />
+//       </Suspense>
+//     )
+//   },
+//   userRoutes,
+//   {
+//     path: "*", // Fallback for unmatched routes
+//     element: <h1>404 - Page Not Found</h1>,
+//   },
+
+// ]);
+
 
 export default App;

@@ -6,7 +6,7 @@ import {
   Button,
   CardMedia,
 } from "@mui/material";
-import React from "react";
+
 
 const RoundCategories = (body: any) => {
   console.log(body.props.image);

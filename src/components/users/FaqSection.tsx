@@ -2,7 +2,6 @@ import { useState } from "react";
 
 const FaqSection = (body: any) => {
     const [expand, setExpand] = useState(false);
-    console.log(body)
 
     function handleClick() {
         setExpand(!expand);
