@@ -3,11 +3,11 @@ import { AxiosError } from "axios";
 import toast from "react-hot-toast";
 
 const errorHandler = (error: unknown) => {
-    console.log("Entered error handler")
+    console.log("Entered error handler", error)
   if (error instanceof AxiosError) {
     if (error.response) {
       const errorMessage = error.response.data.message;
-      toast.error(`${errorMessage.message}`);
+      toast.error(`${errorMessage}`);
     } else if (error.request) {
         toast.error("No response from server. Please try again later.");
     } else {

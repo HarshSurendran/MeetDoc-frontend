@@ -7,17 +7,20 @@ import { RouterProvider } from "react-router-dom";
 import { lightTheme, darkTheme } from "./theme.ts";
 import App from "./App.tsx";
 import { Provider } from "react-redux";
-import appStore from "./redux/store/appStore.ts";
+import appStore, { persistor } from "./redux/store/appStore.ts";
+import { PersistGate } from "redux-persist/integration/react";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <Provider store={appStore}>
-      <ThemeProvider theme={lightTheme}>
-        {/* <Suspense fallback={<div>Loading Application...</div>}>
+      <PersistGate persistor={persistor}>
+        <ThemeProvider theme={lightTheme}>
+          {/* <Suspense fallback={<div>Loading Application...</div>}>
           <RouterProvider router={appRouter}></RouterProvider>
         </Suspense> */}
-        <App />
-      </ThemeProvider>
+          <App />
+        </ThemeProvider>
+      </PersistGate>
     </Provider>
   </StrictMode>
 );
