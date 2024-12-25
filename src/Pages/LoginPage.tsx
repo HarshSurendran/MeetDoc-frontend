@@ -55,6 +55,7 @@ const LoginPage: React.FC = () => {
             name: response?.data.user.name,
           })
         );
+        localStorage.setItem("userAccessToken", response.data.accessToken);
         navigate("/");
       }
     } catch (error) {

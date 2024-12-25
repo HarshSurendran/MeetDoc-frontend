@@ -18,6 +18,7 @@ import { RootState } from "../../redux/store/appStore";
 import { logout } from "../../services/userAuth";
 import { resetUser } from "../../redux/slices/userSlice";
 import errorHandler from "../../utils/errorHandler";
+import toast from "react-hot-toast";
 
 const pages = ["Home", "Pricing", "Blog"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
@@ -47,8 +48,9 @@ function UserHeaderPreLogin() {
       const response = await logout(user._id);
       console.log(response,"Response from axios.");
       dispatch(resetUser());
+      localStorage.setItem("userAccessToken", "");
+      toast.success("Successfully logged out!")
       navigate("/");
-
     } catch (error) {
       errorHandler(error);
     }
