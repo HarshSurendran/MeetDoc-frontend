@@ -9,7 +9,8 @@ export interface IloginResponse {
         _id: string;
         name: string;
         email: string;
-        gender: string;
+        gender?: string;
     }
     accessToken: string;
 }
+

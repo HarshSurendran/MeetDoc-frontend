@@ -15,6 +15,10 @@ const NAVIGATION: Navigation = [
     icon: <DashboardIcon />,
   },
   {
+    segment: 'users',
+    title: 'Users',
+  },
+  {
     segment: 'orders',
     title: 'Orders',
     icon: <ShoppingCartIcon />,
@@ -61,7 +65,7 @@ interface DemoProps {
   window?: () => Window;
 }
 
-export default function DashboardLayoutBranding(props: DemoProps) {
+export default function AdminPage(props: DemoProps) {
   const { window } = props;
 
   const [pathname, setPathname] = React.useState('/dashboard');
@@ -82,8 +86,8 @@ export default function DashboardLayoutBranding(props: DemoProps) {
     <AppProvider
       navigation={NAVIGATION}
       branding={{
-        logo: <img src="https://mui.com/static/logo.png" alt="MUI logo" />,
-        title: 'MUI',
+        // logo: <img src="https://mui.com/static/logo.png" alt="MUI logo" />,
+        title: 'MeetDoc',
       }}
       router={router}
       theme={demoTheme}

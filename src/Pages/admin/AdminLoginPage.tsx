@@ -1,62 +1,54 @@
 import { Box, Button, Grid, TextField, Typography, Paper } from "@mui/material";
 import React, { useState } from "react";
-import {
-  validateEmail,
-  validatePassword,
-} from "../utils/userValidator/uservalidator";
-import { login } from "../services/userAuth";
-import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { addUser } from "../redux/slices/userSlice";
-import errorHandler from "../utils/errorHandler";
+import { useNavigate } from "react-router-dom";
+import { validateEmail, validatePassword } from "../../utils/userValidator/uservalidator";
+import { login } from "../../services/admin/adminAuth";
 import toast from "react-hot-toast";
+import { addAdmin } from "../../redux/slices/adminSlice";
+import errorHandler from "../../utils/errorHandler";
 
-export interface ILoginCredential {
-  email: string;
-  password: string;
-}
 
-const LoginPage: React.FC = () => {
-  const [user, setUser] = useState({
+const AdminLoginPage: React.FC = () => {
+  const [admin, setAdmin] = useState({
     email: "",
     password: "",
   });
+  const [error, setError] = useState("");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [error, setError] = useState("");
 
   const onLogin = async (event : React.MouseEvent<HTMLButtonElement, MouseEvent>) => {    
     try {
       setError("");
       event.preventDefault();
   
-      const emailError = validateEmail(user.email);
+      const emailError = validateEmail(admin.email);
       if (emailError) {
         setError(emailError);
         return;
       }
-      const passError = validatePassword(user.password);
+      const passError = validatePassword(admin.password);
       if (passError) {
         setError(passError);
         return;
       }
   
-      const response = await login(user);
-      console.log("This is the response from axios -", response);
+      const response = await login(admin);      
   
       if (response?.status == 201) {
-        toast.success("logged in successfully");
+        toast.success("logged in successfully");        
         dispatch(
-          addUser({
-            _id: response?.data.user._id,
-            email: response?.data.user.email,
-            name: response?.data.user.name,
+          addAdmin({
+            _id: response?.data.admin._id,
+            email: response?.data.admin.email,
+            name: response?.data.admin.name,
           })
-        );
-        localStorage.setItem("userAccessToken", response.data.accessToken);
-        navigate("/");
+        );        
+        localStorage.setItem("adminAccessToken", response.data.adminAccessToken);
+        navigate("/admin");
       }
     } catch (error) {
       errorHandler(error);
@@ -91,7 +83,7 @@ const LoginPage: React.FC = () => {
           gutterBottom
           sx={{ textAlign: "center" }}
         >
-          Login
+          Admin Login
         </Typography>
 
         <Grid container spacing={3} sx={{ mt: 2 }}>
@@ -101,7 +93,7 @@ const LoginPage: React.FC = () => {
               label="Email"
               variant="outlined"
               type="email"
-              onChange={(e) => setUser({ ...user, email: e.target.value })}
+              onChange={(e) => setAdmin({ ...admin, email: e.target.value })}
               required
             />
           </Grid>
@@ -112,7 +104,7 @@ const LoginPage: React.FC = () => {
               label="Password"
               variant="outlined"
               type="password"
-              onChange={(e) => setUser({ ...user, password: e.target.value })}
+              onChange={(e) => setAdmin({ ...admin, password: e.target.value })}
               required
             />
             {error && <p className="text-red-700"> {error}</p>}
@@ -145,4 +137,4 @@ const LoginPage: React.FC = () => {
   );
 };
 
-export default LoginPage;
+export default AdminLoginPage;

@@ -1,10 +1,16 @@
-import { BrowserRouter, Outlet, Route, RouterProvider, Routes } from "react-router-dom";
+import {
+  BrowserRouter,
+  Outlet,
+  Route,
+  RouterProvider,
+  Routes,
+} from "react-router-dom";
 import "./App.css";
 import AdminRouter from "./routes/AdminRouter";
 import DoctorRouter from "./routes/DoctorRouter";
 import { createBrowserRouter } from "react-router-dom";
 import HomePage from "./Pages/HomePage";
-import LoginPage from "./Pages/LoginPage";
+import LoginPage from "./Pages/user/LoginPage";
 import { Suspense } from "react";
 import AppRouter from "./routes/AppRouter";
 import { Toaster } from "react-hot-toast";
@@ -17,9 +23,8 @@ function App() {
         <AppRouter />
       </BrowserRouter>
     </>
-   
   );
-};
+}
 
 // export const appRouter = createBrowserRouter([
 //   {
@@ -28,7 +33,7 @@ function App() {
 //       <Suspense fallback={<div>Loading...</div>}>
 //         <HomePage/>
 //       </Suspense>
-//     ),   
+//     ),
 //   },
 //   {
 //     path: "/login",
@@ -45,6 +50,5 @@ function App() {
 //   },
 
 // ]);
-
 
 export default App;

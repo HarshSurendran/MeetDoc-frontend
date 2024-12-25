@@ -1,14 +1,16 @@
-import React from 'react'
-import { Route, Routes } from 'react-router-dom'
-import DoctorHomePage from '../components/DoctorHomePage'
-import LoginPage from '../Pages/LoginPage'
+import { Route, Routes } from "react-router-dom";
+import AdminPage from "../Pages/admin/AdminPage";
+import AdminLoginPage from "../Pages/admin/AdminLoginPage";
+import PrivateRoute from "../hocs/admins/PrivateRoute"
+import PublicRoute from "../hocs/admins/PublicRoute";
 
 const AdminRouter = () => {
   return (
     <Routes>
-      <Route path='/' element={<h1>Hello world!!</h1>} />
+      <Route path="/login" element={<PublicRoute component={AdminLoginPage} />} />
+      <Route path="/" element={<PrivateRoute component={AdminPage} />} />
     </Routes>
-  )
-}
+  );
+};
 
-export default AdminRouter
+export default AdminRouter;
