@@ -32,4 +32,16 @@ export const login = async (
       apiErrorHandler(error);
       return Promise.reject();
     }
-  };
+};
+  
+export const logout = async (
+  userId: string
+): Promise<AxiosResponse | undefined> => {
+  try {
+    const response = await userAxiosInstance.post("/auth/logout", userId);
+    return response;
+  } catch (error) {
+    apiErrorHandler(error);
+    return Promise.reject();
+  }
+};

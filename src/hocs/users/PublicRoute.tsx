@@ -10,7 +10,7 @@ interface PublicRoute {
 
 const PublicRoute: React.FC<PublicRoute> = ({ component: Component }) => {
     const isAuthenticated = useSelector((state: RootState) =>  state.user.isAuthenticated);    
-    return isAuthenticated ? <Navigate to={"/dashboard"} /> : <Component />;
+    return isAuthenticated ? <Navigate to={"/"} /> : <Component />;
 }
 
 export default PublicRoute;

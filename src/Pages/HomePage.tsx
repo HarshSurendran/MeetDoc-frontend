@@ -6,6 +6,8 @@ import RoundCategories from "../components/RoundCategories";
 import FaqSection from "../components/users/FaqSection";
 import DoctorCard from "../components/DoctorCard";
 import Header from "../components/users/Header";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/store/appStore";
 
 
 const HomePage: React.FC = () => {
@@ -59,7 +61,7 @@ const HomePage: React.FC = () => {
         mx: "auto",
       }}
     >
-      <UserHeaderPreLogin></UserHeaderPreLogin>
+      <UserHeaderPreLogin />
       {/* <Header/> */}
       {/* Hero Image */}
       <Box sx={{ py: 10, mx: 1 }}>

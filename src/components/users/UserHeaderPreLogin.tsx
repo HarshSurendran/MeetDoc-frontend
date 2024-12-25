@@ -12,7 +12,12 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import MedicationIcon from "@mui/icons-material/Medication";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../redux/store/appStore";
+import { logout } from "../../services/userAuth";
+import { resetUser } from "../../redux/slices/userSlice";
+import errorHandler from "../../utils/errorHandler";
 
 const pages = ["Home", "Pricing", "Blog"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
@@ -22,6 +27,13 @@ function UserHeaderPreLogin() {
     null
   );
 
+  const user = useSelector((state: RootState) => state.user.user);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  console.log(user);
+
+
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -29,6 +41,18 @@ function UserHeaderPreLogin() {
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
+
+  const handleLogout = async () => {
+    try {
+      const response = await logout(user._id);
+      console.log(response,"Response from axios.");
+      dispatch(resetUser());
+      navigate("/");
+
+    } catch (error) {
+      errorHandler(error);
+    }
+  }
 
   
 
@@ -123,8 +147,8 @@ function UserHeaderPreLogin() {
               </Button>
             ))}
           </Box>
-          <Box sx={{ flexGrow: 0 }}>            
-            <Tooltip title="login button">
+          <Box sx={{ flexGrow: 0 }}>
+            {user._id !== "" ? <Button onClick={handleLogout} color="inherit">{ user.name }</Button> : <Tooltip title="login button">
                 <Link to={"/login"}><Button                
                 onClick={handleCloseNavMenu}
                 color="inherit"
@@ -132,7 +156,8 @@ function UserHeaderPreLogin() {
                 >
                 Login
                 </Button></Link>
-            </Tooltip>
+            </Tooltip> }
+            
           </Box>
         </Toolbar>
       </Container>

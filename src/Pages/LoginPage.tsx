@@ -23,7 +23,6 @@ const LoginPage: React.FC = () => {
   });
 
   const dispatch = useDispatch();
-
   const navigate = useNavigate();
 
   const [error, setError] = useState("");
@@ -56,7 +55,7 @@ const LoginPage: React.FC = () => {
             name: response?.data.user.name,
           })
         );
-        navigate("/home");
+        navigate("/");
       }
     } catch (error) {
       errorHandler(error);

@@ -10,7 +10,7 @@ import Dashboard from '../Pages/user/Dashboard';
 const UserRouter = () => {
   return (
       <Routes>
-          <Route path='/' element={<PublicRoute component={HomePage} />} />
+      <Route path='/' element={<HomePage/>}  />
           <Route path='/login' element={<PublicRoute component={LoginPage} />} />
           <Route path='/dashboard' element={<PrivateRoute component={ Dashboard } />} />
     </Routes>
