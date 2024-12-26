@@ -1,7 +1,7 @@
 import axios, { Axios, AxiosError, AxiosInstance, AxiosResponse } from "axios";
-import { userAxiosInstance } from "./instance/userInstance";
-import { Ilogin, IloginResponse } from "../interfaces/user/Ilogin";
-import apiErrorHandler from "../utils/apiErrorHandler";
+import { userAxiosInstance } from "../instance/userInstance";
+import { Ilogin, IloginResponse } from "../../interfaces/user/Ilogin";
+import apiErrorHandler from "../../utils/apiErrorHandler";
 
 // export const login = async (credentials: ILoginCredential) => {
 //     try {

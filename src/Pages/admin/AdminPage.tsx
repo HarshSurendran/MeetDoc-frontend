@@ -7,6 +7,7 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { AppProvider } from '@toolpad/core/AppProvider';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import type { Navigation, Router } from '@toolpad/core';
+import UserManagementTable from '../../components/admin/UserManagement';
 
 const NAVIGATION: Navigation = [
   {
@@ -23,6 +24,10 @@ const NAVIGATION: Navigation = [
     title: 'Orders',
     icon: <ShoppingCartIcon />,
   },
+  {
+    segment: 'logout',
+    title: 'Logout',
+  }
 ];
 
 const demoTheme = createTheme({
@@ -52,7 +57,7 @@ function DemoPageContent({ pathname }: { pathname: string }) {
         textAlign: 'center',
       }}
     >
-      <Typography>Dashboard content for {pathname}</Typography>
+      {pathname == "/users"? <UserManagementTable /> : <Typography>Dashboard content for {pathname}</Typography>}
     </Box>
   );
 }

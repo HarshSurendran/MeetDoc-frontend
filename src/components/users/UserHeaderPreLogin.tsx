@@ -15,7 +15,7 @@ import MedicationIcon from "@mui/icons-material/Medication";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store/appStore";
-import { logout } from "../../services/userAuth";
+import { logout } from "../../services/user/userAuth";
 import { resetUser } from "../../redux/slices/userSlice";
 import errorHandler from "../../utils/errorHandler";
 import toast from "react-hot-toast";
@@ -34,7 +34,6 @@ function UserHeaderPreLogin() {
 
   console.log(user);
 
-
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -46,17 +45,15 @@ function UserHeaderPreLogin() {
   const handleLogout = async () => {
     try {
       const response = await logout(user._id);
-      console.log(response,"Response from axios.");
+      console.log(response, "Response from axios.");
       dispatch(resetUser());
       localStorage.setItem("userAccessToken", "");
-      toast.success("Successfully logged out!")
+      toast.success("Successfully logged out!");
       navigate("/");
     } catch (error) {
       errorHandler(error);
     }
-  }
-
-  
+  };
 
   return (
     <AppBar position="static">
@@ -150,16 +147,23 @@ function UserHeaderPreLogin() {
             ))}
           </Box>
           <Box sx={{ flexGrow: 0 }}>
-            {user._id !== "" ? <Button onClick={handleLogout} color="inherit">{ user.name }</Button> : <Tooltip title="login button">
-                <Link to={"/login"}><Button                
-                onClick={handleCloseNavMenu}
-                color="inherit"
-                sx={{ my: 2, display: "block" }}
-                >
-                Login
-                </Button></Link>
-            </Tooltip> }
-            
+            {user._id !== "" ? (
+              <Button onClick={handleLogout} color="inherit">
+                {user.name}
+              </Button>
+            ) : (
+              <Tooltip title="login button">
+                <Link to={"/login"}>
+                  <Button
+                    onClick={handleCloseNavMenu}
+                    color="inherit"
+                    sx={{ my: 2, display: "block" }}
+                  >
+                    Login
+                  </Button>
+                </Link>
+              </Tooltip>
+            )}
           </Box>
         </Toolbar>
       </Container>

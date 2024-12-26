@@ -4,13 +4,12 @@ import {
   validateEmail,
   validatePassword,
 } from "../../utils/userValidator/uservalidator";
-import { login } from "../../services/userAuth";
+import { login } from "../../services/user/userAuth";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addUser } from "../../redux/slices/userSlice";
 import errorHandler from "../../utils/errorHandler";
 import toast from "react-hot-toast";
-
 
 const LoginPage: React.FC = () => {
   const [user, setUser] = useState({
