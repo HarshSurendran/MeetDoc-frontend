@@ -7,6 +7,7 @@ const errorHandler = (error: unknown) => {
   if (error instanceof AxiosError) {
     if (error.response) {
       const errorMessage = error.response.data.message;
+      console.log(errorMessage)
       toast.error(`${errorMessage}`);
     } else if (error.request) {
         toast.error("No response from server. Please try again later.");

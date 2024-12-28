@@ -26,6 +26,7 @@ export const logout = async (
 ): Promise<AxiosResponse | undefined> => {
   try {
     const response = await adminAxiosInstance.post("/auth/admin/logout", adminId);
+    localStorage.setItem("adminAccessToken", "");
     return response;
   } catch (error) {
     apiErrorHandler(error);

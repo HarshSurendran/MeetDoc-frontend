@@ -15,9 +15,6 @@ createRoot(document.getElementById("root")!).render(
     <Provider store={appStore}>
       <PersistGate persistor={persistor}>
         <ThemeProvider theme={lightTheme}>
-          {/* <Suspense fallback={<div>Loading Application...</div>}>
-          <RouterProvider router={appRouter}></RouterProvider>
-        </Suspense> */}
           <App />
         </ThemeProvider>
       </PersistGate>

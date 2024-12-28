@@ -8,6 +8,7 @@ import { AppProvider } from '@toolpad/core/AppProvider';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import type { Navigation, Router } from '@toolpad/core';
 import UserManagementTable from '../../components/admin/UserManagement';
+import { logout } from '../../services/admin/adminAuth';
 
 const NAVIGATION: Navigation = [
   {
@@ -46,6 +47,11 @@ const demoTheme = createTheme({
   },
 });
 
+function handleLogout() {
+   const res = logout("676512f9cd78ad1bfbdc16de")
+}
+
+
 function DemoPageContent({ pathname }: { pathname: string }) {
   return (
     <Box
@@ -57,7 +63,9 @@ function DemoPageContent({ pathname }: { pathname: string }) {
         textAlign: 'center',
       }}
     >
-      {pathname == "/users"? <UserManagementTable /> : <Typography>Dashboard content for {pathname}</Typography>}
+      {pathname == "/users" ? <UserManagementTable /> : <> <Typography>Dashboard content for {pathname}
+      </Typography>
+      <button onClick={handleLogout}>Logout</button></>}
     </Box>
   );
 }
@@ -97,10 +105,16 @@ export default function AdminPage(props: DemoProps) {
       router={router}
       theme={demoTheme}
       window={demoWindow}
+     
     >
+   
       <DashboardLayout>
+      
         <DemoPageContent pathname={pathname} />
+
+        
       </DashboardLayout>
+      
     </AppProvider>
     // preview-end
   );

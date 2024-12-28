@@ -56,6 +56,7 @@ const LoginPage: React.FC = () => {
         navigate("/");
       }
     } catch (error) {
+      console.log(error, "Error from login page")
       errorHandler(error);
     }
   };
@@ -131,7 +132,7 @@ const LoginPage: React.FC = () => {
         <Box sx={{ mt: 4, textAlign: "center" }}>
           <Typography variant="body2">
             Don't have an account?{" "}
-            <Button color="primary" variant="text" size="small">
+            <Button onClick={()=> navigate("/signup")} color="inherit" variant="text" size="small">
               Sign Up
             </Button>
           </Typography>
