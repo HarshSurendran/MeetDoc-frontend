@@ -1,5 +1,11 @@
 import React, { useState } from 'react';
 import { Menu, X, Home, Calendar, DollarSign, User, Settings, LogOut } from 'lucide-react';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../redux/store/appStore';
+import { logout } from '../../services/doctor/doctorAuth';
+import errorHandler from '../../utils/errorHandler';
+import { resetDoctor } from '../../redux/slices/doctorSlice';
+import { useNavigate } from 'react-router-dom';
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -7,6 +13,23 @@ interface DashboardLayoutProps {
 
 const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const doctor = useSelector((state: RootState) => state.doctor.doctor);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      const response = await logout(doctor.email);
+      if (response) {
+        localStorage.setItem("doctorAccessToken", "");
+        dispatch(resetDoctor());
+        navigate("/doctor/login");
+      }
+    } catch (error) {
+      errorHandler(error);      
+    }
+
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -60,7 +83,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
           </div>
 
           <div className="absolute bottom-8 w-full px-4 left-0">
-            <button className="flex items-center px-4 py-3 text-sm rounded-lg hover:bg-blue-800 w-full">
+            <button onClick={handleLogout} className="flex items-center px-4 py-3 text-sm rounded-lg hover:bg-blue-800 w-full">
               <LogOut className="h-5 w-5 mr-3" />
               Logout
             </button>
@@ -80,7 +103,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
               <Menu className="h-6 w-6" />
             </button>
             <div className="ml-auto flex items-center space-x-4">
-              <span className="text-sm text-gray-700">Welcome, Dr -------</span>
+              <span className="text-sm text-gray-700">Welcome, Dr { doctor.name }</span>
               <img 
                 src="pic from database"
                 alt="Profile" 
