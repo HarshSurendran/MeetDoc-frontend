@@ -41,16 +41,17 @@ doctorAxiosInstance.interceptors.response.use((response) => {
       }
     }
 
-    if(error.response.status == 403){
+    if (error.response.status == 403) {
       appStore.dispatch(resetDoctor())
       toast.error("Your account is blocked by the site")
     }
 
     if (error.response.status >= 500) {
-      toast.error(error.response.data.message ||  'something went wrong');
+      toast.error(error.response.data.message || 'something went wrong');
     }
 
     if (error.response.status >= 400 && error.response.status < 500 && error.response.status !== 401) {
+      console.log("reached doctor axios interceptor toast statement for user errors")
       toast.error(`${error.response.data.message || 'An error occurred'}`);
     }
   } else if (error.request) {
@@ -58,7 +59,7 @@ doctorAxiosInstance.interceptors.response.use((response) => {
   } else {
     toast.error("An unexpected error occurred.");
   }
-})
+});
 
 async function getNewAccessToken() {
   const response = await axios.get(`${BASE_URL}/auth/doctor/refreshtoken`, {

@@ -50,11 +50,13 @@ const LoginPage = () => {
             setLoading(true);
             try {
                 const response = await login(formData)
-                console.log('Form submitted:', response);
-                localStorage.setItem("doctorAccessToken", response.accessToken);
-                dispatch(addDoctor(response.doctor));
-                toast.success("Logged in successfully")
-                navigate("/")
+                if (response) {
+                    console.log('Form submitted:', response);
+                    localStorage.setItem("doctorAccessToken", response.data.doctorAccessToken);
+                    dispatch(addDoctor(response.data.docData));
+                    toast.success("Logged in successfully")
+                    navigate("/doctor");
+                }
             } catch (error) {
                 errorHandler(error);
                 console.error('Signup error:', error);
