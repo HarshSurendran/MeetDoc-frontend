@@ -4,6 +4,7 @@ import { persistReducer } from "redux-persist";
 import storage from 'redux-persist/lib/storage';
 import persistStore from "redux-persist/es/persistStore";
 import adminReducer from "../slices/adminSlice";
+import doctorReducer from "../slices/doctorSlice";
 
 const userPersistConfig = {
   key: 'user',
@@ -19,10 +20,18 @@ const adminPersistConfig = {
 };
 const persistedAdminReducer = persistReducer(adminPersistConfig, adminReducer);
 
+const doctorPersistConfig = {
+  key: 'doctor',
+  storage,
+  blacklist: [],
+};
+const persistedDoctorReducer = persistReducer(doctorPersistConfig, doctorReducer);
+
 const appStore = configureStore({
   reducer: {
     user: persistedUserReducer,
-    admin: persistedAdminReducer
+    admin: persistedAdminReducer,
+    doctor: persistedDoctorReducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

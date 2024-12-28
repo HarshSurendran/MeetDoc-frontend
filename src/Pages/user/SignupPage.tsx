@@ -3,6 +3,7 @@ import { register } from '../../services/user/userAuth';
 import errorHandler from '../../utils/errorHandler';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import { Link } from 'react-router-dom';
 
 export interface FormData {
   name: string;
@@ -236,9 +237,9 @@ const SignupPage = () => {
               <div className="relative flex justify-center text-sm">
                 <span className="px-2 text-gray-500">
                   Already have an account?{' '}
-                  <a href="/login" className="font-medium text-blue-600 hover:text-blue-500">
+                  <Link to="/login" className="font-medium text-blue-600 hover:text-blue-500">
                     Log in
-                  </a>
+                  </Link>
                 </span>
               </div>
             </div>
