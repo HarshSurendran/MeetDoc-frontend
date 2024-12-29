@@ -14,9 +14,11 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { logout } from '@/services/admin/adminAuth';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/redux/store/appStore';
 import errorHandler from '@/utils/errorHandler';
+import { resetAdmin } from '@/redux/slices/adminSlice';
+import toast from 'react-hot-toast';
 
 const SideBar = () => {
     const sideMenu = [
@@ -30,6 +32,7 @@ const SideBar = () => {
 
     const admin = useSelector((state: RootState) => state.admin.admin);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const handleLogout = async () => {
         console.log("Logout clicked");
@@ -37,6 +40,8 @@ const SideBar = () => {
             const response = await logout(admin._id);
             if (response) {
                 localStorage.setItem("adminAccessToken", "");
+                dispatch(resetAdmin());
+                toast.success("Successfully logged out.")
                 navigate("/admin/login");
             }
         } catch (error) {
@@ -45,10 +50,9 @@ const SideBar = () => {
         
     }
     
-  
 
     return (
-        <aside className="hidden lg:flex flex-col w-64 bg-white border-r h-full sticky top-0">            
+        <aside className="hidden lg:flex flex-col w-64 bg-white border-r h-screen sticky top-0">            
             <nav className=" p-4 space-y-2 flex-1 overflow-y-auto">
                 {sideMenu.map((item) => (
                     <NavLink to={item.pathName}

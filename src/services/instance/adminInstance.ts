@@ -13,7 +13,6 @@ export const adminAxiosInstance = axios.create({
 
 adminAxiosInstance.interceptors.request.use((config) => {
     const token = localStorage.getItem("adminAccessToken");
-    console.log("This is from admin axios interceptors: ", config)
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;
     }
@@ -28,7 +27,7 @@ adminAxiosInstance.interceptors.response.use((response) => {
   
     if (error.response) {
       if (error.response.status === 401 && !originalRequest._retry) {
-        console.log("Entered 401 unauthorised response middleware, trying to create new token for doctors")
+        console.log("Entered 401 unauthorised response middleware, trying to create new token for admin-------------@@@@@@@@@@@@@@@@@@@@!!!!!!!!!!!!!!!!")
         originalRequest._retry = true;
         try {
           const newAccessToken = await getNewAccessToken();
@@ -63,9 +62,9 @@ adminAxiosInstance.interceptors.response.use((response) => {
   });
   
   async function getNewAccessToken() {
-    const response = await axios.get(`${BASE_URL}/auth/doctor/refreshtoken`, {
+    const response = await axios.get(`${BASE_URL}/auth/admin/refreshtoken`, {
       withCredentials: true,
     });
     console.log("THis is response from refreshtoken endpoint", response.data);
-    return response.data.accessToken;
+    return response.data.adminAccessToken;
   }
