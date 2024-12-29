@@ -9,7 +9,6 @@ interface PrivateRoute {
 
 const PrivateRoute: React.FC<PrivateRoute> = ({ component: Component }) => {
     const admin = useSelector((state: RootState) => state.admin.admin);
-    console.log(admin._id, "From private route")
     return admin._id? <Component/> : <Navigate to={"/admin/login"} />;
 }
 
