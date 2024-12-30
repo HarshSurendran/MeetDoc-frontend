@@ -34,3 +34,13 @@ export const editUser = async (id: string, body: IUser) => {
         return Promise.reject();        
     }
 }
+
+export const getUser = async (id: string) => {
+    try {
+        const response = await adminAxiosInstance.get(`/admin/users/${id}`);
+        return response;        
+    } catch (error) {
+        apiErrorHandler(error);
+        return Promise.reject();
+    }
+}

@@ -72,7 +72,7 @@ const UserManagementTable: React.FC = () => {
   };
 
   const handleRowClick = (userId: string) => {
-    navigate(`user/${userId}`);
+    navigate(`${userId}`);
   };
 
   const handleEditClick = (userId: string, event: React.MouseEvent) => {
@@ -186,10 +186,6 @@ const UserManagementTable: React.FC = () => {
                 onMouseEnter={() => setHoveredRow(user._id)}
                 onMouseLeave={() => {
                   setHoveredRow(null);
-                  // Optional: Close dropdown when leaving row
-                  // if (activeDropdown === user._id) {
-                  //   setActiveDropdown(null);
-                  // }
                 }}
                 className="hover:bg-blue-50 transition-colors duration-150 cursor-pointer"
               >

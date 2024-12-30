@@ -16,4 +16,5 @@ export interface IUser {
     pincode: number;
   };
   rating?: number;
+  photo: string;
 }
