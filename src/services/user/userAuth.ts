@@ -67,3 +67,14 @@ export const verifyOtp = async (otp: string, data: {}) : Promise<AxiosResponse |
     return Promise.reject();    
   }
 }
+
+export const sendGoogleToken = async (token: string) : Promise<AxiosResponse | undefined> => {
+  try {
+    const response = await userAxiosInstance.post("/auth/google/callback", { token })
+    return response;
+  } catch (error) {
+    apiErrorHandler(error);
+    return Promise.reject();
+  }
+
+}
