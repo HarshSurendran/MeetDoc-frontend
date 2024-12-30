@@ -9,10 +9,11 @@ export interface IUser {
   date_of_birth?: Date;
   isBlocked: Boolean;
   address?: {
-    street: string;
-    city: string;
+    district: string;
+    locality: string;
     state: string;
     country: string;
+    pincode: number;
   };
   rating?: number;
 }
