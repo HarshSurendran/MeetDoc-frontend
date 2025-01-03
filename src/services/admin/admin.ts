@@ -44,3 +44,14 @@ export const getUser = async (id: string) => {
         return Promise.reject();
     }
 }
+
+export const addUser = async (data: IUser) => {
+    try {
+        const response = await adminAxiosInstance.post('/admin/users', data);
+        console.log("Response from addUser", response);
+        return response;
+    } catch (error) {
+        apiErrorHandler(error);
+        return Promise.reject();
+    }
+}

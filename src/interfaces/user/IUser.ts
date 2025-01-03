@@ -17,4 +17,5 @@ export interface IUser {
   };
   rating?: number;
   photo: string;
+  password: string;
 }

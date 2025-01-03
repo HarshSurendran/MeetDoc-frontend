@@ -49,12 +49,12 @@ const dateOfBirth = joi.date()
         "date.empty": "Date of birth is required.",
     });
 
-// const pin_code = joi.string()
-//     .pattern(/^\d{6}$/)
-//     .messages({
-//         "string.pattern.base": "Pin code must be a 6-digit number.",
-//         "string.empty": "Pin code is required.",
-//     });
+const pinCode = joi.string()
+    .pattern(/^\d{6}$/)
+    .messages({
+        "string.pattern.base": "Please enter a valid Pincode.",
+        "string.empty": "Pin code is required.",
+    });
 
 // const state = joi.string().messages({
 //     "string.empty": "State is required.",
@@ -94,3 +94,19 @@ export const validateFullName = (name: string) => {
     }
     return null;
 };
+
+export const validatePincode = (pincode: number) => {
+    const { error } = pinCode.validate(pincode);
+    if (error) {
+        return error.details[0].message;
+    }
+    return null;
+}
+
+export const validatePhone = (phoneNumber: string) => {
+    const { error } = phone.validate(phoneNumber);
+    if (error) {
+        return error.details[0].message;
+    }
+    return null;
+}
