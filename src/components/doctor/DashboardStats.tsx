@@ -18,8 +18,11 @@ const StatsCard: React.FC<StatsCardProps> = ({ title, value, icon, trend }) => (
         <p className="text-sm text-gray-600">{title}</p>
         <h3 className="text-2xl font-bold mt-1">{value}</h3>
         {trend && (
-          <p className={`text-sm mt-2 ${trend.isPositive ? 'text-green-600' : 'text-red-600'}`}>
-            {trend.isPositive ? '↑' : '↓'} {Math.abs(trend.value)}% from last month
+          <p
+            className={`text-sm mt-2 ${trend.isPositive ? 'text-green-600' : 'text-red-600'}`}
+          >
+            {trend.isPositive ? '↑' : '↓'} {Math.abs(trend.value)}% from last
+            month
           </p>
         )}
       </div>

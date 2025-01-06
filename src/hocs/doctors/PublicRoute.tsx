@@ -1,18 +1,17 @@
-import React from "react"
-import { useSelector } from "react-redux";
-import { RootState } from "../../redux/store/appStore";
-import { Navigate } from "react-router-dom";
-
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../redux/store/appStore';
+import { Navigate } from 'react-router-dom';
 
 interface PublicRoute {
-    component: React.ComponentType;
+  component: React.ComponentType;
 }
 
 const PublicRoute: React.FC<PublicRoute> = ({ component: Component }) => {
-    const isAuthenticated = useSelector((state: RootState) =>  state.doctor.isAuthenticated);    
-    return isAuthenticated ? <Navigate to={"/doctor"} /> : <Component />;
-}
+  const isAuthenticated = useSelector(
+    (state: RootState) => state.doctor.isAuthenticated
+  );
+  return isAuthenticated ? <Navigate to={'/doctor'} /> : <Component />;
+};
 
 export default PublicRoute;
-
-

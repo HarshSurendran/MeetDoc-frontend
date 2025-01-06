@@ -1,7 +1,7 @@
-import React from "react"
-import { Outlet } from 'react-router-dom'
+import React from 'react';
+import { Outlet } from 'react-router-dom';
 
-const UserLayout : React.FC = () => {
+const UserLayout: React.FC = () => {
   return (
     <>
       <header>
@@ -14,7 +14,7 @@ const UserLayout : React.FC = () => {
         <h1>Footer</h1>
       </footer>
     </>
-  )
+  );
 };
 
 export default UserLayout;

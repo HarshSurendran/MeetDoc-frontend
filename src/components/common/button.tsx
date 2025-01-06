@@ -7,6 +7,6 @@ const MyButton: React.FC = () => {
       Click Me
     </Button>
   );
-}
+};
 
 export default MyButton;

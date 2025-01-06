@@ -4,9 +4,7 @@ import { IUser } from '../../interfaces/user/IUser';
 import { getUsers, toggleBlock } from '../../services/admin/admin';
 import errorHandler from '../../utils/errorHandler';
 
-
 const UserManagementTable: React.FC = () => {
-  
   const [users, setUsers] = useState<IUser[]>([]);
   const [isBlocked, setIsBlocked] = useState(false);
 
@@ -16,39 +14,40 @@ const UserManagementTable: React.FC = () => {
 
   useEffect(() => {
     fetchUser();
-  },[])
+  }, []);
 
   const fetchUser = async () => {
     try {
       const response: IUser[] = await getUsers();
       // console.log(response);
       if (response) {
-        console.log(response)
+        console.log(response);
         setUsers(response);
       }
     } catch (error) {
       errorHandler(error);
     }
-  }
+  };
 
-  const handleBlock = async (_id : string) => {
+  const handleBlock = async (_id: string) => {
     try {
       const response = await toggleBlock(_id);
-      console.log()
+      console.log();
       if (response) {
         setIsBlocked((isBlocked) => !isBlocked);
-        setUsers(users.map((user) => {
-          if (user._id === _id) {
-            user.isBlocked = !user.isBlocked             
-          }
-          return user;
-        }))
+        setUsers(
+          users.map((user) => {
+            if (user._id === _id) {
+              user.isBlocked = !user.isBlocked;
+            }
+            return user;
+          })
+        );
       }
-      
     } catch (error) {
-      errorHandler(error);      
-    }    
-  }
+      errorHandler(error);
+    }
+  };
 
   const handleSort = (field: keyof IUser) => {
     if (sortField === field) {
@@ -59,9 +58,10 @@ const UserManagementTable: React.FC = () => {
     }
   };
 
-  const filteredUsers = users.filter((user) =>
-    user.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    user.email?.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredUsers = users.filter(
+    (user) =>
+      user.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.email?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const sortedUsers = [...filteredUsers].sort((a, b) => {
@@ -119,8 +119,12 @@ const UserManagementTable: React.FC = () => {
               >
                 Email <SortIcon field="email" />
               </th>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-blue-700">Phone</th>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-blue-700">Occupation</th>
+              <th className="px-6 py-3 text-left text-sm font-semibold text-blue-700">
+                Phone
+              </th>
+              <th className="px-6 py-3 text-left text-sm font-semibold text-blue-700">
+                Occupation
+              </th>
               {/* <th className="px-6 py-3 text-left text-sm font-semibold text-blue-700">Address</th> */}
               <th
                 className="px-6 py-3 text-left text-sm font-semibold text-blue-700 cursor-pointer"
@@ -128,19 +132,32 @@ const UserManagementTable: React.FC = () => {
               >
                 Rating <SortIcon field="rating" />
               </th>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-blue-700">Actions</th>              
+              <th className="px-6 py-3 text-left text-sm font-semibold text-blue-700">
+                Actions
+              </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
             {sortedUsers.map((user) => (
-              <tr key={user._id} className="hover:bg-blue-50 transition-colors duration-150">
+              <tr
+                key={user._id}
+                className="hover:bg-blue-50 transition-colors duration-150"
+              >
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm font-medium text-gray-900">{user.name}</div>
+                  <div className="text-sm font-medium text-gray-900">
+                    {user.name}
+                  </div>
                   <div className="text-sm text-gray-500">{user.gender}</div>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{user.email}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{user.phone}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{user.occupation}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  {user.email}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  {user.phone}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  {user.occupation}
+                </td>
                 {/* <td className="px-6 py-4 text-sm text-gray-500">
                   <div className="max-w-xs">
                     {`${user.address?.street}, ${user.address?.city}`}
@@ -153,11 +170,18 @@ const UserManagementTable: React.FC = () => {
                     {user.rating}
                   </span>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><button  onClick={()=> handleBlock(user._id)} className={`px-3 py-1 rounded-md text-white font-semibold transition-colors duration-200 ${
-          user.isBlocked
-            ? 'bg-green-500 hover:bg-green-600'
-            : 'bg-red-500 hover:bg-red-600'
-                  }`}>{user.isBlocked ? "Unblock" : "Block"}</button></td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  <button
+                    onClick={() => handleBlock(user._id)}
+                    className={`px-3 py-1 rounded-md text-white font-semibold transition-colors duration-200 ${
+                      user.isBlocked
+                        ? 'bg-green-500 hover:bg-green-600'
+                        : 'bg-red-500 hover:bg-red-600'
+                    }`}
+                  >
+                    {user.isBlocked ? 'Unblock' : 'Block'}
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>

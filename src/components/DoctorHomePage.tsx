@@ -1,5 +1,14 @@
 import React from 'react';
-import { Box, Typography, Button, Grid, Card, CardContent, Tabs, Tab } from '@mui/material';
+import {
+  Box,
+  Typography,
+  Button,
+  Grid,
+  Card,
+  CardContent,
+  Tabs,
+  Tab,
+} from '@mui/material';
 import { AccessTime, CalendarToday, Star } from '@mui/icons-material';
 
 const DoctorHomePage: React.FC = () => {
@@ -69,9 +78,15 @@ const DoctorHomePage: React.FC = () => {
           <Typography variant="h5" sx={{ mb: 3 }}>
             Appointments
           </Typography>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
+          >
             {/* Left Arrow */}
-            <Button variant="outlined">{"<"}</Button>
+            <Button variant="outlined">{'<'}</Button>
 
             {/* Tabs for Days */}
             <Tabs value={0} indicatorColor="primary" textColor="primary">
@@ -81,28 +96,40 @@ const DoctorHomePage: React.FC = () => {
             </Tabs>
 
             {/* Right Arrow */}
-            <Button variant="outlined">{">"}</Button>
+            <Button variant="outlined">{'>'}</Button>
           </Box>
 
           {/* Time Slots */}
           <Grid container spacing={2} sx={{ mt: 3 }}>
-            {['04:00 PM', '05:00 PM', '06:00 PM', '07:00 PM'].map((time, index) => (
-              <Grid item key={index} xs={6} sm={3}>
-                <Button variant="outlined" color={index % 2 === 0 ? "success" : "error"} sx={{ width: '100%' }}>
-                  {time}
-                </Button>
-              </Grid>
-            ))}
+            {['04:00 PM', '05:00 PM', '06:00 PM', '07:00 PM'].map(
+              (time, index) => (
+                <Grid item key={index} xs={6} sm={3}>
+                  <Button
+                    variant="outlined"
+                    color={index % 2 === 0 ? 'success' : 'error'}
+                    sx={{ width: '100%' }}
+                  >
+                    {time}
+                  </Button>
+                </Grid>
+              )
+            )}
           </Grid>
 
           <Grid container spacing={2} sx={{ mt: 2 }}>
-            {['08:00 PM', '09:00 PM', '10:00 PM', '11:00 PM'].map((time, index) => (
-              <Grid item key={index} xs={6} sm={3}>
-                <Button variant="outlined" color={index % 2 === 0 ? "success" : "error"} sx={{ width: '100%' }}>
-                  {time}
-                </Button>
-              </Grid>
-            ))}
+            {['08:00 PM', '09:00 PM', '10:00 PM', '11:00 PM'].map(
+              (time, index) => (
+                <Grid item key={index} xs={6} sm={3}>
+                  <Button
+                    variant="outlined"
+                    color={index % 2 === 0 ? 'success' : 'error'}
+                    sx={{ width: '100%' }}
+                  >
+                    {time}
+                  </Button>
+                </Grid>
+              )
+            )}
           </Grid>
         </Card>
       </Box>

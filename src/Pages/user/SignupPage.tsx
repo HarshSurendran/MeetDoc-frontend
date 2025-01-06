@@ -31,9 +31,9 @@ const SignupPage = () => {
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
-    const [loading, setLoading] = useState(false);
-    
-    const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
@@ -57,7 +57,7 @@ const SignupPage = () => {
       newErrors.password = 'Password must be at least 6 characters';
     }
 
-    // Phone validation 
+    // Phone validation
     if (formData.phone && !/^\d{10}$/.test(formData.phone)) {
       newErrors.phone = 'Please enter a valid 10-digit phone number';
     }
@@ -71,14 +71,14 @@ const SignupPage = () => {
     if (validateForm()) {
       setLoading(true);
       try {
-          const response = await register(formData);
-          console.log('Form submitted:', response);
-          if (response?.data.mailSent) {
-              toast.success("Otp has been sent to your email")              
-              navigate("/otp", {state: formData});
-          }
+        const response = await register(formData);
+        console.log('Form submitted:', response);
+        if (response?.data.mailSent) {
+          toast.success('Otp has been sent to your email');
+          navigate('/otp', { state: formData });
+        }
       } catch (error) {
-          errorHandler(error);
+        errorHandler(error);
         console.error('Signup error:', error);
       } finally {
         setLoading(false);
@@ -86,17 +86,19 @@ const SignupPage = () => {
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
     // Clear error when user starts typing
     if (errors[name as keyof FormErrors]) {
-      setErrors(prev => ({
+      setErrors((prev) => ({
         ...prev,
-        [name]: undefined
+        [name]: undefined,
       }));
     }
   };
@@ -117,7 +119,10 @@ const SignupPage = () => {
           <form className="space-y-6" onSubmit={handleSubmit}>
             {/* Name Field */}
             <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="name"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Full Name <span className="text-red-500">*</span>
               </label>
               <div className="mt-1">
@@ -132,13 +137,18 @@ const SignupPage = () => {
                     errors.name ? 'border-red-300' : 'border-gray-300'
                   } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
                 />
-                {errors.name && <p className="mt-1 text-sm text-red-600">{errors.name}</p>}
+                {errors.name && (
+                  <p className="mt-1 text-sm text-red-600">{errors.name}</p>
+                )}
               </div>
             </div>
 
             {/* Email Field */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Email <span className="text-red-500">*</span>
               </label>
               <div className="mt-1">
@@ -153,13 +163,18 @@ const SignupPage = () => {
                     errors.email ? 'border-red-300' : 'border-gray-300'
                   } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
                 />
-                {errors.email && <p className="mt-1 text-sm text-red-600">{errors.email}</p>}
+                {errors.email && (
+                  <p className="mt-1 text-sm text-red-600">{errors.email}</p>
+                )}
               </div>
             </div>
 
             {/* Password Field */}
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Password <span className="text-red-500">*</span>
               </label>
               <div className="mt-1">
@@ -174,13 +189,18 @@ const SignupPage = () => {
                     errors.password ? 'border-red-300' : 'border-gray-300'
                   } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
                 />
-                {errors.password && <p className="mt-1 text-sm text-red-600">{errors.password}</p>}
+                {errors.password && (
+                  <p className="mt-1 text-sm text-red-600">{errors.password}</p>
+                )}
               </div>
             </div>
 
             {/* Gender Field */}
             <div>
-              <label htmlFor="gender" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="gender"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Gender
               </label>
               <div className="mt-1">
@@ -201,7 +221,10 @@ const SignupPage = () => {
 
             {/* Phone Field */}
             <div>
-              <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="phone"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Phone Number
               </label>
               <div className="mt-1">
@@ -215,7 +238,9 @@ const SignupPage = () => {
                     errors.phone ? 'border-red-300' : 'border-gray-300'
                   } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
                 />
-                {errors.phone && <p className="mt-1 text-sm text-red-600">{errors.phone}</p>}
+                {errors.phone && (
+                  <p className="mt-1 text-sm text-red-600">{errors.phone}</p>
+                )}
               </div>
             </div>
 
@@ -237,7 +262,10 @@ const SignupPage = () => {
               <div className="relative flex justify-center text-sm">
                 <span className="px-2 text-gray-500">
                   Already have an account?{' '}
-                  <Link to="/login" className="font-medium text-blue-600 hover:text-blue-500">
+                  <Link
+                    to="/login"
+                    className="font-medium text-blue-600 hover:text-blue-500"
+                  >
                     Log in
                   </Link>
                 </span>

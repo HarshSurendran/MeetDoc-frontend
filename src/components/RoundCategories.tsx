@@ -5,8 +5,7 @@ import {
   CardActions,
   Button,
   CardMedia,
-} from "@mui/material";
-
+} from '@mui/material';
 
 const RoundCategories = (body: any) => {
   console.log(body.props.image);
@@ -31,14 +30,14 @@ const RoundCategories = (body: any) => {
     //   </CardActions>
     // </Card>
 
-    <Card sx={{ maxWidth: 200, textAlign: "center", boxShadow: "none", my: 2 }}>
+    <Card sx={{ maxWidth: 200, textAlign: 'center', boxShadow: 'none', my: 2 }}>
       <CardMedia
         component="img"
         image={body.props.image}
         alt={body.props.title}
-        sx={{ width: 150, height: 150, borderRadius: "50%", margin: "0 auto" }}
+        sx={{ width: 150, height: 150, borderRadius: '50%', margin: '0 auto' }}
       />
-      <CardContent sx={{ padding: "5px 0 0 0" }}>
+      <CardContent sx={{ padding: '5px 0 0 0' }}>
         <Typography variant="subtitle1" component="div" color="secondary">
           {body.props.title}
         </Typography>
@@ -46,12 +45,11 @@ const RoundCategories = (body: any) => {
           variant="text"
           color="secondary"
           size="small"
-          sx={{ fontSize: "12px" }}
+          sx={{ fontSize: '12px' }}
         >
           {body.props.linkText}
         </Button>
       </CardContent>
-      
     </Card>
   );
 };

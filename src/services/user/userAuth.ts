@@ -1,9 +1,9 @@
-import axios, { Axios, AxiosError, AxiosInstance, AxiosResponse } from "axios";
-import { userAxiosInstance } from "../instance/userInstance";
-import { Ilogin, IloginResponse } from "../../interfaces/user/Ilogin";
-import apiErrorHandler from "../../utils/apiErrorHandler";
-import { IUser } from "../../interfaces/user/IUser";
-import { FormData } from "../../Pages/user/SignupPage";
+import axios, { Axios, AxiosError, AxiosInstance, AxiosResponse } from 'axios';
+import { userAxiosInstance } from '../instance/userInstance';
+import { Ilogin, IloginResponse } from '../../interfaces/user/Ilogin';
+import apiErrorHandler from '../../utils/apiErrorHandler';
+import { IUser } from '../../interfaces/user/IUser';
+import { FormData } from '../../Pages/user/SignupPage';
 
 // export const login = async (credentials: ILoginCredential) => {
 //     try {
@@ -23,13 +23,13 @@ export const login = async (
 ): Promise<AxiosResponse<IloginResponse> | undefined> => {
   try {
     const response = await userAxiosInstance.post(
-      "/auth/login",
+      '/auth/login',
       userCredentials
     );
-    console.log("This is response from login",response)
+    console.log('This is response from login', response);
     return response;
   } catch (error) {
-    console.log("This is error from login",error)
+    console.log('This is error from login', error);
 
     apiErrorHandler(error);
     return Promise.reject();
@@ -40,7 +40,7 @@ export const logout = async (
   userId: string
 ): Promise<AxiosResponse | undefined> => {
   try {
-    const response = await userAxiosInstance.post("/auth/logout", userId);
+    const response = await userAxiosInstance.post('/auth/logout', userId);
     return response;
   } catch (error) {
     apiErrorHandler(error);
@@ -48,22 +48,30 @@ export const logout = async (
   }
 };
 
-export const register = async (data: FormData) : Promise<AxiosResponse | undefined> => {
- try {
-   const response = await userAxiosInstance.post("/auth/register", data);
-   return response;
- } catch (error) {
-   apiErrorHandler(error);
-   return Promise.reject();
- }
-}
-
-export const verifyOtp = async (otp: string, data: {}) : Promise<AxiosResponse | undefined> => {
+export const register = async (
+  data: FormData
+): Promise<AxiosResponse | undefined> => {
   try {
-    const response = await userAxiosInstance.post("/auth/verify_otp", { otp, data});
+    const response = await userAxiosInstance.post('/auth/register', data);
     return response;
   } catch (error) {
     apiErrorHandler(error);
-    return Promise.reject();    
+    return Promise.reject();
   }
-}
+};
+
+export const verifyOtp = async (
+  otp: string,
+  data: {}
+): Promise<AxiosResponse | undefined> => {
+  try {
+    const response = await userAxiosInstance.post('/auth/verify_otp', {
+      otp,
+      data,
+    });
+    return response;
+  } catch (error) {
+    apiErrorHandler(error);
+    return Promise.reject();
+  }
+};

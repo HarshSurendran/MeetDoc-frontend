@@ -1,5 +1,5 @@
-import MyButton from "../common/button";
-import Header from "./Header";
+import MyButton from '../common/button';
+import Header from './Header';
 
 const LoginPage = () => {
   return (
@@ -42,13 +42,13 @@ const LoginPage = () => {
               </button>
             </form>
             <p className="mt-6 text-center text-gray-600">
-              Are you a doctor?{" "}
+              Are you a doctor?{' '}
               <a href="#" className="text-blue-500">
                 Click here to login.
               </a>
             </p>
             <p className="mt-2 text-center text-gray-600">
-              New to MeetDoc?{" "}
+              New to MeetDoc?{' '}
               <a href="#" className="text-blue-500">
                 Register here.
               </a>

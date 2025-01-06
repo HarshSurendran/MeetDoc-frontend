@@ -28,7 +28,7 @@ const NAVIGATION: Navigation = [
   {
     segment: 'logout',
     title: 'Logout',
-  }
+  },
 ];
 
 const demoTheme = createTheme({
@@ -48,9 +48,8 @@ const demoTheme = createTheme({
 });
 
 function handleLogout() {
-   const res = logout("676512f9cd78ad1bfbdc16de")
+  const res = logout('676512f9cd78ad1bfbdc16de');
 }
-
 
 function DemoPageContent({ pathname }: { pathname: string }) {
   return (
@@ -63,9 +62,15 @@ function DemoPageContent({ pathname }: { pathname: string }) {
         textAlign: 'center',
       }}
     >
-      {pathname == "/users" ? <UserManagementTable /> : <> <Typography>Dashboard content for {pathname}
-      </Typography>
-      <button onClick={handleLogout}>Logout</button></>}
+      {pathname == '/users' ? (
+        <UserManagementTable />
+      ) : (
+        <>
+          {' '}
+          <Typography>Dashboard content for {pathname}</Typography>
+          <button onClick={handleLogout}>Logout</button>
+        </>
+      )}
     </Box>
   );
 }
@@ -105,16 +110,10 @@ export default function AdminPage(props: DemoProps) {
       router={router}
       theme={demoTheme}
       window={demoWindow}
-     
     >
-   
       <DashboardLayout>
-      
         <DemoPageContent pathname={pathname} />
-
-        
       </DashboardLayout>
-      
     </AppProvider>
     // preview-end
   );
