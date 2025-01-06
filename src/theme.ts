@@ -15,7 +15,7 @@ const lightTheme = createTheme({
     },
     background: {
       default: grey[50],
-      paper: "#FFFFFF",
+      paper: '#FFFFFF',
     },
   },
   typography: {
@@ -63,4 +63,3 @@ const darkTheme = createTheme({
 });
 
 export { lightTheme, darkTheme };
-

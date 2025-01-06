@@ -3,7 +3,6 @@ import DashboardLayout from './DashboardLayout';
 import DashboardStats from '../../components/doctor/DashboardStats';
 import AppointmentScheduler from '../../components/doctor/AppointmentScheduler';
 
-
 const Dashboard: React.FC = () => {
   return (
     <DashboardLayout>

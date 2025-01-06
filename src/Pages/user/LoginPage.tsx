@@ -1,32 +1,32 @@
-import { Box, Button, Grid, TextField, Typography, Paper } from "@mui/material";
-import React, { useState } from "react";
+import { Box, Button, Grid, TextField, Typography, Paper } from '@mui/material';
+import React, { useState } from 'react';
 import {
   validateEmail,
   validatePassword,
-} from "../../utils/userValidator/uservalidator";
-import { login } from "../../services/user/userAuth";
-import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { addUser } from "../../redux/slices/userSlice";
-import errorHandler from "../../utils/errorHandler";
-import toast from "react-hot-toast";
+} from '../../utils/userValidator/uservalidator';
+import { login } from '../../services/user/userAuth';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { addUser } from '../../redux/slices/userSlice';
+import errorHandler from '../../utils/errorHandler';
+import toast from 'react-hot-toast';
 
 const LoginPage: React.FC = () => {
   const [user, setUser] = useState({
-    email: "",
-    password: "",
+    email: '',
+    password: '',
   });
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
 
   const onLogin = async (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     try {
-      setError("");
+      setError('');
       event.preventDefault();
 
       const emailError = validateEmail(user.email);
@@ -41,10 +41,10 @@ const LoginPage: React.FC = () => {
       }
 
       const response = await login(user);
-      console.log("This is the response from axios -", response);
+      console.log('This is the response from axios -', response);
 
       if (response?.status == 201) {
-        toast.success("logged in successfully");
+        toast.success('logged in successfully');
         dispatch(
           addUser({
             _id: response?.data.user._id,
@@ -52,11 +52,11 @@ const LoginPage: React.FC = () => {
             name: response?.data.user.name,
           })
         );
-        localStorage.setItem("userAccessToken", response.data.accessToken);
-        navigate("/");
+        localStorage.setItem('userAccessToken', response.data.accessToken);
+        navigate('/');
       }
     } catch (error) {
-      console.log(error, "Error from login page")
+      console.log(error, 'Error from login page');
       errorHandler(error);
     }
   };
@@ -65,28 +65,28 @@ const LoginPage: React.FC = () => {
     <Box
       sx={{
         my: 5,
-        width: "100%",
+        width: '100%',
         maxWidth: {
-          xs: "100%",
-          sm: "100%",
-          md: "900px",
-          lg: "1160px",
-          xl: "1140px",
+          xs: '100%',
+          sm: '100%',
+          md: '900px',
+          lg: '1160px',
+          xl: '1140px',
         },
-        mx: "auto",
-        display: "flex",
-        justifyContent: "center",
+        mx: 'auto',
+        display: 'flex',
+        justifyContent: 'center',
       }}
     >
       <Paper
         elevation={3}
-        sx={{ p: 4, width: { xs: "100%", sm: "80%", md: "50%" } }}
+        sx={{ p: 4, width: { xs: '100%', sm: '80%', md: '50%' } }}
       >
         <Typography
           variant="h4"
           component="h1"
           gutterBottom
-          sx={{ textAlign: "center" }}
+          sx={{ textAlign: 'center' }}
         >
           Login
         </Typography>
@@ -129,10 +129,15 @@ const LoginPage: React.FC = () => {
           </Grid>
         </Grid>
 
-        <Box sx={{ mt: 4, textAlign: "center" }}>
+        <Box sx={{ mt: 4, textAlign: 'center' }}>
           <Typography variant="body2">
-            Don't have an account?{" "}
-            <Button onClick={()=> navigate("/signup")} color="inherit" variant="text" size="small">
+            Don't have an account?{' '}
+            <Button
+              onClick={() => navigate('/signup')}
+              color="inherit"
+              variant="text"
+              size="small"
+            >
               Sign Up
             </Button>
           </Typography>

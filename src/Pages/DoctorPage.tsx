@@ -1,12 +1,12 @@
-import React from 'react'
-import DoctorHomePage from '../components/DoctorHomePage'
+import React from 'react';
+import DoctorHomePage from '../components/DoctorHomePage';
 
 const DoctorPage: React.FC = () => {
   return (
     <div>
-      <DoctorHomePage/>
+      <DoctorHomePage />
     </div>
-  )
-}
+  );
+};
 
-export default DoctorPage
+export default DoctorPage;
