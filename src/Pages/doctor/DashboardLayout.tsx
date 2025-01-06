@@ -15,6 +15,17 @@ import { logout } from '../../services/doctor/doctorAuth';
 import errorHandler from '../../utils/errorHandler';
 import { resetDoctor } from '../../redux/slices/doctorSlice';
 import { useNavigate } from 'react-router-dom';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -105,13 +116,29 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
           </div>
 
           <div className="absolute bottom-8 w-full px-4 left-0">
-            <button
-              onClick={handleLogout}
-              className="flex items-center px-4 py-3 text-sm rounded-lg hover:bg-blue-800 w-full"
-            >
+            {/* <button onClick={handleLogout} className="flex items-center px-4 py-3 text-sm rounded-lg hover:bg-blue-800 w-full">
               <LogOut className="h-5 w-5 mr-3" />
               Logout
-            </button>
+            </button> */}
+            <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                        <button className="w-full flex items-center space-x-3 px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow">
+                            <LogOut className="h-5 w-5" /> <span>Logout</span>
+                        </button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                        <AlertDialogHeader>
+                            <AlertDialogTitle>Confirm Logout</AlertDialogTitle>
+                            <AlertDialogDescription>
+                                Are you sure you want to log out?
+                            </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction onClick={handleLogout}>Continue</AlertDialogAction>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
           </div>
         </nav>
       </aside>
