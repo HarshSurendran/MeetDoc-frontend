@@ -55,3 +55,23 @@ export const addUser = async (data: IUser) => {
         return Promise.reject();
     }
 }
+
+export const getVerificationRequests = async () => {
+    try {
+        const response = await adminAxiosInstance.get('/admin/verification-requests');
+        return response;
+    } catch (error) {
+        apiErrorHandler(error);
+        return Promise.reject();
+    }
+}
+
+export const verifyDoctor = async (id: string) => {
+    try {
+        const response = await adminAxiosInstance.patch(`/auth/doctor/verify/${id}`);
+        return response;
+    } catch (error) {
+        apiErrorHandler(error);
+        return Promise.reject();
+    }
+}

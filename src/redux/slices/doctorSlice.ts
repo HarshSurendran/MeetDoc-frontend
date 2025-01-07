@@ -18,6 +18,7 @@ const doctorSlice = createSlice({
       languages: [],
       fee: 0,
       rating: 0,
+      _id: '',
     },
     isAuthenticated: false,
   },
@@ -45,6 +46,7 @@ const doctorSlice = createSlice({
         languages: [],
         fee: 0,
         rating: 0,
+        _id: '',
       };
       state.isAuthenticated = false;
     },

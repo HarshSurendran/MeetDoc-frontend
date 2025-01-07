@@ -59,3 +59,14 @@ export const verification = async (formData: FormData) => {
     apiErrorHandler(error);
   }
 };
+
+export const checkDataSubmitted = async (doctorId: string) => {
+  try {
+    const response = await doctorAxiosInstance.get(
+      `/auth/doctor/checkVerification/${doctorId}`
+    );
+    return response;
+  } catch (error) {
+    console.log('Error in checkDataSubmitted', error);
+  }
+}

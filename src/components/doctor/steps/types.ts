@@ -49,4 +49,6 @@ export type FormData = {
     verificationDetails: VerificationDetails;
     experienceDetails: ExperienceDetails[];
     acceptedTerms: boolean;
+    doctorId: string;
+    isVerified: boolean;
 };

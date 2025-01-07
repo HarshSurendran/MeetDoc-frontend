@@ -16,6 +16,11 @@ import {
     Calendar, 
     DollarSign,
   } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { getVerificationRequests, verifyDoctor } from '@/services/admin/admin';
+import errorHandler from '@/utils/errorHandler';
+import { FormData } from '../doctor/steps/types';
+import toast from 'react-hot-toast';
 
   const revenueData = [
     { day: 0, amount: 60 },
@@ -39,6 +44,33 @@ import {
   ];
 
 const AdminMainContent = () => {
+  const [VerificationRequests, setVerificationRequests] = useState<FormData[]>([]);
+
+  useEffect(() => {
+    getRequests();
+  }, []);
+
+  const  getRequests =  async () => {
+    try {
+      const res = await getVerificationRequests();
+      const filteredData = res.data.filter((doc:FormData)=> doc.isVerified === false);
+      setVerificationRequests(filteredData);
+    } catch (error) {
+      errorHandler(error);
+    }
+  };
+
+  const handleVerify = async (id: string) => {
+    try {
+      const res = await verifyDoctor(id);
+      if(res.data) {
+        toast.success('Doctor Verified Successfully');
+      }
+    } catch (error) {
+      errorHandler(error);
+    };
+  }
+
 
   return (
     <>
@@ -142,28 +174,15 @@ const AdminMainContent = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
-                  {[
-                    {
-                      name: 'Harsh Surendran',
-                      email: 'harshsurendran@gmail.com',
-                      gender: 'Male',
-                      age: '24'
-                    },
-                    {
-                      name: 'Harsh Surendran',
-                      email: 'harshsurendran@gmail.com',
-                      gender: 'Male',
-                      age: '24'
-                    }
-                  ].map((user, idx) => (
+              {VerificationRequests.map((doctor, idx) => (
                     <tr key={idx}>
-                      <td className="px-6 py-4 text-sm text-gray-900">{user.name}</td>
-                      <td className="px-6 py-4 text-sm text-gray-500">{user.email}</td>
-                      <td className="px-6 py-4 text-sm text-gray-500">{user.gender}</td>
-                      <td className="px-6 py-4 text-sm text-gray-500">{user.age}</td>
+                      <td className="px-6 py-4 text-sm text-gray-900">{doctor?.personalDetails.name}</td>
+                      <td className="px-6 py-4 text-sm text-gray-500">{doctor?.personalDetails.email}</td>
+                      <td className="px-6 py-4 text-sm text-gray-500">{doctor?.personalDetails.gender}</td>
+                      <td className="px-6 py-4 text-sm text-gray-500">{doctor?.personalDetails.age}</td>
                       <td className="px-6 py-4 text-sm">
-                        <button className="px-3 py-1 bg-blue-50 text-blue-600 rounded-md hover:bg-blue-100">
-                          Verify
+                        <button onClick={()=> handleVerify(doctor.doctorId)} className="px-3 py-1 bg-blue-50 text-blue-600 rounded-md hover:bg-blue-100">
+                       Verify
                         </button>
                       </td>
                     </tr>

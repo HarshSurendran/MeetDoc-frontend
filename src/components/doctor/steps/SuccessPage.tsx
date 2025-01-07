@@ -29,7 +29,7 @@ const SuccessPage: React.FC<SuccessPageProps> = ({
 
   return (
     <div className="space-y-4">
- <div className="border p-4 rounded-md bg-gray-50 max-h-60 overflow-y-auto">
+      <div className="border p-4 rounded-md bg-gray-50 max-h-60 overflow-y-auto">
         <h2 className="text-lg font-semibold mb-2">Terms and Conditions</h2>
         <p className="text-sm text-gray-700">
           Please read these terms and conditions carefully before using the MeetDoc online consultation platform. By accessing or using the platform, you agree to be bound by these terms and conditions. If you do not agree with any of these terms, please refrain from using the platform.
@@ -159,9 +159,7 @@ const SuccessPage: React.FC<SuccessPageProps> = ({
           {/* Continue adding terms as necessary */}
         </p>
       </div>
-
-
-
+      
       <div className="mb-4">
         <label className="flex items-center space-x-2">
           <input

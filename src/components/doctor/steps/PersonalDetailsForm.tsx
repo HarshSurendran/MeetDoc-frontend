@@ -14,12 +14,14 @@ interface PersonalDetailsFormProps {
   data: PersonalDetails;
   onUpdate: (data: Partial<PersonalDetails>) => void;
   onNext: () => void;
+  onBack: () => void;
 }
 
 const PersonalDetailsForm: React.FC<PersonalDetailsFormProps> = ({
   data,
   onUpdate,
   onNext,
+  onBack
 }) => {
   const [lang, setLang] = useState<string[]>([...data.language]);
 
@@ -135,7 +137,10 @@ const PersonalDetailsForm: React.FC<PersonalDetailsFormProps> = ({
         </div>
       </div>
 
-      <div className="flex justify-end space-x-4">
+      <div className="flex justify-between">
+        <Button type="button" variant="secondary" onClick={onBack}>
+          Back
+        </Button>
         <Button type="submit">Next</Button>
       </div>
     </form>

@@ -16,7 +16,7 @@ const PrivateRoute: React.FC<PrivateRoute> = ({ component: Component }) => {
     isVerified ? (
       <Component />
     ) : (
-      <DoctorRegistration />
+        <DoctorRegistration />
     )
   ) : (
     <Navigate to={'/doctor/login'} />
