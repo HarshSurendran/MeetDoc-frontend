@@ -14,6 +14,8 @@ import { RootState } from '@/redux/store/appStore';
 import toast from 'react-hot-toast';
 import errorHandler from '@/utils/errorHandler';
 import CompletedPage from '@/components/doctor/steps/CompletedPage';
+import { sendCertificate } from '@/services/doctor/doctor';
+
 
 const DoctorVerification: React.FC = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -106,13 +108,33 @@ const DoctorVerification: React.FC = () => {
     }));
   };
 
+  const sendCertificatesToBackend = async (educationFile: File | undefined, postGraduationFile: File | undefined) => {
+    console.log("Inside sendCertificatesToBackend function", educationFile, postGraduationFile);
+    const keys = { educationFile: '', postGraduationFile: '' };
+    if (educationFile) {
+      const response = await sendCertificate(educationFile);
+      console.log(response, "Response from the education file upload");
+      if(response) keys.educationFile = response?.data.key;      
+    }
+    if (postGraduationFile) {
+      const response = await sendCertificate(postGraduationFile);
+      if(response) keys.postGraduationFile = response?.data.key;      
+    }
+    return keys;  
+  }
+
   const handleSubmit = async () => {
-    try {
-      console.log('Submitting the data to backend...', formData);
-      formData["doctorId"] = doctorData._id;
-      //send data to the backend and store to verify.
-      const response = await verification(formData);
+    try {      
+      formData["doctorId"] = doctorData._id;      
+      const keys = await sendCertificatesToBackend(formData.educationDetails.certificateFile as File, formData.postGraduationDetails.certificateFile as File);
+
+      const updatedFormData: FormData = { ...formData, educationDetails: { ...formData.educationDetails, certificateFile: keys.educationFile }, postGraduationDetails: { ...formData.postGraduationDetails, certificateFile: keys.postGraduationFile } };
+      
+      console.log(updatedFormData, "Updated form data with keys");
+
+      const response = await verification(updatedFormData);
       console.log(response, " From the submission of verification data----");
+
       if (response) {
         toast.success("Verification data submitted successfully");
         setCompleted(true);
@@ -120,7 +142,6 @@ const DoctorVerification: React.FC = () => {
     } catch (error) {
       errorHandler(error);
     }
-    
   };
 
   return (

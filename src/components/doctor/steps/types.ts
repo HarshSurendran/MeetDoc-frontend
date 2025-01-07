@@ -15,7 +15,7 @@ export type EducationDetails = {
     registrationNumber: string;
     city: string;
     yearOfCompletion: number;
-    certificateFile?: File;
+    certificateFile?: File | string;
 };
 
 export type PostGraduationDetails = {
@@ -27,7 +27,7 @@ export type PostGraduationDetails = {
     registrationNumber: string;
     city: string;
     yearOfCompletion: number;
-    certificateFile?: File;
+    certificateFile?: File | string;
 };
 
 export type VerificationDetails = {
