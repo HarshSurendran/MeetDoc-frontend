@@ -27,7 +27,7 @@ export const login = async (
       userCredentials
     );
     console.log('This is response from login', response);
-    return response;
+    return response.data;
   } catch (error) {
     console.log('This is error from login', error);
 
@@ -41,7 +41,7 @@ export const logout = async (
 ): Promise<AxiosResponse | undefined> => {
   try {
     const response = await userAxiosInstance.post('/auth/logout', userId);
-    return response;
+    return response.data;
   } catch (error) {
     apiErrorHandler(error);
     return Promise.reject();
@@ -53,7 +53,9 @@ export const register = async (
 ): Promise<AxiosResponse | undefined> => {
   try {
     const response = await userAxiosInstance.post('/auth/register', data);
-    return response;
+    if (response) {
+      return response.data;
+    }
   } catch (error) {
     apiErrorHandler(error);
     return Promise.reject();
@@ -69,17 +71,21 @@ export const verifyOtp = async (
       otp,
       data,
     });
-    return response;
-  } catch (error) {
+    if (response) {
+      return response;
+    }
+  } catch (error) {    
     apiErrorHandler(error);
-    return Promise.reject();
+     return Promise.reject();
   }
 }
 
 export const sendGoogleToken = async (token: string) : Promise<AxiosResponse | undefined> => {
   try {
-    const response = await userAxiosInstance.post("/auth/google/callback", { token })
-    return response;
+    const response = await userAxiosInstance.post("/auth/google/callback", { token });
+    if (response) {
+      return response.data;
+    }
   } catch (error) {
     apiErrorHandler(error);
     return Promise.reject();

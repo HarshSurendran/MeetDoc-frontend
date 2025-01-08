@@ -73,6 +73,5 @@ async function getNewAccessToken() {
   const response = await axios.get(`${BASE_URL}/auth/refreshtoken`, {
     withCredentials: true,
   });
-  console.log('THis is response from refreshtoken endpoint', response.data);
-  return response.data.accessToken;
+  return response.data.data.accessToken;
 }

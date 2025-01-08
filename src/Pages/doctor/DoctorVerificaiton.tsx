@@ -9,12 +9,13 @@ import ExperienceDetailsForm from '../../components/doctor/steps/ExperienceDetai
 import PostGraduationDetailsForm from '../../components/doctor/steps/PostGraduationForm';
 import { checkDataSubmitted, verification } from '../../services/doctor/doctorAuth';
 import StartForm from '@/components/doctor/steps/StartForm';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/redux/store/appStore';
 import toast from 'react-hot-toast';
 import errorHandler from '@/utils/errorHandler';
 import CompletedPage from '@/components/doctor/steps/CompletedPage';
 import { sendCertificate } from '@/services/doctor/doctor';
+import { resetDoctor } from '@/redux/slices/doctorSlice';
 
 
 const DoctorVerification: React.FC = () => {
@@ -60,6 +61,7 @@ const DoctorVerification: React.FC = () => {
     isVerified: false,
   });
   const [completed, setCompleted] = useState(false);
+  const dispatch = useDispatch();
   const doctorData = useSelector((state: RootState) => state.doctor.doctor);
 
   useEffect(() => {
@@ -68,12 +70,17 @@ const DoctorVerification: React.FC = () => {
   
   const dataSubmitted = async () => {
     try {
-     const response = await checkDataSubmitted(doctorData._id);
+      if (!doctorData._id) {       
+        dispatch(resetDoctor());
+      }
+      const response = await checkDataSubmitted(doctorData._id);
+      console.log("This is the response from the checkDataSubmitted function", response);
      if(response) {
        setCompleted(true);
      } 
    } catch (error) {
-     console.log(error);
+      console.log(error);
+      errorHandler(error);
    }
   }
 

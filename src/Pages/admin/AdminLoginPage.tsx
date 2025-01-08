@@ -40,8 +40,9 @@ const AdminLoginPage: React.FC = () => {
       }
 
       const response = await login(admin);
+      console.log("Response from admin login",response);
 
-      if (response?.status == 201) {
+      if (response?.status) {
         toast.success('logged in successfully');
         dispatch(
           addAdmin({
@@ -54,9 +55,10 @@ const AdminLoginPage: React.FC = () => {
           'adminAccessToken',
           response.data.adminAccessToken
         );
-        navigate('/admin');
+        navigate('/admin/dashboard');
       }
     } catch (error) {
+      console.log("Error from admin login",error);
       errorHandler(error);
     }
   };

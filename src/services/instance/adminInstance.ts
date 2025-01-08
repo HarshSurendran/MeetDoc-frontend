@@ -13,7 +13,6 @@ export const adminAxiosInstance = axios.create({
 
 adminAxiosInstance.interceptors.request.use((config) => {
   const token = localStorage.getItem('adminAccessToken');
-  console.log('This is from admin axios interceptors: ', config);
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -67,5 +66,5 @@ adminAxiosInstance.interceptors.response.use((response) => {
       withCredentials: true,
     });
     console.log("THis is response from refreshtoken endpoint", response.data);
-    return response.data.adminAccessToken;
+    return response.data.data.adminAccessToken;
   }

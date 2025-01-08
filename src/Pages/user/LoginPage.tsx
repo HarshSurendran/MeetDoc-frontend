@@ -7,7 +7,7 @@ import {
 import { login } from '../../services/user/userAuth';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { addUser } from '../../redux/slices/userSlice';
+import { addUser, toggleAuthentication } from '../../redux/slices/userSlice';
 import errorHandler from '../../utils/errorHandler';
 import toast from 'react-hot-toast';
 
@@ -28,7 +28,6 @@ const LoginPage: React.FC = () => {
     try {
       setError('');
       event.preventDefault();
-
       const emailError = validateEmail(user.email);
       if (emailError) {
         setError(emailError);
@@ -39,11 +38,8 @@ const LoginPage: React.FC = () => {
         setError(passError);
         return;
       }
-
-      const response = await login(user);
-      console.log('This is the response from axios -', response);
-
-      if (response?.status == 201) {
+      const response = await login(user); 
+      if (response?.status) {
         toast.success('logged in successfully');
         dispatch(
           addUser({
@@ -52,6 +48,7 @@ const LoginPage: React.FC = () => {
             name: response?.data.user.name,
           })
         );
+        dispatch(toggleAuthentication(true));
         localStorage.setItem('userAccessToken', response.data.accessToken);
         navigate('/');
       }

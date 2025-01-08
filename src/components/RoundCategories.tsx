@@ -8,7 +8,7 @@ import {
 } from '@mui/material';
 
 const RoundCategories = (body: any) => {
-  console.log(body.props.image);
+ 
   return (
     // <Card>
     //   <CardMedia

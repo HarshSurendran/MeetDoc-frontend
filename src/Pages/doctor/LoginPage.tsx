@@ -53,13 +53,12 @@ const LoginPage = () => {
       setLoading(true);
       try {
         const response = await login(formData);
-        if (response) {
-          console.log('Form submitted:', response);
+
+        if (response) {          
           localStorage.setItem(
             'doctorAccessToken',
             response.data.doctorAccessToken
           );
-          console.log("This is the doc data from server", response.data.docData);
           dispatch(addDoctor(response.data.docData));
           toast.success('Logged in successfully');
           navigate('/doctor');

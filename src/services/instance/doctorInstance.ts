@@ -77,5 +77,5 @@ async function getNewAccessToken() {
     withCredentials: true,
   });
   console.log('THis is response from refreshtoken endpoint', response.data);
-  return response.data.accessToken;
+  return response.data.data.accessToken;
 }

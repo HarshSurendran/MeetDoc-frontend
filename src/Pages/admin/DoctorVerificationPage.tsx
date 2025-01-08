@@ -42,7 +42,7 @@ const DoctorVerificationPage: React.FC = () => {
     try {
       if (id) {
         const response = await checkDataSubmitted(id);
-        console.log('Reapone Data:', response);
+        
         if (response) {
           const docData  = response.data.data;
           console.log('Doctor Data:', docData);

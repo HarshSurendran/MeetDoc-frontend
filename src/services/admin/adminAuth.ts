@@ -12,7 +12,9 @@ export const login = async (
       '/auth/admin/login',
       adminCredentials
     );
-    return response;
+    if (response) {
+      return response.data;      
+    }
   } catch (error) {
     apiErrorHandler(error);
     return Promise.reject();
@@ -28,7 +30,9 @@ export const logout = async (
       adminId
     );
     localStorage.setItem('adminAccessToken', '');
-    return response;
+    if (response) {      
+      return response.data;
+    }
   } catch (error) {
     apiErrorHandler(error);
     return Promise.reject();

@@ -72,8 +72,9 @@ const SignupPage = () => {
     if (validateForm()) {
       setLoading(true);
       try {
+        console.log("Form submitted:-----------------------------------------", formData);
         const response = await register(formData);
-        console.log('Form submitted:', response);
+        console.log('Form submitted:-----------------------------------------', response);
         if (response?.data.mailSent) {
           toast.success('Otp has been sent to your email');
           navigate('/otp', { state: formData });
