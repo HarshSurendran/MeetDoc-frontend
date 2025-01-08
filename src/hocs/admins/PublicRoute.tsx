@@ -10,7 +10,7 @@ interface PublicRoute {
 const PublicRoute: React.FC<PublicRoute> = ({ component: Component }) => {
   const admin = useSelector((state: RootState) => state.admin.admin);
   console.log(admin, 'From public roots');
-  return admin._id ? <Navigate to={'/admin'} /> : <Component />;
+  return admin._id ? <Navigate to={'/admin/dashboard'} /> : <Component />;
 };
 
 export default PublicRoute;
