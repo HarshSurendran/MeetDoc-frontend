@@ -60,6 +60,7 @@ export const verification = async (formData: FormData) => {
   }
 };
 
+//get data submitted by doctor
 export const checkDataSubmitted = async (doctorId: string) => {
   try {
     const response = await doctorAxiosInstance.get(

@@ -66,10 +66,23 @@ export const getVerificationRequests = async () => {
     }
 }
 
-export const verifyDoctor = async (id: string) => {
+export const verifyDoctor = async (id: string, status : Boolean) => {
     try {
-        const response = await adminAxiosInstance.patch(`/auth/doctor/verify/${id}`);
+        const response = await adminAxiosInstance.patch(`/auth/doctor/verify/${id}`, {status});
         return response;
+    } catch (error) {
+        apiErrorHandler(error);
+        return Promise.reject();
+    }
+}
+
+export const getCertificate = async (key : string) => {
+    try {
+        const response = await adminAxiosInstance.get(`/s3/certificate/${key}`);
+        if (response) {
+            return response.data.url;
+        }
+        return null;
     } catch (error) {
         apiErrorHandler(error);
         return Promise.reject();
