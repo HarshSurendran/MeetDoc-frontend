@@ -3,8 +3,9 @@ import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
 import { sendGoogleToken } from '@/services/user/userAuth';
 import errorHandler from '@/utils/errorHandler';
 import { useDispatch } from 'react-redux';
-import { addUser, toggleAuthentication } from '@/redux/slices/userSlice';
+import { addPhoto, addUser, toggleAuthentication } from '@/redux/slices/userSlice';
 import { useNavigate } from 'react-router-dom';
+import { getProfilePhoto } from '@/services/user/user';
 
 const GoogleLoginButton = () => {
     const dispatch = useDispatch();
@@ -13,14 +14,17 @@ const GoogleLoginButton = () => {
 
     const handleSuccess = async (credentialResponse: any) => {
         try {
-            console.log('Google Login Success:', credentialResponse);
             const response = await sendGoogleToken(credentialResponse);
             console.log("this is reposne form google signin--------------------------- ", response?.data.user);
             if (response) {
               dispatch(addUser(response.data.user));
               dispatch(toggleAuthentication(true));
-                localStorage.setItem("accessToken", response.data.accessToken);
-                navigate("/");
+              localStorage.setItem("accessToken", response.data.accessToken);
+              if (response.data.user?.photo) {
+                const url = await getProfilePhoto(response.data.user.photo);
+                dispatch(addPhoto(url));
+              }
+              navigate("/");
             }
         } catch (error) {
             errorHandler(error);

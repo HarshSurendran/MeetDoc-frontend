@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -23,61 +23,29 @@ import {
 } from "@/components/ui/popover";
 import { format } from "date-fns";
 import { Calendar as CalendarIcon, Camera } from "lucide-react";
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/redux/store/appStore';
-import { changeProfilePhoto, getUserData, updateUser } from '@/services/user/user';
-import { User } from '@/types/Authtypes/userTypes';
+import { changeProfilePhoto, getProfilePhoto, updateUser } from '@/services/user/user';
 import errorHandler from '@/utils/errorHandler';
 import toast from 'react-hot-toast';
 import getCroppedImg from '@/utils/getCroppedImg';
 import Cropper, { Area } from 'react-easy-crop';
+import { addPhoto } from '@/redux/slices/userSlice';
+import { IUser } from '@/interfaces/user/IUser';
 
 
 const UserProfile: React.FC = () => {
   const [isEditing, setIsEditing] = useState(false);
-  const [userData, setUserData] = useState<User>({
-    name: "John Doe",
-    email: "john@example.com",
-    gender: "Male",
-    phone: "+1234567890",
-    date_of_birth: "1990-01-01",
-    occupation: "Software Engineer",
-    address: {
-      district: "Downtown",
-      locality: "Tech Hub",
-      pincode: "12345",
-      state: "California",
-      country: "USA"
-    },
-    rating: 4.5,
-    photo: "Heroimageblue.png"
-  });
   const user = useSelector((state: RootState) => state.user.user);
-
-  
-  const [photo, setPhoto] = useState(userData.photo);
+  const [userData, setUserData] = useState<Partial<IUser>>(user);  
+  const [photo, setPhoto] = useState(userData?.photo || "defaultprofilephoto.jpg");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [showCropModal, setShowCropModal] = useState(false);
   const [imageSrc, setImageSrc] = useState<string | null>(null);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area|null>(null);
-  
-
-  useEffect(() => {
-    getUser();
-  }, []);
-  
-  const getUser = async () => {
-    try {
-      const response = await getUserData(user._id);
-      if (response?.status) {
-        setUserData(response.data);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  }
+  const dispatch = useDispatch();
 
   const handleSave = async () => {
     try {
@@ -131,14 +99,16 @@ const UserProfile: React.FC = () => {
     try {
       const formData = new FormData();
       formData.append("photo", file);
-      const response = await changeProfilePhoto(user._id, formData);
+      const response = await changeProfilePhoto(userData._id as string, formData);
       if (response?.status) {
         toast.success("Profile Photo updated!");
       }
+      const url = await getProfilePhoto(response.data.key);
+      console.log(url,"This is the profilephoto url ")
+      dispatch(addPhoto(url));
     } catch (error) {
       errorHandler(error);
     }
-
   }
 
   const onCropComplete = async (_: any, croppedAreaPixels: any) => {
@@ -297,7 +267,7 @@ const UserProfile: React.FC = () => {
                 <PopoverContent className="w-auto p-0">
                   <Calendar
                     mode="single"
-                    selected={new Date(userData.date_of_birth)}
+                    selected={userData.date_of_birth}
                     onSelect={handleDateSelect}
                     initialFocus
                   />

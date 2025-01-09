@@ -1,6 +1,7 @@
 import apiErrorHandler from "@/utils/apiErrorHandler";
 import { userAxiosInstance } from "../instance/userInstance";
 import { User } from "@/types/Authtypes/userTypes";
+import { IUser } from "@/interfaces/user/IUser";
 
 export const getUserData = async (id: string) => {
     try {
@@ -14,7 +15,7 @@ export const getUserData = async (id: string) => {
     }
 }
 
-export const updateUser = async (id: string, data: User) => {
+export const updateUser = async (id: string, data: Partial<IUser>) => {
     try {
         const response = await userAxiosInstance.patch(`users/${id}`, data);
         if (response) {
@@ -25,7 +26,6 @@ export const updateUser = async (id: string, data: User) => {
         return Promise.reject();
     }
 }
-
 
 export const changeProfilePhoto = async (id: string, formData: FormData) => {
     try {
@@ -40,5 +40,19 @@ export const changeProfilePhoto = async (id: string, formData: FormData) => {
     } catch (error) {
         apiErrorHandler(error);
         return Promise.reject();        
+    }
+}
+
+
+export const getProfilePhoto = async (key : string) => {
+    try {        
+        const response = await userAxiosInstance.get(`/s3/file/${key}`);
+        if (response) {
+            return response.data.data.url;
+        }
+        return null;
+    } catch (error) {
+        apiErrorHandler(error);
+        return Promise.reject();
     }
 }

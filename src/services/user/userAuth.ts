@@ -20,17 +20,18 @@ import { FormData } from '../../Pages/user/SignupPage';
 
 export const login = async (
   userCredentials: Ilogin
-): Promise<AxiosResponse<IloginResponse> | undefined> => {
+): Promise<AxiosResponse<Partial<IloginResponse>> | undefined> => {
   try {
     const response = await userAxiosInstance.post(
       '/auth/login',
       userCredentials
     );
     console.log('This is response from login', response);
-    return response.data;
+    if (response) {
+      return response.data;      
+    }
   } catch (error) {
     console.log('This is error from login', error);
-
     apiErrorHandler(error);
     return Promise.reject();
   }

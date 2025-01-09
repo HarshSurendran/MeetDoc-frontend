@@ -24,9 +24,6 @@ const UserRouter = () => {
         
       
       </Route>
-
-
-      
     </Routes>
   );
 };

@@ -78,7 +78,7 @@ export const verifyDoctor = async (id: string, status : Boolean) => {
 
 export const getCertificate = async (key : string) => {
     try {        
-        const response = await adminAxiosInstance.get(`/s3/certificate/${key}`);
+        const response = await adminAxiosInstance.get(`/s3/file/${key}`);
         if (response) {
             return response.data.data.url;
         }

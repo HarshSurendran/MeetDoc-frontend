@@ -7,9 +7,10 @@ import {
 import { login } from '../../services/user/userAuth';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { addUser, toggleAuthentication } from '../../redux/slices/userSlice';
+import { addPhoto, addUser, toggleAuthentication } from '../../redux/slices/userSlice';
 import errorHandler from '../../utils/errorHandler';
 import toast from 'react-hot-toast';
+import { getProfilePhoto } from '@/services/user/user';
 
 const LoginPage: React.FC = () => {
   const [user, setUser] = useState({
@@ -38,18 +39,18 @@ const LoginPage: React.FC = () => {
         setError(passError);
         return;
       }
-      const response = await login(user); 
+      const response = await login(user);
       if (response?.status) {
         toast.success('logged in successfully');
-        dispatch(
-          addUser({
-            _id: response?.data.user._id,
-            email: response?.data.user.email,
-            name: response?.data.user.name,
-          })
-        );
+        dispatch(addUser(response.data.user));
         dispatch(toggleAuthentication(true));
-        localStorage.setItem('userAccessToken', response.data.accessToken);
+        if (response.data.accessToken) {
+          localStorage.setItem('userAccessToken', response.data.accessToken);
+        }
+        if (response.data.user?.photo) {
+          const url = await getProfilePhoto(response.data.user.photo);
+          dispatch(addPhoto(url));
+        }
         navigate('/');
       }
     } catch (error) {

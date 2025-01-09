@@ -12,7 +12,7 @@ export interface IUser {
     locality: string;
     state: string;
     country: string;
-    pincode: number;
+    pincode: string;
   };
   rating?: number;
   photo: string;
