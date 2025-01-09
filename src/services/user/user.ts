@@ -25,3 +25,20 @@ export const updateUser = async (id: string, data: User) => {
         return Promise.reject();
     }
 }
+
+
+export const changeProfilePhoto = async (id: string, formData: FormData) => {
+    try {
+        const response = await userAxiosInstance.patch(`users/profilephoto/${id}`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+        if (response) {
+            return response.data;
+        }      
+    } catch (error) {
+        apiErrorHandler(error);
+        return Promise.reject();        
+    }
+}
