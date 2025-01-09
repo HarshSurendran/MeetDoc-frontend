@@ -2,7 +2,7 @@ import toast from 'react-hot-toast';
 import Button from '../comps/Button';
 import Input from '../comps/Input';
 import Select from '../comps/Select';
-import { PersonalDetails } from './types';
+import { PersonalDetails } from '../../../types/Authtypes/doctorTypes';
 import { useState } from 'react';
 import {
   validateEmail,
@@ -21,7 +21,7 @@ const PersonalDetailsForm: React.FC<PersonalDetailsFormProps> = ({
   data,
   onUpdate,
   onNext,
-  onBack
+  onBack,
 }) => {
   const [lang, setLang] = useState<string[]>([...data.language]);
 

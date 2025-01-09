@@ -1,7 +1,6 @@
-
 import Button from '../comps/Button';
 import Select from '../comps/Select';
-import { VerificationDetails } from './types';
+import { VerificationDetails } from '../../../types/Authtypes/doctorTypes';
 
 interface VerificationFormProps {
   data: VerificationDetails;

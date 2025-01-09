@@ -2,7 +2,7 @@ import toast from 'react-hot-toast';
 import Button from '../comps/Button';
 import Input from '../comps/Input';
 import Select from '../comps/Select';
-import { EducationDetails } from './types';
+import { EducationDetails } from '../../../types/Authtypes/doctorTypes';
 import {
   validateInstituteName,
   validateUniversityName,

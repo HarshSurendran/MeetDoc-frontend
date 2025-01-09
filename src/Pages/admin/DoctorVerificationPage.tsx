@@ -1,65 +1,59 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
- 
-} from "@/components/ui/card";
-import {
-  Badge,
-} from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import {
   User,
   Phone,
   Mail,
   GraduationCap,
-  
   FileCheck,
   Briefcase,
- 
   CheckCircle2,
   XCircle,
   ExternalLink,
 } from 'lucide-react';
 import { checkDataSubmitted } from '@/services/doctor/doctorAuth';
 import errorHandler from '@/utils/errorHandler';
-import { FormData } from '@/components/doctor/steps/types';
+import { FormData } from '@/types/Authtypes/doctorTypes';
 import { getCertificate, verifyDoctor } from '@/services/admin/admin';
-
 
 const DoctorVerificationPage: React.FC = () => {
   const { id } = useParams();
   const [data, setData] = useState<FormData | null>(null);
 
   useEffect(() => {
-    getDoctorData();    
+    getDoctorData();
   }, [id]);
 
   const getDoctorData = async () => {
     try {
       if (id) {
         const response = await checkDataSubmitted(id);
-        
+
         if (response) {
-          const docData  = response.data.data;
+          const docData = response.data.data;
           console.log('Doctor Data:', docData);
-          const DegreeCertificateUrl = await getCertificate(docData.educationDetails.certificateFile);
+          const DegreeCertificateUrl = await getCertificate(
+            docData.educationDetails.certificateFile
+          );
           if (DegreeCertificateUrl) {
             docData.educationDetails.certificateFile = DegreeCertificateUrl;
           }
           if (docData.postGraduationDetails.certificateFile) {
-            const PostGraduationCertificateUrl = await getCertificate(docData.postGraduationDetails.certificateFile);
+            const PostGraduationCertificateUrl = await getCertificate(
+              docData.postGraduationDetails.certificateFile
+            );
             if (PostGraduationCertificateUrl) {
-              docData.postGraduationDetails.certificateFile = PostGraduationCertificateUrl;
+              docData.postGraduationDetails.certificateFile =
+                PostGraduationCertificateUrl;
             }
           }
-          
+
           console.log('Doctor Details:', docData);
           setData(docData);
-        }        
+        }
       }
     } catch (error) {
       console.error('Failed to fetch doctor details:', error);
@@ -78,8 +72,7 @@ const DoctorVerificationPage: React.FC = () => {
         return prevData;
       });
     }
-    
-  }
+  };
 
   const handleVerification = async (status: boolean) => {
     try {
@@ -94,7 +87,7 @@ const DoctorVerificationPage: React.FC = () => {
   const formatDate = (date: Date) => {
     return new Date(date).toLocaleDateString('en-US', {
       month: 'long',
-      year: 'numeric'
+      year: 'numeric',
     });
   };
 
@@ -104,8 +97,12 @@ const DoctorVerificationPage: React.FC = () => {
       <div className="mb-8">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-blue-900">Doctor Verification</h1>
-            <p className="text-gray-600">Review and verify doctor's credentials</p>
+            <h1 className="text-2xl font-bold text-blue-900">
+              Doctor Verification
+            </h1>
+            <p className="text-gray-600">
+              Review and verify doctor's credentials
+            </p>
           </div>
           <div className="flex gap-3">
             <Button
@@ -167,7 +164,11 @@ const DoctorVerificationPage: React.FC = () => {
               <label className="text-sm text-gray-500">Languages</label>
               <div className="flex flex-wrap gap-2 mt-1">
                 {data?.personalDetails.language.map((lang, index) => (
-                  <Badge key={index} variant="secondary" className="bg-blue-50 text-blue-700">
+                  <Badge
+                    key={index}
+                    variant="secondary"
+                    className="bg-blue-50 text-blue-700"
+                  >
                     {lang}
                   </Badge>
                 ))}
@@ -189,7 +190,9 @@ const DoctorVerificationPage: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label className="text-sm text-gray-500">Institution</label>
-              <p className="font-medium">{data?.educationDetails.institution}</p>
+              <p className="font-medium">
+                {data?.educationDetails.institution}
+              </p>
             </div>
             <div>
               <label className="text-sm text-gray-500">Degree</label>
@@ -204,12 +207,20 @@ const DoctorVerificationPage: React.FC = () => {
               <p className="font-medium">{data?.educationDetails.university}</p>
             </div>
             <div>
-              <label className="text-sm text-gray-500">Registration Number</label>
-              <p className="font-medium">{data?.educationDetails.registrationNumber}</p>
+              <label className="text-sm text-gray-500">
+                Registration Number
+              </label>
+              <p className="font-medium">
+                {data?.educationDetails.registrationNumber}
+              </p>
             </div>
             <div>
-              <label className="text-sm text-gray-500">Year of Completion</label>
-              <p className="font-medium">{data?.educationDetails.yearOfCompletion}</p>
+              <label className="text-sm text-gray-500">
+                Year of Completion
+              </label>
+              <p className="font-medium">
+                {data?.educationDetails.yearOfCompletion}
+              </p>
             </div>
             <div>
               <label className="text-sm text-gray-500">Certificate</label>
@@ -240,27 +251,43 @@ const DoctorVerificationPage: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label className="text-sm text-gray-500">Institution</label>
-              <p className="font-medium">{data?.postGraduationDetails.institution}</p>
+              <p className="font-medium">
+                {data?.postGraduationDetails.institution}
+              </p>
             </div>
             <div>
               <label className="text-sm text-gray-500">Degree</label>
-              <p className="font-medium">{data?.postGraduationDetails.degree}</p>
+              <p className="font-medium">
+                {data?.postGraduationDetails.degree}
+              </p>
             </div>
             <div>
               <label className="text-sm text-gray-500">Specialty</label>
-              <p className="font-medium">{data?.postGraduationDetails.specialty}</p>
+              <p className="font-medium">
+                {data?.postGraduationDetails.specialty}
+              </p>
             </div>
             <div>
               <label className="text-sm text-gray-500">Super Specialty</label>
-              <p className="font-medium">{data?.postGraduationDetails.superSpecialty}</p>
+              <p className="font-medium">
+                {data?.postGraduationDetails.superSpecialty}
+              </p>
             </div>
             <div>
-              <label className="text-sm text-gray-500">Registration Number</label>
-              <p className="font-medium">{data?.postGraduationDetails.registrationNumber}</p>
+              <label className="text-sm text-gray-500">
+                Registration Number
+              </label>
+              <p className="font-medium">
+                {data?.postGraduationDetails.registrationNumber}
+              </p>
             </div>
             <div>
-              <label className="text-sm text-gray-500">Year of Completion</label>
-              <p className="font-medium">{data?.postGraduationDetails.yearOfCompletion}</p>
+              <label className="text-sm text-gray-500">
+                Year of Completion
+              </label>
+              <p className="font-medium">
+                {data?.postGraduationDetails.yearOfCompletion}
+              </p>
             </div>
             <div>
               <label className="text-sm text-gray-500">Certificate</label>
@@ -293,7 +320,9 @@ const DoctorVerificationPage: React.FC = () => {
               <div key={index} className="p-4 bg-gray-50 rounded-lg">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="text-sm text-gray-500">Hospital Name</label>
+                    <label className="text-sm text-gray-500">
+                      Hospital Name
+                    </label>
                     <p className="font-medium">{exp.hospitalName}</p>
                   </div>
                   <div>
@@ -326,14 +355,14 @@ const DoctorVerificationPage: React.FC = () => {
             <div>
               <p className="text-sm text-gray-500">Current Status</p>
               <Badge
-                variant={data?.isVerified ? "default" : "secondary"}
+                variant={data?.isVerified ? 'default' : 'secondary'}
                 className={`mt-1 ${
                   data?.isVerified
-                    ? "bg-green-100 text-green-700"
-                    : "bg-yellow-100 text-yellow-700"
+                    ? 'bg-green-100 text-green-700'
+                    : 'bg-yellow-100 text-yellow-700'
                 }`}
               >
-                {data?.isVerified ? "Verified" : "Pending Verification"}
+                {data?.isVerified ? 'Verified' : 'Pending Verification'}
               </Badge>
             </div>
             <div className="flex gap-3">

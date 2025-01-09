@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -22,15 +22,18 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { format } from "date-fns";
-import { Calendar as CalendarIcon, Pencil, Camera } from "lucide-react";
+import { Calendar as CalendarIcon, Camera } from "lucide-react";
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store/appStore';
-import { getUserData } from '@/services/user/user';
+import { getUserData, updateUser } from '@/services/user/user';
+import { User } from '@/types/Authtypes/userTypes';
+import errorHandler from '@/utils/errorHandler';
+import toast from 'react-hot-toast';
 
-const UserProfile = () => {
+const UserProfile: React.FC = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [date, setDate] = useState(new Date());
-  const [userData, setUserData] = useState({
+  const [userData, setUserData] = useState<User>({
     name: "John Doe",
     email: "john@example.com",
     gender: "Male",
@@ -64,9 +67,18 @@ const UserProfile = () => {
     }
   }
 
-  const handleSave = () => {
-    setIsEditing(false);
-    // Add API call to save user data
+  const handleSave = async () => {
+    try {
+      setIsEditing(false);
+      // Add API call to save user data
+      const response = await updateUser(user._id, userData);
+      if (response.status) {
+        toast.success("Successfully updated!");
+      }
+    } catch (error) {
+      errorHandler(error);
+    }
+
   };
 
   return (

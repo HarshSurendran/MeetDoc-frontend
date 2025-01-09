@@ -41,12 +41,6 @@
 //         required
 //       />
 
-
-
-
-
-
-
 //       <div className="flex justify-between">
 //         <Button type="button" variant="secondary" onClick={onBack}>
 //           Back
@@ -63,7 +57,7 @@ import toast from 'react-hot-toast';
 import Button from '../comps/Button';
 import Input from '../comps/Input';
 import Select from '../comps/Select';
-import { ExperienceDetails } from './types';
+import { ExperienceDetails } from '../../../types/Authtypes/doctorTypes';
 import { useState } from 'react';
 
 interface ExperienceDetailsFormProps {
@@ -79,15 +73,14 @@ const ExperienceDetailsForm: React.FC<ExperienceDetailsFormProps> = ({
   onNext,
   onBack,
 }) => {
-  console.log(data, typeof (data));
+  console.log(data, typeof data);
   const [experiences, setExperiences] = useState<ExperienceDetails[]>(data);
-  console.log(experiences, typeof (experiences));
-  
+  console.log(experiences, typeof experiences);
 
   const handleAddExperience = () => {
     setExperiences([
       ...experiences,
-      { hospitalName: '', position: '', from: new Date, to: new Date },
+      { hospitalName: '', position: '', from: new Date(), to: new Date() },
     ]);
   };
 
@@ -98,27 +91,30 @@ const ExperienceDetailsForm: React.FC<ExperienceDetailsFormProps> = ({
   };
 
   const isDateValid = (fromDate: Date, toDate: Date): boolean => {
-    if (!fromDate|| !toDate) return false;
+    if (!fromDate || !toDate) return false;
     const from = new Date(fromDate);
     const to = new Date(toDate);
-    console.log(from, to, new Date())
+    console.log(from, to, new Date());
     return from < to && from < new Date() && to <= new Date();
   };
-  
-  const handleExperienceChange = (index: number, field: keyof ExperienceDetails, value: any) => {
+
+  const handleExperienceChange = (
+    index: number,
+    field: keyof ExperienceDetails,
+    value: any
+  ) => {
     const updatedExperiences = [...experiences];
     updatedExperiences[index][field] = value;
-    setExperiences(updatedExperiences);    
+    setExperiences(updatedExperiences);
   };
 
-  
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!experiences.every(exp => isDateValid(exp.from, exp.to))) {
+    if (!experiences.every((exp) => isDateValid(exp.from, exp.to))) {
       toast.error('Please ensure all date ranges are valid.');
       return;
     }
-    onUpdate(experiences)
+    onUpdate(experiences);
     onNext();
   };
 
@@ -128,7 +124,7 @@ const ExperienceDetailsForm: React.FC<ExperienceDetailsFormProps> = ({
 
       {experiences.map((experience, index) => (
         <div key={index} className="border p-4 rounded-lg space-y-4">
-           <div className="flex justify-end">
+          <div className="flex justify-end">
             <button
               type="button"
               className="text-black text-xl"
@@ -140,13 +136,17 @@ const ExperienceDetailsForm: React.FC<ExperienceDetailsFormProps> = ({
           <Input
             label="Hospital Name"
             value={experience.hospitalName}
-            onChange={(e) => handleExperienceChange(index, 'hospitalName', e.target.value)}
+            onChange={(e) =>
+              handleExperienceChange(index, 'hospitalName', e.target.value)
+            }
             required
           />
           <Select
             label="Position"
             value={experience.position}
-            onChange={(e) => handleExperienceChange(index, 'position', e.target.value)}
+            onChange={(e) =>
+              handleExperienceChange(index, 'position', e.target.value)
+            }
             options={[
               { value: 'resident', label: 'Resident' },
               { value: 'consultant', label: 'Consultant' },
@@ -159,14 +159,18 @@ const ExperienceDetailsForm: React.FC<ExperienceDetailsFormProps> = ({
               label="From Date"
               type="date"
               value={`${experience.from ? new Date(experience.from).toISOString().split('T')[0] : ''}`}
-              onChange={(e) => handleExperienceChange(index, 'from', e.target.value)}
+              onChange={(e) =>
+                handleExperienceChange(index, 'from', e.target.value)
+              }
               required
             />
             <Input
               label="To Date"
               type="date"
               value={`${experience.to ? new Date(experience.to).toISOString().split('T')[0] : ''}`}
-              onChange={(e) => handleExperienceChange(index, 'to', e.target.value)}
+              onChange={(e) =>
+                handleExperienceChange(index, 'to', e.target.value)
+              }
               required
             />
           </div>

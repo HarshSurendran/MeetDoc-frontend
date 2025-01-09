@@ -1,13 +1,13 @@
-import { FormData } from '../../components/doctor/steps/types';
+import { FormData } from '../../types/Authtypes/doctorTypes';
 import apiErrorHandler from '../../utils/apiErrorHandler';
 import { doctorAxiosInstance } from '../instance/doctorInstance';
 
 export const login = async (data: { email: string; password: string }) => {
   try {
     const response = await doctorAxiosInstance.post('/auth/doctor/login', data);
-    
+
     if (response) {
-      return response.data;      
+      return response.data;
     }
   } catch (error) {
     console.log('Entered catch statement-----------------------', error);
@@ -62,7 +62,7 @@ export const verification = async (formData: FormData) => {
       '/auth/doctor/verify',
       formData
     );
-    if (response) {      
+    if (response) {
       return response.data;
     }
   } catch (error) {
@@ -72,16 +72,16 @@ export const verification = async (formData: FormData) => {
 
 //get data submitted by doctor
 export const checkDataSubmitted = async (doctorId: string) => {
-  try {    
-    if(!doctorId) return null;
+  try {
+    if (!doctorId) return null;
     const response = await doctorAxiosInstance.get(
       `/auth/doctor/checkVerification/${doctorId}`
     );
     if (response) {
-      return response.data;      
+      return response.data;
     }
   } catch (error) {
     console.log('Error in checkDataSubmitted----------------', error);
     apiErrorHandler(error);
   }
-}
+};

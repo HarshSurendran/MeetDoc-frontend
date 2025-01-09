@@ -4,10 +4,13 @@ import EducationDetailsForm from '../../components/doctor/steps/EducationDetails
 import VerificationForm from '../../components/doctor/steps/VerificationForm';
 import PersonalDetailsForm from '../../components/doctor/steps/PersonalDetailsForm';
 import SuccessPage from '../../components/doctor/steps/SuccessPage';
-import { ExperienceDetails, FormData } from '../../components/doctor/steps/types';
+import { ExperienceDetails, FormData } from '../../types/Authtypes/doctorTypes';
 import ExperienceDetailsForm from '../../components/doctor/steps/ExperienceDetailsForm';
 import PostGraduationDetailsForm from '../../components/doctor/steps/PostGraduationForm';
-import { checkDataSubmitted, verification } from '../../services/doctor/doctorAuth';
+import {
+  checkDataSubmitted,
+  verification,
+} from '../../services/doctor/doctorAuth';
 import StartForm from '@/components/doctor/steps/StartForm';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/redux/store/appStore';
@@ -16,7 +19,6 @@ import errorHandler from '@/utils/errorHandler';
 import CompletedPage from '@/components/doctor/steps/CompletedPage';
 import { sendCertificate } from '@/services/doctor/doctor';
 import { resetDoctor } from '@/redux/slices/doctorSlice';
-
 
 const DoctorVerification: React.FC = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -43,11 +45,14 @@ const DoctorVerification: React.FC = () => {
     verificationDetails: {
       specialty: '',
     },
-    experienceDetails: [{
-      hospitalName: "", position: "",
-      from: new Date,
-      to: new Date
-    }],
+    experienceDetails: [
+      {
+        hospitalName: '',
+        position: '',
+        from: new Date(),
+        to: new Date(),
+      },
+    ],
     personalDetails: {
       name: '',
       phone: '',
@@ -66,23 +71,26 @@ const DoctorVerification: React.FC = () => {
 
   useEffect(() => {
     dataSubmitted();
-  },[]);
-  
+  }, []);
+
   const dataSubmitted = async () => {
     try {
-      if (!doctorData._id) {       
+      if (!doctorData._id) {
         dispatch(resetDoctor());
       }
       const response = await checkDataSubmitted(doctorData._id);
-      console.log("This is the response from the checkDataSubmitted function", response);
-     if(response) {
-       setCompleted(true);
-     } 
-   } catch (error) {
+      console.log(
+        'This is the response from the checkDataSubmitted function',
+        response
+      );
+      if (response) {
+        setCompleted(true);
+      }
+    } catch (error) {
       console.log(error);
       errorHandler(error);
-   }
-  }
+    }
+  };
 
   const handleNext = () => {
     setCurrentStep((prev) => Math.min(prev + 1, 7));
@@ -103,10 +111,10 @@ const DoctorVerification: React.FC = () => {
     setFormData((prev) => {
       return {
         ...prev,
-        ["experienceDetails"] : [...data], 
-      }
-    })
-  }
+        ['experienceDetails']: [...data],
+      };
+    });
+  };
 
   const toggleTerms = (data: boolean) => {
     setFormData((prev) => ({
@@ -115,35 +123,55 @@ const DoctorVerification: React.FC = () => {
     }));
   };
 
-  const sendCertificatesToBackend = async (educationFile: File | undefined, postGraduationFile: File | undefined) => {
-    console.log("Inside sendCertificatesToBackend function", educationFile, postGraduationFile);
+  const sendCertificatesToBackend = async (
+    educationFile: File | undefined,
+    postGraduationFile: File | undefined
+  ) => {
+    console.log(
+      'Inside sendCertificatesToBackend function',
+      educationFile,
+      postGraduationFile
+    );
     const keys = { educationFile: '', postGraduationFile: '' };
     if (educationFile) {
       const response = await sendCertificate(educationFile);
-      console.log(response, "Response from the education file upload");
-      if(response) keys.educationFile = response?.data.key;      
+      console.log(response, 'Response from the education file upload');
+      if (response) keys.educationFile = response?.data.key;
     }
     if (postGraduationFile) {
       const response = await sendCertificate(postGraduationFile);
-      if(response) keys.postGraduationFile = response?.data.key;      
+      if (response) keys.postGraduationFile = response?.data.key;
     }
-    return keys;  
-  }
+    return keys;
+  };
 
   const handleSubmit = async () => {
-    try {      
-      formData["doctorId"] = doctorData._id;      
-      const keys = await sendCertificatesToBackend(formData.educationDetails.certificateFile as File, formData.postGraduationDetails.certificateFile as File);
+    try {
+      formData['doctorId'] = doctorData._id;
+      const keys = await sendCertificatesToBackend(
+        formData.educationDetails.certificateFile as File,
+        formData.postGraduationDetails.certificateFile as File
+      );
 
-      const updatedFormData: FormData = { ...formData, educationDetails: { ...formData.educationDetails, certificateFile: keys.educationFile }, postGraduationDetails: { ...formData.postGraduationDetails, certificateFile: keys.postGraduationFile } };
-      
-      console.log(updatedFormData, "Updated form data with keys");
+      const updatedFormData: FormData = {
+        ...formData,
+        educationDetails: {
+          ...formData.educationDetails,
+          certificateFile: keys.educationFile,
+        },
+        postGraduationDetails: {
+          ...formData.postGraduationDetails,
+          certificateFile: keys.postGraduationFile,
+        },
+      };
+
+      console.log(updatedFormData, 'Updated form data with keys');
 
       const response = await verification(updatedFormData);
-      console.log(response, " From the submission of verification data----");
+      console.log(response, ' From the submission of verification data----');
 
       if (response) {
-        toast.success("Verification data submitted successfully");
+        toast.success('Verification data submitted successfully');
         setCompleted(true);
       }
     } catch (error) {
@@ -152,77 +180,82 @@ const DoctorVerification: React.FC = () => {
   };
 
   return (
-    <>    {
-      completed ? < CompletedPage doctorId={ doctorData._id } /> : <div className="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-2xl mx-auto bg-white rounded-lg shadow-md">
-          <div className="p-6">
-            <StepIndicator currentStep={currentStep} totalSteps={6} />
+    <>
+      {' '}
+      {completed ? (
+        <CompletedPage doctorId={doctorData._id} />
+      ) : (
+        <div className="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-2xl mx-auto bg-white rounded-lg shadow-md">
+            <div className="p-6">
+              <StepIndicator currentStep={currentStep} totalSteps={6} />
 
-            {currentStep === 1 && (
-              <StartForm             
-                onNext={handleNext}              
-              />
-            )}
+              {currentStep === 1 && <StartForm onNext={handleNext} />}
 
-            {currentStep === 2 && (
-              <PersonalDetailsForm
-                data={formData.personalDetails}
-                onUpdate={(data) => updateFormData('personalDetails', data)}
-                onNext={handleNext}
-                onBack={handleBack}
-              />
-            )}
+              {currentStep === 2 && (
+                <PersonalDetailsForm
+                  data={formData.personalDetails}
+                  onUpdate={(data) => updateFormData('personalDetails', data)}
+                  onNext={handleNext}
+                  onBack={handleBack}
+                />
+              )}
 
-            {currentStep === 3 && (
-              <EducationDetailsForm
-                data={formData.educationDetails}
-                onUpdate={(data) => updateFormData('educationDetails', data)}
-                onNext={handleNext}
-                onBack={handleBack}
-              />
-            )}
+              {currentStep === 3 && (
+                <EducationDetailsForm
+                  data={formData.educationDetails}
+                  onUpdate={(data) => updateFormData('educationDetails', data)}
+                  onNext={handleNext}
+                  onBack={handleBack}
+                />
+              )}
 
-            {currentStep === 4 && (
-              <PostGraduationDetailsForm
-                data={formData.postGraduationDetails}
-                onUpdate={(data) => updateFormData('postGraduationDetails', data)}
-                onNext={handleNext}
-                onBack={handleBack}
-              />
-            )}
+              {currentStep === 4 && (
+                <PostGraduationDetailsForm
+                  data={formData.postGraduationDetails}
+                  onUpdate={(data) =>
+                    updateFormData('postGraduationDetails', data)
+                  }
+                  onNext={handleNext}
+                  onBack={handleBack}
+                />
+              )}
 
-            {currentStep === 5 && (
-              <VerificationForm
-                data={formData.verificationDetails}
-                onUpdate={(data) => updateFormData('verificationDetails', data)}
-                onNext={handleNext}
-                onBack={handleBack}
-              />
-            )}
+              {currentStep === 5 && (
+                <VerificationForm
+                  data={formData.verificationDetails}
+                  onUpdate={(data) =>
+                    updateFormData('verificationDetails', data)
+                  }
+                  onNext={handleNext}
+                  onBack={handleBack}
+                />
+              )}
 
-            {currentStep === 6 && (
-              <ExperienceDetailsForm
-                data={formData.experienceDetails}
-                onUpdate={(data) => updateExperience(data as ExperienceDetails[])}
-                onNext={handleNext}
-                onBack={handleBack}
-              />
-            )}
+              {currentStep === 6 && (
+                <ExperienceDetailsForm
+                  data={formData.experienceDetails}
+                  onUpdate={(data) =>
+                    updateExperience(data as ExperienceDetails[])
+                  }
+                  onNext={handleNext}
+                  onBack={handleBack}
+                />
+              )}
 
-            {currentStep === 7 && (
-              <SuccessPage
-                data={formData}
-                onUpdate={(data) => toggleTerms(data)}
-                onSubmit={handleSubmit}
-                onBack={handleBack}
-              />
-            )}
+              {currentStep === 7 && (
+                <SuccessPage
+                  data={formData}
+                  onUpdate={(data) => toggleTerms(data)}
+                  onSubmit={handleSubmit}
+                  onBack={handleBack}
+                />
+              )}
+            </div>
           </div>
         </div>
-      </div>
-    }
+      )}
     </>
-
   );
 };
 
