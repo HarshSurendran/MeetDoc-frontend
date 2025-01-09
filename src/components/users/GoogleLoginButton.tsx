@@ -19,7 +19,7 @@ const GoogleLoginButton = () => {
             if (response) {
               dispatch(addUser(response.data.user));
               dispatch(toggleAuthentication(true));
-              localStorage.setItem("accessToken", response.data.accessToken);
+              localStorage.setItem("userAccessToken", response.data.accessToken);
               if (response.data.user?.photo) {
                 const url = await getProfilePhoto(response.data.user.photo);
                 dispatch(addPhoto(url));

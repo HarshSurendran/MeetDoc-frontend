@@ -14,7 +14,7 @@ import { RootState } from '../../redux/store/appStore';
 import { logout } from '../../services/doctor/doctorAuth';
 import errorHandler from '../../utils/errorHandler';
 import { resetDoctor } from '../../redux/slices/doctorSlice';
-import { useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -26,12 +26,11 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+import { NavLink } from 'react-router-dom';
 
-interface DashboardLayoutProps {
-  children: React.ReactNode;
-}
 
-const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
+
+const DashboardLayout: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const doctor = useSelector((state: RootState) => state.doctor.doctor);
   const dispatch = useDispatch();
@@ -49,6 +48,14 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
       errorHandler(error);
     }
   };
+
+  const sideMenu = [
+    { name: 'Dashboard', icon: <Home className="h-5 w-5 mr-3" />, pathName: "/doctor/dashboard", },
+    { name: 'Appointments', icon: <Calendar className="h-5 w-5 mr-3" />, pathName: "/doctor/appointments", },
+    { name: 'Revenue', icon: <DollarSign className="h-5 w-5 mr-3" />, pathName: "/doctor/revenue", },
+    { name: 'Profile', icon: <User className="h-5 w-5 mr-3" />, pathName: "/doctor/profile", },
+    { name: 'Settings', icon:  <Settings className="h-5 w-5 mr-3" />, pathName: "/admin/settings", },
+]
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -74,45 +81,20 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
             <X className="h-6 w-6" />
           </button>
         </div>
-
         {/* change a tag to Link tag */}
         <nav className="mt-8 px-4">
           <div className="space-y-2">
-            <a
-              href="/dashboard"
-              className="flex items-center px-4 py-3 text-sm rounded-lg bg-blue-800"
-            >
-              <Home className="h-5 w-5 mr-3" />
-              Dashboard
-            </a>
-            <a
-              href="/appointments"
-              className="flex items-center px-4 py-3 text-sm rounded-lg hover:bg-blue-800"
-            >
-              <Calendar className="h-5 w-5 mr-3" />
-              Appointments
-            </a>
-            <a
-              href="/revenue"
-              className="flex items-center px-4 py-3 text-sm rounded-lg hover:bg-blue-800"
-            >
-              <DollarSign className="h-5 w-5 mr-3" />
-              Revenue
-            </a>
-            <a
-              href="/profile"
-              className="flex items-center px-4 py-3 text-sm rounded-lg hover:bg-blue-800"
-            >
-              <User className="h-5 w-5 mr-3" />
-              Profile
-            </a>
-            <a
-              href="/settings"
-              className="flex items-center px-4 py-3 text-sm rounded-lg hover:bg-blue-800"
-            >
-              <Settings className="h-5 w-5 mr-3" />
-              Settings
-            </a>
+            {
+              sideMenu.map((item) => (
+                <NavLink key={item.name}
+                to={item.pathName}
+                className={({isActive}) => `flex items-center px-4 py-3 text-sm rounded-lg hover:bg-blue-800  ${isActive && "bg-blue-800" }`} 
+              >
+                {item.icon}
+                {item.name}
+            </NavLink>))}
+         
+           
           </div>
 
           <div className="absolute bottom-8 w-full px-4 left-0">
@@ -168,7 +150,9 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
         </header>
 
         {/* Main Content Area */}
-        <main className="flex-1 p-4">{children}</main>
+        <main className="flex-1 p-4">
+          <Outlet />
+        </main>
       </div>
     </div>
   );
