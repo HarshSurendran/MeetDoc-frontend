@@ -66,9 +66,9 @@ export const getVerificationRequests = async () => {
     }
 }
 
-export const verifyDoctor = async (id: string, status : Boolean) => {
+export const verifyDoctor = async (id: string, payload : { isVerified: Boolean, degree: string, specialisation: string, masterDegree: string }) => {
     try {
-        const response = await adminAxiosInstance.patch(`/auth/doctor/verify/${id}`, {status});
+        const response = await adminAxiosInstance.patch(`/auth/doctor/verify/${id}`, payload);
         return response.data;
     } catch (error) {
         apiErrorHandler(error);

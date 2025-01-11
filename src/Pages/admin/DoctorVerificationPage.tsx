@@ -61,8 +61,9 @@ const DoctorVerificationPage: React.FC = () => {
     }
   };
 
-  const onVerify = async (id: string, status: boolean) => {
-    const response = await verifyDoctor(id, status);
+  const onVerify = async (id: string, status:Boolean, data: {degree: string, specialisation: string, masterDegree: string}) => {
+    const payload =  { isVerified: status , ...data}
+    const response = await verifyDoctor(id, payload);
     if (response) {
       console.log('Doctor verification status updated:', response);
       setData((prevData) => {
@@ -77,7 +78,12 @@ const DoctorVerificationPage: React.FC = () => {
   const handleVerification = async (status: boolean) => {
     try {
       if (data?.doctorId) {
-        await onVerify(data?.doctorId, status);
+        const payload = {
+          degree: data.educationDetails.degree,
+          masterDegree: data.postGraduationDetails.degree || "",
+          specialisation: data.postGraduationDetails ? `${data.postGraduationDetails.superSpecialty}, ${data.postGraduationDetails.specialty}, ${data.educationDetails.specialty}` : data.educationDetails.specialty
+        }
+        await onVerify(data?.doctorId, status, payload );
       }
     } catch (error) {
       console.error('Verification failed:', error);

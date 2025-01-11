@@ -15,6 +15,13 @@ const doctorSlice = createSlice({
       isVerified: false,
       about: '',
       languages: [],
+      address: {
+        district: "",
+        locality: "",
+        pincode: "",
+        state: "",
+        country: ""
+      },
       fee: 0,
       rating: 0,
       _id: '',
@@ -36,6 +43,7 @@ const doctorSlice = createSlice({
       state.doctor.isVerified = action.payload?.isVerified;
       state.doctor.about = action.payload?.about;
       state.doctor.languages = action.payload?.languages;
+      state.doctor.address = action.payload.address;
       state.doctor.fee = action.payload?.fee;
       state.doctor.rating = action.payload?.rating;
       state.doctor._id = action.payload?._id;
@@ -61,6 +69,13 @@ const doctorSlice = createSlice({
         isVerified: false,
         about: '',
         languages: [],
+        address: {
+          district: "",
+          locality: "",
+          pincode: "",
+          state: "",
+          country: ""
+        },
         fee: 0,
         rating: 0,
         _id: '',
