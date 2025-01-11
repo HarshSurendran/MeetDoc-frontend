@@ -9,7 +9,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import errorHandler from '../../utils/errorHandler';
 import { verifyOtp } from '../../services/user/userAuth';
 import { useDispatch } from 'react-redux';
-import { addUser } from '../../redux/slices/userSlice';
+import { addUser, toggleAuthentication } from '../../redux/slices/userSlice';
 
 const OtpPage = () => {
   const [otp, setOtp] = useState<string[]>(new Array(6).fill(''));
@@ -136,12 +136,9 @@ const OtpPage = () => {
       const response = await verifyOtp(otp.join(''), formData);
       console.log(response, 'This is the reponse form otp');
       dispatch(
-        addUser({
-          _id: response?.data.user._id,
-          email: response?.data.user.email,
-          name: response?.data.user.name,
-        })
+        addUser(response?.data.user)
       );
+      dispatch(toggleAuthentication(true));
       localStorage.setItem('userAccessToken', response?.data.accessToken);
       navigate('/');
     } catch (error) {

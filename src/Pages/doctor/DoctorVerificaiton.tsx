@@ -17,7 +17,7 @@ import { RootState } from '@/redux/store/appStore';
 import toast from 'react-hot-toast';
 import errorHandler from '@/utils/errorHandler';
 import CompletedPage from '@/components/doctor/steps/CompletedPage';
-import { sendCertificate } from '@/services/doctor/doctor';
+import { sendFile } from '@/services/doctor/doctor';
 import { resetDoctor } from '@/redux/slices/doctorSlice';
 
 const DoctorVerification: React.FC = () => {
@@ -134,12 +134,12 @@ const DoctorVerification: React.FC = () => {
     );
     const keys = { educationFile: '', postGraduationFile: '' };
     if (educationFile) {
-      const response = await sendCertificate(educationFile);
+      const response = await sendFile(educationFile);
       console.log(response, 'Response from the education file upload');
       if (response) keys.educationFile = response?.data.key;
     }
     if (postGraduationFile) {
-      const response = await sendCertificate(postGraduationFile);
+      const response = await sendFile(postGraduationFile);
       if (response) keys.postGraduationFile = response?.data.key;
     }
     return keys;

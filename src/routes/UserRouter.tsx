@@ -9,6 +9,7 @@ import LandingPage from '../Pages/user/LandingPage';
 import UserProfilePage from '@/components/users/UserProfile';
 import UserDashboardLayout from '@/Pages/user/UserDashboardLayout';
 import Dashboard from '@/components/users/Dashboard';
+import UserErrorPage from '@/Pages/user/UserErrorPage';
 
 const UserRouter = () => {
   return (
@@ -24,6 +25,7 @@ const UserRouter = () => {
         
       
       </Route>
+      <Route path='*' element={<UserErrorPage/>} />
     </Routes>
   );
 };

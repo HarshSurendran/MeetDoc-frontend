@@ -26,6 +26,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+import { Link } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
 
 
@@ -35,6 +36,14 @@ const DashboardLayout: React.FC = () => {
   const doctor = useSelector((state: RootState) => state.doctor.doctor);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const sideLinks = [
+    { name: 'Dashboard', icon: <Home className="h-5 w-5 mr-3" />, pathName: "/doctor/dashboard", },
+    { name: 'Appointments', icon: <Calendar className="h-5 w-5 mr-3" />, pathName: "/doctor/appointments", },
+    { name: 'Revenue', icon: <DollarSign className="h-5 w-5 mr-3" />, pathName: "/doctor/revenue", },
+    { name: 'Profile', icon: <User className="h-5 w-5 mr-3" />, pathName: "/doctor/profile", },
+    { name: 'Settings', icon: <Settings className="h-5 w-5 mr-3" />, pathName: "/doctor/settings", },
+  ];
 
   const handleLogout = async () => {
     try {
@@ -48,14 +57,6 @@ const DashboardLayout: React.FC = () => {
       errorHandler(error);
     }
   };
-
-  const sideMenu = [
-    { name: 'Dashboard', icon: <Home className="h-5 w-5 mr-3" />, pathName: "/doctor/dashboard", },
-    { name: 'Appointments', icon: <Calendar className="h-5 w-5 mr-3" />, pathName: "/doctor/appointments", },
-    { name: 'Revenue', icon: <DollarSign className="h-5 w-5 mr-3" />, pathName: "/doctor/revenue", },
-    { name: 'Profile', icon: <User className="h-5 w-5 mr-3" />, pathName: "/doctor/profile", },
-    { name: 'Settings', icon:  <Settings className="h-5 w-5 mr-3" />, pathName: "/admin/settings", },
-]
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -76,51 +77,47 @@ const DashboardLayout: React.FC = () => {
       `}
       >
         <div className="flex items-center justify-between h-16 px-4 bg-blue-800">
-          <span className="text-xl font-bold">MeetDoc</span>
+          <span className="text-xl font-bold">MeetDoc Doctors</span>
           <button className="lg:hidden" onClick={() => setIsSidebarOpen(false)}>
             <X className="h-6 w-6" />
           </button>
         </div>
-        {/* change a tag to Link tag */}
+       
         <nav className="mt-8 px-4">
           <div className="space-y-2">
-            {
-              sideMenu.map((item) => (
-                <NavLink key={item.name}
+            {sideLinks.map((item) => (
+              <NavLink
+                key={item.name}
                 to={item.pathName}
-                className={({isActive}) => `flex items-center px-4 py-3 text-sm rounded-lg hover:bg-blue-800  ${isActive && "bg-blue-800" }`} 
+                className={({ isActive }) => `flex items-center px-4 py-3 text-sm rounded-lg hover:bg-blue-800 ${isActive && "bg-blue-800"}` }
               >
                 {item.icon}
                 {item.name}
-            </NavLink>))}
-         
-           
+              </NavLink>
+            ))}
           </div>
+          
 
-          <div className="absolute bottom-8 w-full px-4 left-0">
-            {/* <button onClick={handleLogout} className="flex items-center px-4 py-3 text-sm rounded-lg hover:bg-blue-800 w-full">
-              <LogOut className="h-5 w-5 mr-3" />
-              Logout
-            </button> */}
+          <div className="absolute bottom-8 w-full px-4 left-0">            
             <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                        <button className="w-full flex items-center space-x-3 px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow">
-                            <LogOut className="h-5 w-5" /> <span>Logout</span>
-                        </button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                        <AlertDialogHeader>
-                            <AlertDialogTitle>Confirm Logout</AlertDialogTitle>
-                            <AlertDialogDescription>
-                                Are you sure you want to log out?
-                            </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                            <AlertDialogCancel>Cancel</AlertDialogCancel>
-                            <AlertDialogAction onClick={handleLogout}>Continue</AlertDialogAction>
-                        </AlertDialogFooter>
-                    </AlertDialogContent>
-                </AlertDialog>
+              <AlertDialogTrigger asChild>
+                <button className="w-full flex items-center space-x-3 px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow">
+                  <LogOut className="h-5 w-5" /> <span>Logout</span>
+                </button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Confirm Logout</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Are you sure you want to log out?
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction onClick={handleLogout}>Continue</AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </div>
         </nav>
       </aside>
@@ -141,14 +138,13 @@ const DashboardLayout: React.FC = () => {
                 Welcome, Dr {doctor.name}
               </span>
               <img
-                src="pic from database"
+                src={doctor.photo || "defaultprofilephoto.jpg"}
                 alt="Profile"
                 className="h-8 w-8 rounded-full"
               />
             </div>
           </div>
         </header>
-
         {/* Main Content Area */}
         <main className="flex-1 p-4">
           <Outlet />

@@ -138,7 +138,7 @@ const OtpPage = () => {
           'doctorAccessToken',
           response?.data.doctorAccessToken
         );
-        navigate('/doctor');
+        navigate('/doctor/dashboard');
       }
     } catch (error) {
       setError('Failed to verify OTP');

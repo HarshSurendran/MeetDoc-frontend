@@ -50,7 +50,8 @@ const UserProfile: React.FC = () => {
   const handleSave = async () => {
     try {
       setIsEditing(false);
-      const response = await updateUser(user._id, userData);
+      const { photo, ...data } = userData
+      const response = await updateUser(user._id, data);
       if (response.status) {
         toast.success("Successfully updated!");
       }
@@ -287,17 +288,6 @@ const UserProfile: React.FC = () => {
 
           {/* Address Information */}
           <div className="space-y-4">
-            <div>
-              <Label>District</Label>
-              <Input
-                value={userData?.address?.district}
-                disabled={!isEditing}
-                onChange={(e) => setUserData({
-                  ...userData,
-                  address: { ...userData.address, district: e.target.value }
-                })}
-              />
-            </div>
 
             <div>
               <Label>Locality</Label>
@@ -311,6 +301,18 @@ const UserProfile: React.FC = () => {
               />
             </div>
 
+            <div>
+              <Label>District</Label>
+              <Input
+                value={userData?.address?.district}
+                disabled={!isEditing}
+                onChange={(e) => setUserData({
+                  ...userData,
+                  address: { ...userData.address, district: e.target.value }
+                })}
+              />
+            </div>
+            
             <div>
               <Label>Pincode</Label>
               <Input

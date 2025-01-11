@@ -10,6 +10,7 @@ import { login } from '../../services/doctor/doctorAuth';
 import { useDispatch } from 'react-redux';
 import { addDoctor } from '../../redux/slices/doctorSlice';
 import { Link } from 'react-router-dom';
+import { getPhotoUrl } from '@/services/doctor/doctor';
 
 export interface FormData {
   email: string;
@@ -59,13 +60,19 @@ const LoginPage = () => {
             'doctorAccessToken',
             response.data.doctorAccessToken
           );
+          if (response.data.docData.photo) {
+            const url = await getPhotoUrl(response.data.docData.photo);
+            console.log(url);
+            response.data.docData.photo = url; 
+            console.log("Response after updating photo url")
+          }
           dispatch(addDoctor(response.data.docData));
           toast.success('Logged in successfully');
-          navigate('/doctor');
+          navigate('/doctor/dashboard');
         }
       } catch (error) {
         errorHandler(error);
-        console.error('Signup error:', error);
+        console.error('Login error:', error);
       } finally {
         setLoading(false);
       }

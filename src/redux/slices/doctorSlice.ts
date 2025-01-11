@@ -8,7 +8,6 @@ const doctorSlice = createSlice({
       email: '',
       gender: '',
       phone: '',
-      password: '',
       dateOfBirth: '',
       occupation: '',
       qualification: '',
@@ -19,24 +18,42 @@ const doctorSlice = createSlice({
       fee: 0,
       rating: 0,
       _id: '',
+      photo: '',
     },
     isAuthenticated: false,
   },
   reducers: {
     addDoctor: (state, action) => {
-      state.doctor = action.payload;
+      console.log("action", action.payload);
+      state.doctor.name = action.payload?.name;
+      state.doctor.email = action.payload?.email;
+      state.doctor.gender = action.payload?.gender;
+      state.doctor.phone = action.payload?.phone;
+      state.doctor.dateOfBirth = action.payload?.dateOfBirth;
+      state.doctor.occupation = action.payload?.occupation;
+      state.doctor.qualification = action.payload?.qualification;
+      state.doctor.specialisation = action.payload?.specialisation;
+      state.doctor.isVerified = action.payload?.isVerified;
+      state.doctor.about = action.payload?.about;
+      state.doctor.languages = action.payload?.languages;
+      state.doctor.fee = action.payload?.fee;
+      state.doctor.rating = action.payload?.rating;
+      state.doctor._id = action.payload?._id;
+      state.doctor.photo = action.payload?.photo;
       state.isAuthenticated = true;
     },
     toggleAuth: (state, action) => {
       state.isAuthenticated = action.payload;
+    },
+    addPhoto: (state, action) => {
+      state.doctor.photo = action.payload;
     },
     resetDoctor: (state) => {
       state.doctor = {
         name: '',
         email: '',
         gender: '',
-        phone: '',
-        password: '',
+        phone: '',        
         dateOfBirth: '',
         occupation: '',
         qualification: '',
@@ -47,11 +64,12 @@ const doctorSlice = createSlice({
         fee: 0,
         rating: 0,
         _id: '',
+        photo: '',
       };
       state.isAuthenticated = false;
     },
   },
 });
 
-export const { addDoctor, toggleAuth, resetDoctor } = doctorSlice.actions;
+export const { addDoctor, addPhoto, toggleAuth, resetDoctor } = doctorSlice.actions;
 export default doctorSlice.reducer;
