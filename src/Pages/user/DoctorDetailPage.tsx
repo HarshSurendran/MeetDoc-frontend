@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Star, MapPin, Globe, GraduationCap, Languages } from "lucide-react";
-import { fetchSingleDoctor } from '@/services/user/user';
+import { fetchSingleDoctor, getProfilePhoto } from '@/services/user/user';
 import errorHandler from '@/utils/errorHandler';
 import SlotsView from '@/components/users/DoctorDetailView/SlotsView';
 import { useParams } from 'react-router-dom';
@@ -42,6 +42,12 @@ const DoctorDetailPage = () => {
       if (doctorId) {        
         const response = await fetchSingleDoctor(doctorId);
         if (response.status) {
+          if (response.data.doctor.photo) {
+            const url = await getProfilePhoto(response.data.doctor.photo);
+            response.data.doctor.photo = url;
+          } else {
+            response.data.doctor.photo = "defaultprofilephoto.jpg"
+          }
           setDoctor(response.data.doctor);
         }
       } else {
@@ -97,11 +103,11 @@ const DoctorDetailPage = () => {
                   </div>
                   <div className="flex items-center gap-2">
                     <Globe className="w-5 h-5 text-blue-600" />
-                    <span>{doctor.specialisation}</span>
+                    <span>{doctor.specialisation || "General Medicine"}</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Languages className="w-5 h-5 text-blue-600" />
-                    <span>{doctor?.languages.join(", ")}</span>
+                    <span>{doctor.languages? doctor.languages.join(", "): "Not mentioned"}</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Star className="w-5 h-5 text-blue-600" />

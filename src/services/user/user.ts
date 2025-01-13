@@ -59,7 +59,7 @@ export const getProfilePhoto = async (key : string) => {
 
 export const fetchSingleDoctor = async (doctorId: string) => {
     try {
-        const response = await userAxiosInstance.get(`doctordetail/${doctorId}`);
+        const response = await userAxiosInstance.get(`users/doctordetails/${doctorId}`);
         if (response) {
             return response.data;
         }
@@ -71,7 +71,7 @@ export const fetchSingleDoctor = async (doctorId: string) => {
 
 export const getSlotsForDoctor = async (doctorId: string) => {
     try {
-        const response = await userAxiosInstance.get(`doctorslots/${doctorId}`);
+        const response = await userAxiosInstance.get(`users/doctorslots/${doctorId}`);
         if (response) {
             return response.data
         }

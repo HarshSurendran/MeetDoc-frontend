@@ -54,7 +54,8 @@ const SlotsView: React.FC<SlotsViewProps> = ({doctor}) => {
   }, []);
 
   const fetchSlots = async () => {
-    try {
+      try {
+          console.log(doctor.id);
       const response = await getSlotsForDoctor(doctor.id);
       if (response.status) {
         console.log("This is the response after fetching slots", response)
@@ -64,11 +65,14 @@ const SlotsView: React.FC<SlotsViewProps> = ({doctor}) => {
       errorHandler(error);
     }
     }
-    
 
-  const dailySlots = slots.filter(slot => 
-    isSameDay(new Date(slot.StartTime), selectedDate)
-  ).sort((a, b) => new Date(a.StartTime).getTime() - new Date(b.StartTime).getTime());
+    const dailySlots = slots
+  .filter(slot => {
+    const isSameDaySlot = isSameDay(new Date(slot.StartTime), selectedDate);
+    const isFutureSlot = new Date(slot.StartTime).getTime() > Date.now();
+    return isSameDaySlot && isFutureSlot;
+  })
+  .sort((a, b) => new Date(a.StartTime).getTime() - new Date(b.StartTime).getTime());
 
   const getStatusColor = (status: Slot['status']) => {
     switch (status) {
@@ -163,7 +167,7 @@ const handleConfirmBooking = () => {
                     </div>
 
                     {dailySlots.length === 0 ? (
-                        <div className="text-center py-10">
+                        <div className="text-center py-4">
                             <p className="text-gray-500">No slots available for this date.</p>
                         </div>
                     ) : (
