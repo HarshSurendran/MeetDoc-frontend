@@ -10,6 +10,7 @@ import UserProfilePage from '@/components/users/UserProfile';
 import UserDashboardLayout from '@/Pages/user/UserDashboardLayout';
 import Dashboard from '@/components/users/Dashboard';
 import UserErrorPage from '@/Pages/user/UserErrorPage';
+import DoctorDetailPage from '@/Pages/user/DoctorDetailPage';
 
 const UserRouter = () => {
   return (
@@ -18,6 +19,7 @@ const UserRouter = () => {
       <Route path="/login" element={<PublicRoute component={LoginPage} />} />
       <Route path="/signup" element={<PublicRoute component={SignupPage} />} />
       <Route path="/otp" element={<PublicRoute component={OtpPage} />} />
+      <Route path="/doctordetail/:id" element={<PrivateRoute component={DoctorDetailPage}/>}/>
       <Route element={<PrivateRoute component={UserDashboardLayout} />}>
         <Route path="/dashboard"  element={<Dashboard />} />
         <Route path="profile" element={<UserProfilePage />} />

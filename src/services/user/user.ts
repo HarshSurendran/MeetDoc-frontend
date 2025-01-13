@@ -56,3 +56,27 @@ export const getProfilePhoto = async (key : string) => {
         return Promise.reject();
     }
 }
+
+export const fetchSingleDoctor = async (doctorId: string) => {
+    try {
+        const response = await userAxiosInstance.get(`doctordetail/${doctorId}`);
+        if (response) {
+            return response.data;
+        }
+        return null;
+    } catch (error) {
+        apiErrorHandler(error);
+    }
+}
+
+export const getSlotsForDoctor = async (doctorId: string) => {
+    try {
+        const response = await userAxiosInstance.get(`doctorslots/${doctorId}`);
+        if (response) {
+            return response.data
+        }
+        return null;        
+    } catch (error) {
+        apiErrorHandler(error);
+    }
+}
