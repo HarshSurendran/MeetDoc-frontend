@@ -100,7 +100,7 @@ const DoctorDetailPage = () => {
               </CardContent>
             </Card>
 
-            {doctor._id && doctor.name && doctor.specialisation && doctor.fee && <SlotsView doctor={{ id: doctor._id, name: doctor.name, specialisation: doctor.specialisation, fee: doctor.fee }} />}
+            {doctor._id && <SlotsView doctor={{ id: doctor._id, name: doctor.name, specialisation: doctor.specialisation, fee: doctor.fee }} />}
           </div>
 
           {/* Right Column - Reviews */}

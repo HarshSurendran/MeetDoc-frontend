@@ -101,7 +101,7 @@ const PaymentForm: React.FC<{
                       ) : (
                         <span className="flex items-center">
                           <CreditCard className="mr-2 h-4 w-4" />
-                          Pay ${appointmentDetails.fee}
+                          Pay ₹ {appointmentDetails.fee}
                         </span>
                       )}
                     </Button>
@@ -143,7 +143,7 @@ const PaymentForm: React.FC<{
                   <div className="pt-2">
                     <div className="flex justify-between items-center font-medium">
                       <span>Consultation Fee</span>
-                      <span>${appointmentDetails.fee}</span>
+                      <span>₹{appointmentDetails.fee}</span>
                     </div>
                   </div>
   

@@ -4,10 +4,10 @@ const paymentSlice = createSlice({
     name: 'payment',
     initialState: {
         payment: {
-            slotId: 'asdf',
-            userId: 'asdf',
-            doctorId: "asdf",
-            fee: 1000,
+            slotId: '',
+            userId: '',
+            doctorId: "",
+            fee: 0,
             startTime: "",
             endTime: "",
             doctor: {

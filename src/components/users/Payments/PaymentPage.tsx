@@ -38,6 +38,7 @@ const PaymentPage: React.FC = () => {
     const paymentDetails = useSelector((state: RootState) => state.payment.payment);
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    
 
     useEffect(() => {
         block();
@@ -46,7 +47,7 @@ const PaymentPage: React.FC = () => {
 
     const block = async () => {
         try {
-            await updateSlot(paymentDetails.slotId, {status:"Pending", pendingBookingExpiry: new Date()});
+            await updateSlot(paymentDetails.slotId, {status:"Pending", pendingBookingExpiry:  new Date(Date.now() + 15 * 60 * 1000)});
         } catch (error) {
             errorHandler(error);
         }
@@ -62,7 +63,7 @@ const PaymentPage: React.FC = () => {
 
     const getClientSecret = async () => {
         try {
-            const response = await createPaymentIntent(paymentDetails.slotId, paymentDetails.userId, paymentDetails.fee, new Date());
+            const response = await createPaymentIntent(paymentDetails.slotId, paymentDetails.userId, paymentDetails.doctorId, paymentDetails.fee, new Date());
             console.log("Recieved Clietn secret", response);
             if (response.data) {
                 setClientSecret(response.data.clientSecret);
@@ -90,7 +91,7 @@ const PaymentPage: React.FC = () => {
     const onBack = () => {
         unblock();
         dispatch(resetPayment());
-        navigate(`/doctordetails/${paymentDetails.doctorId}`)
+        navigate(`/doctordetail/${paymentDetails.doctorId}`)
     }
 
     return (

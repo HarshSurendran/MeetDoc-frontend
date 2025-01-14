@@ -96,11 +96,12 @@ export const updateSlot = async (slotId: string, body: Partial<ISlot> ) => {
 
 
 
-export const createPaymentIntent = async (slotId: string, userId: string, fee: number, date: Date) => {
+export const createPaymentIntent = async (slotId: string, userId: string, doctorId: string, fee: number, date: Date) => {
     try {
         const response = await userAxiosInstance.post(`/payments/paymentintent`, {
             slotId,
             userId,
+            doctorId,
             fee,
             date
         });

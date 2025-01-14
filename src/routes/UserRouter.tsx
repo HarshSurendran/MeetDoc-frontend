@@ -12,6 +12,7 @@ import Dashboard from '@/components/users/Dashboard';
 import UserErrorPage from '@/Pages/user/UserErrorPage';
 import DoctorDetailPage from '@/Pages/user/DoctorDetailPage';
 import PaymentPage from '@/components/users/Payments/PaymentPage';
+import PaymentRoute from '@/hocs/users/PaymentRoute';
 
 const UserRouter = () => {
   return (
@@ -21,7 +22,7 @@ const UserRouter = () => {
       <Route path="/signup" element={<PublicRoute component={SignupPage} />} />
       <Route path="/otp" element={<PublicRoute component={OtpPage} />} />
       <Route path="/doctordetail/:id" element={<PrivateRoute component={DoctorDetailPage} />} />
-      <Route path="users/payment" element={<PrivateRoute component={PaymentPage}/>} />
+      <Route path="users/payment" element={<PaymentRoute component={PaymentPage}/>} />
       <Route element={<PrivateRoute component={UserDashboardLayout} />}>
         <Route path="/dashboard"  element={<Dashboard />} />
         <Route path="profile" element={<UserProfilePage />} />
