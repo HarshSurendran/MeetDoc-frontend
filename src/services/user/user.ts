@@ -94,8 +94,6 @@ export const updateSlot = async (slotId: string, body: Partial<ISlot> ) => {
     }
 }
 
-
-
 export const createPaymentIntent = async (slotId: string, userId: string, doctorId: string, fee: number, date: Date) => {
     try {
         const response = await userAxiosInstance.post(`/payments/paymentintent`, {
@@ -124,5 +122,18 @@ export const getBookingDetails = async (paymentId: string) => {
         return null;
     } catch (error) {
         apiErrorHandler(error);  
+    }
+}
+
+export const getDoctorsForLandingPage = async () => {
+    try {
+        const response = await userAxiosInstance.get(`users/doctors`);
+        if (response) {
+            return response.data;
+        }
+        return null;
+    } catch (error) {
+        apiErrorHandler(error);
+        
     }
 }
