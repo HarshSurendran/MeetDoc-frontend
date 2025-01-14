@@ -12,24 +12,7 @@ import HeaderPostLogin from '@/components/users/HeaderPostLogin';
  
 
 const DoctorDetailPage = () => {
-  const [doctor, setDoctor] = useState<Partial<IDoctorProfile>>({
-    name: "Dr. Sarah Johnson",
-    gender: "Female",
-    address: {
-        district: "string",
-      locality: "string",
-      pincode: "string",
-      state: "string",
-       country: "string",
-    },
-    qualification: "MBBS, MD - General Medicine",
-    specialisation: "General Medicine",
-    about: "Dr. Sarah Johnson is a highly experienced general physician with over 15 years of practice. She specializes in preventive care and chronic disease management.",
-    languages: ["English", "Spanish", "French"],
-    fee: 150,
-    rating: 4.8,
-    photo: "defaultprofilephoto.jpg"
-  });
+  const [doctor, setDoctor] = useState<Partial<IDoctorProfile>>({});
   const params = useParams();
   const doctorId = params.id;
 
@@ -117,7 +100,7 @@ const DoctorDetailPage = () => {
               </CardContent>
             </Card>
 
-            <SlotsView doctor={{ id: doctor?._id || "", name: doctor.name||"", specialisation: doctor.specialisation||"", fee: doctor.fee||0 } } />
+            {doctor._id && doctor.name && doctor.specialisation && doctor.fee && <SlotsView doctor={{ id: doctor._id, name: doctor.name, specialisation: doctor.specialisation, fee: doctor.fee }} />}
           </div>
 
           {/* Right Column - Reviews */}

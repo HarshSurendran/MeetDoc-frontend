@@ -5,6 +5,7 @@ import storage from 'redux-persist/lib/storage';
 import persistStore from 'redux-persist/es/persistStore';
 import adminReducer from '../slices/adminSlice';
 import doctorReducer from '../slices/doctorSlice';
+import paymentReducer from "../slices/paymentSlice";
 
 const userPersistConfig = {
   key: 'user',
@@ -35,6 +36,7 @@ const appStore = configureStore({
     user: persistedUserReducer,
     admin: persistedAdminReducer,
     doctor: persistedDoctorReducer,
+    payment: paymentReducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

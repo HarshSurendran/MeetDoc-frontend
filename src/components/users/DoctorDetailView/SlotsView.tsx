@@ -16,101 +16,118 @@ import {
 } from '@/components/ui/tooltip';
 import { format, isSameDay } from 'date-fns';
 import { CalendarIcon, Clock, AlertCircle } from 'lucide-react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/redux/store/appStore';
 import errorHandler from '@/utils/errorHandler';
 import { getSlotsForDoctor } from '@/services/user/user';
 import toast from 'react-hot-toast';
 import BookingConfirmationModal from './BookingConfirmationModal';
+import { useNavigate } from 'react-router-dom';
+import { addPayment } from '@/redux/slices/paymentSlice';
 
-interface Slot {
+export interface ISlot {
     _id: string;
-  doctorId: string;
-  StartTime: Date;
-  EndTime: Date;
-  status: 'Available' | 'Pending' | 'Booked';
-  pendingBookingExpiry: Date | null;
+    doctorId: string;
+    StartTime: Date;
+    EndTime: Date;
+    status: 'Available' | 'Pending' | 'Booked';
+    pendingBookingExpiry: Date | null;
 }
 
 interface SlotsViewProps {
     doctor: { id: string, name: string, specialisation: string, fee: number};
 }
 
-
-
 const SlotsView: React.FC<SlotsViewProps> = ({doctor}) => {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-  const [slots, setSlots] = useState<Slot[]>([
-    { _id: "q", doctorId: "1", StartTime: new Date("2025-01-13T09:00:00"), EndTime: new Date("2025-01-13T09:30:00"), status: "Available",pendingBookingExpiry: null },
-    { _id: "e", doctorId: "1", StartTime: new Date("2025-01-13T09:30:00"), EndTime: new Date("2025-01-13T10:00:00"), status: "Booked",pendingBookingExpiry: null  },
-    { _id: "s", doctorId: "1", StartTime: new Date("2025-01-13T10:00:00"), EndTime: new Date("2025-01-13T10:30:00"), status: "Available",pendingBookingExpiry: null  },
-  ]);
-    
-  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
-  const [selectedSlot, setSelectedSlot] = useState<Slot | null>(null);
+    const [slots, setSlots] = useState<ISlot[]>([
+        { _id: "q", doctorId: "1", StartTime: new Date("2025-01-14T09:00:00"), EndTime: new Date("2025-01-14T09:30:00"), status: "Available", pendingBookingExpiry: null },
+        { _id: "e", doctorId: "1", StartTime: new Date("2025-01-14T09:30:00"), EndTime: new Date("2025-01-14T10:00:00"), status: "Booked", pendingBookingExpiry: null },
+        { _id: "s", doctorId: "1", StartTime: new Date("2025-01-14T10:00:00"), EndTime: new Date("2025-01-14T10:30:00"), status: "Available", pendingBookingExpiry: null },
+    ]);
+    const userId = useSelector((state: RootState) => state.user.user._id);
+    const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+    const [selectedSlot, setSelectedSlot] = useState<ISlot | null>(null);
 
-  useEffect(() => {
-    fetchSlots();
-  }, []);
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
-  const fetchSlots = async () => {
-      try {
-          console.log(doctor.id);
-      const response = await getSlotsForDoctor(doctor.id);
-      if (response.status) {
-        console.log("This is the response after fetching slots", response)
-        setSlots(response.data.slots);
-      }
+    useEffect(() => {
+        fetchSlots();
+    }, []);
+
+    const fetchSlots = async () => {
+        try {
+        const response = await getSlotsForDoctor(doctor.id);
+        if (response.status) {
+            console.log("This is the response after fetching slots", response)
+            setSlots(response.data.slots);
+        }
     } catch (error) {
       errorHandler(error);
     }
     }
 
     const dailySlots = slots
-  .filter(slot => {
-    const isSameDaySlot = isSameDay(new Date(slot.StartTime), selectedDate);
-    const isFutureSlot = new Date(slot.StartTime).getTime() > Date.now();
-    return isSameDaySlot && isFutureSlot;
-  })
-  .sort((a, b) => new Date(a.StartTime).getTime() - new Date(b.StartTime).getTime());
+    .filter(slot => {
+        const isSameDaySlot = isSameDay(new Date(slot.StartTime), selectedDate);
+        const isFutureSlot = new Date(slot.StartTime).getTime() > Date.now();
+        return isSameDaySlot && isFutureSlot;
+    })
+    .sort((a, b) => new Date(a.StartTime).getTime() - new Date(b.StartTime).getTime());
 
-  const getStatusColor = (status: Slot['status']) => {
-    switch (status) {
-      case 'Available':
-        return 'bg-emerald-50 border-emerald-200 hover:bg-emerald-100 text-emerald-700';
-      case 'Pending':
-        return 'bg-amber-50 border-amber-200 hover:bg-amber-100 text-amber-700';
-      case 'Booked':
-        return 'bg-blue-50 border-blue-200 hover:bg-blue-100 text-blue-700';
-      default:
-        return '';
-    }
-  };
-
-  const getStatusIcon = (status: Slot['status'], expiry: Date | null) => {
-    if (status === 'Pending' && expiry) {
-      return <AlertCircle className="h-4 w-4" />;
-    }
-    return <Clock className="h-4 w-4" />;
+    const getStatusColor = (status: ISlot['status']) => {
+        switch (status) {
+        case 'Available':
+            return 'bg-emerald-50 border-emerald-200 hover:bg-emerald-100 text-emerald-700';
+        case 'Pending':
+            return 'bg-amber-50 border-amber-200 hover:bg-amber-100 text-amber-700';
+        case 'Booked':
+            return 'bg-blue-50 border-blue-200 hover:bg-blue-100 text-blue-700';
+        default:
+            return '';
+        }
     };
+
+    const getStatusIcon = (status: ISlot['status'], expiry: Date | null) => {
+        if (status === 'Pending' && expiry) {
+        return <AlertCircle className="h-4 w-4" />;
+        }
+        return <Clock className="h-4 w-4" />;
+        };
     
 
 
-const handleSlotClick = (slot: Slot) => {
-  if (slot.status === 'Available') {
-    setSelectedSlot(slot);
-      setIsPaymentModalOpen(true);
-      return
-    }
-    toast.error("Sorry! This slot is booked.");
-    return;
-};
+    const handleSlotClick = (slot: ISlot) => {
+    if (slot.status === 'Available') {
+        setSelectedSlot(slot);
+        setIsPaymentModalOpen(true);
+        return
+        }
+        toast.error("Sorry! This slot is booked.");
+        return;
+    };
 
-const handleConfirmBooking = () => {
-  // Handle payment navigation
-  console.log('Proceeding to payment...');
-//   setIsPaymentModalOpen(false);
-};
+    const handleConfirmBooking = async () => {        
+        const paymentDetails = {
+            slotId: selectedSlot?._id,
+            userId,
+            doctorId: doctor.id,
+            fee: doctor.fee,
+            startTime: selectedSlot?.StartTime,
+            endTime: selectedSlot?.EndTime,
+            doctor: {
+                name: doctor.name,
+                specialisation: doctor.specialisation,
+            }
+        }
+        dispatch(addPayment(paymentDetails));        
+        navigate('/users/payment');
+        setIsPaymentModalOpen(false);
+        return
+    };
+
+    
 
     return (
         <div className="min-h- bg-gray-50 p-0 ">
@@ -158,8 +175,8 @@ const handleConfirmBooking = () => {
                                 className="flex items-center"
                             >
                                 <div className={`w-3 h-3 rounded-full mr-2 ${status === 'Available' ? 'bg-emerald-500' :
-                                        status === 'Pending' ? 'bg-amber-500' :
-                                            'bg-blue-500'
+                                    status === 'Pending' ? 'bg-amber-500' :
+                                        'bg-blue-500'
                                     }`} />
                                 <span className="text-sm text-gray-600">{status}</span>
                             </div>
@@ -226,8 +243,8 @@ const handleConfirmBooking = () => {
                                             <div className="text-center">
                                                 <p className="text-2xl font-bold text-gray-900">{count}</p>
                                                 <p className={`text-sm ${status === 'Available' ? 'text-emerald-600' :
-                                                        status === 'Pending' ? 'text-amber-600' :
-                                                            'text-blue-600'
+                                                    status === 'Pending' ? 'text-amber-600' :
+                                                        'text-blue-600'
                                                     }`}>{status} Slots</p>
                                             </div>
                                         </CardContent>
@@ -252,7 +269,10 @@ const handleConfirmBooking = () => {
                     StartTime: new Date(),
                     EndTime: new Date(),
                 }}
-            />
+            >
+                
+            </BookingConfirmationModal>
+
         </div>
     );
 };

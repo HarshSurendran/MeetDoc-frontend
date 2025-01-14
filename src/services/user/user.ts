@@ -2,6 +2,7 @@ import apiErrorHandler from "@/utils/apiErrorHandler";
 import { userAxiosInstance } from "../instance/userInstance";
 import { User } from "@/types/Authtypes/userTypes";
 import { IUser } from "@/interfaces/user/IUser";
+import { ISlot } from "@/components/users/DoctorDetailView/SlotsView";
 
 export const getUserData = async (id: string) => {
     try {
@@ -78,5 +79,37 @@ export const getSlotsForDoctor = async (doctorId: string) => {
         return null;        
     } catch (error) {
         apiErrorHandler(error);
+    }
+}
+
+export const updateSlot = async (slotId: string, body: Partial<ISlot> ) => {
+    try {
+        const response = await userAxiosInstance.patch(`users/slots/${slotId}`, body);
+        if (response) {
+            return response.data
+        }
+        return null;        
+    } catch (error) {
+        apiErrorHandler(error);        
+    }
+}
+
+
+
+export const createPaymentIntent = async (slotId: string, userId: string, fee: number, date: Date) => {
+    try {
+        const response = await userAxiosInstance.post(`/payments/paymentintent`, {
+            slotId,
+            userId,
+            fee,
+            date
+        });
+        if (response) {
+            return response.data;
+        }
+        return null;
+    } catch (error) {
+        apiErrorHandler(error);
+        
     }
 }

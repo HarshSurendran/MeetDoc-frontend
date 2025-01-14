@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { format } from 'date-fns';
 import { Button } from "@/components/ui/button";
 import {
@@ -24,6 +24,7 @@ interface BookingModalProps {
     StartTime: Date;
     EndTime: Date;
   };
+  children?: ReactNode;
 }
 
 const BookingConfirmationModal: React.FC<BookingModalProps> = ({
@@ -32,6 +33,7 @@ const BookingConfirmationModal: React.FC<BookingModalProps> = ({
   onConfirm,
   doctorDetails,
   slotDetails,
+  children
 }) => {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -78,11 +80,14 @@ const BookingConfirmationModal: React.FC<BookingModalProps> = ({
             <div>
               <h4 className="font-semibold text-green-900">Consultation Fee</h4>
               <p className="text-sm text-green-700">
-                ${doctorDetails.fee}
+              ₹ {doctorDetails.fee}
               </p>
             </div>
           </div>
         </div>
+
+        {/* {children && <div className="mt-4">{children}</div>} */}
+
 
         {/* Action Buttons */}
         <DialogFooter className="flex-col sm:flex-row gap-2">

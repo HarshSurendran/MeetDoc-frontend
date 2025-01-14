@@ -1,9 +1,14 @@
 import React, { lazy, Suspense } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
+
 const UserRoutes = lazy(() => import('./UserRouter'));
 const AdminRoutes = lazy(() => import('./AdminRouter'));
 const DoctorRoutes = lazy(() => import('./DoctorRouter'));
+
+
+
+
 
 const AppRouter = () => {
   return (
