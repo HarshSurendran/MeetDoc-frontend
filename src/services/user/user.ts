@@ -114,3 +114,15 @@ export const createPaymentIntent = async (slotId: string, userId: string, doctor
         
     }
 }
+
+export const getBookingDetails = async (paymentId: string) => {
+    try {
+        const response = await userAxiosInstance.get(`users/payment/${paymentId}`);
+        if (response) {
+            return response.data;
+        }
+        return null;
+    } catch (error) {
+        apiErrorHandler(error);  
+    }
+}
