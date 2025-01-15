@@ -127,7 +127,7 @@ export const getBookingDetails = async (paymentId: string) => {
 
 export const getDoctorsForLandingPage = async () => {
     try {
-        const response = await userAxiosInstance.get(`users/doctors`);
+        const response = await userAxiosInstance.get(`users/doctors/landingpage`);
         if (response) {
             return response.data;
         }

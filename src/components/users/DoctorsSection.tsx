@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { Card } from "../ui/card";
 import { getDoctorsForLandingPage, getProfilePhoto } from "@/services/user/user";
+import { useNavigate } from "react-router-dom";
 
 interface DoctorDetails {
+  _id: string,
   name: string,
   specialisation: string,
   consultation: number,
@@ -12,11 +14,12 @@ interface DoctorDetails {
 
 const DoctorsSection = () => {
   const [doctors, setDoctors] = useState<DoctorDetails[]>([
-    { name: "Afsal Madathingal", specialisation: "General Medicine", consultation: 783, photo: "src/assets/heroimage2.avif" },
-    { name: "Afsal Madathingal", specialisation: "General Medicine", consultation: 783, photo: "src/assets/heroimage2.avif" },
-    { name: "Afsal Madathingal", specialisation: "General Medicine", consultation: 783, photo: "src/assets/heroimage2.avif" },
-    { name: "Afsal Madathingal", specialisation: "General Medicine", consultation: 783, photo: "src/assets/heroimage2.avif" },
-])
+    { _id: "1", name: "Afsal Madathingal", specialisation: "General Medicine", consultation: 783, photo: "src/assets/heroimage2.avif" },
+    { _id: "2", name: "Afsal Madathingal", specialisation: "General Medicine", consultation: 783, photo: "src/assets/heroimage2.avif" },
+    { _id: "3", name: "Afsal Madathingal", specialisation: "General Medicine", consultation: 783, photo: "src/assets/heroimage2.avif" },
+    { _id: "4", name: "Afsal Madathingal", specialisation: "General Medicine", consultation: 783, photo: "src/assets/heroimage2.avif" },
+  ]);
+  const navigate = useNavigate();
     
   useEffect(() => {
     fetchDoctors();    
@@ -44,8 +47,8 @@ const DoctorsSection = () => {
             <Button variant="outline">View All Doctors</Button>
           </div>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-            {doctors.map((doctor, index) => (
-              <Card key={index} className="p-4 text-center hover:shadow-lg transition-shadow">
+            {doctors.map((doctor) => (
+              <Card key={doctor._id} onClick={()=> navigate(`/doctordetail/${doctor._id}`)} className="p-4 text-center hover:shadow-lg transition-shadow">
                     <img src={doctor.photo} alt={doctor.name} className="w-24 h-24 rounded-full mx-auto my-4" />
                     <div className="my-4">
                         <h3 className="font-semibold text-center">Dr. {doctor.name}</h3>
