@@ -26,7 +26,6 @@ import { RootState } from '@/redux/store/appStore';
 const DoctorProfilePage = () => {
   const [isEditing, setIsEditing] = useState(false);
   const doctor = useSelector((state: RootState) => state.doctor.doctor);
-  console.log(doctor)
   const [profile, setProfile] = useState<Partial<IDoctorProfile>>(doctor);
   const [showCropModal, setShowCropModal] = useState(false);
   const [imageSrc, setImageSrc] = useState<string | null>(null);
@@ -70,8 +69,7 @@ const DoctorProfilePage = () => {
   
 const sendFileToBackend = async (file: File) => {
   try {
-    const response = await changeProfilePhoto(doctor._id, file);
-    console.log("This is the response after sending the pic to vbackedn", response);
+    const response = await changeProfilePhoto(file);
     if (response?.status) {
       const key = response?.data.key;
       const url = await getPhotoUrl(key);
@@ -96,9 +94,10 @@ const handleSave = async () => {
   setIsEditing(false);    
   if (profile._id) {
     const { photo, ...data } = profile;
-    const response = await updateProfile(profile._id, data);
-    console.log("This is the response after updating doctor progilein the database", response);
+    const response = await updateProfile(data);
+
     if (response.status) {
+      dispatch(addDoctor(profile))
       toast.success("Profile updated successfully.");
      
     }

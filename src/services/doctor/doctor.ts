@@ -23,11 +23,11 @@ export const sendFile = async (file: File) => {
   };
 };
 
-export const changeProfilePhoto = async (id: string, photo: File) => {
+export const changeProfilePhoto = async ( photo: File) => {
   try {
     const formData = new FormData();
     formData.append("photo", photo);
-    const response = await doctorAxiosInstance.patch(`doctors/profilephoto/${id}`, formData, {
+    const response = await doctorAxiosInstance.patch(`doctors/profilephoto`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       }
@@ -40,9 +40,9 @@ export const changeProfilePhoto = async (id: string, photo: File) => {
   }
 }
 
-export const updateProfile = async (id: string, data: Partial<IDoctorProfile>) => {
+export const updateProfile = async (data: Partial<IDoctorProfile>) => {
   try {
-    const response = await doctorAxiosInstance.patch(`/doctors/${id}`, data);
+    const response = await doctorAxiosInstance.patch(`/doctors`, data);
     if (response) {
       return response.data;
     }
