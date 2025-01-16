@@ -18,6 +18,7 @@ import { checkDataSubmitted } from '@/services/doctor/doctorAuth';
 import errorHandler from '@/utils/errorHandler';
 import { FormData } from '@/types/Authtypes/doctorTypes';
 import { getCertificate, verifyDoctor } from '@/services/admin/admin';
+import toast from 'react-hot-toast';
 
 const DoctorVerificationPage: React.FC = () => {
   const { id } = useParams();
@@ -61,11 +62,12 @@ const DoctorVerificationPage: React.FC = () => {
     }
   };
 
-  const onVerify = async (id: string, status:Boolean, data: {degree: string, specialisation: string, masterDegree: string}) => {
-    const payload =  { isVerified: status , ...data}
+  const onVerify = async (id: string, status: boolean, verifyData: { languages: string[], degree: string, specialisation: string, masterDegree: string}) => {
+    const payload =  { isVerified: status , ...verifyData}
     const response = await verifyDoctor(id, payload);
     if (response) {
       console.log('Doctor verification status updated:', response);
+      toast.success(`Dr. ${data?.personalDetails.name} has been updated`);
       setData((prevData) => {
         if (prevData) {
           return { ...prevData, isVerified: status };
@@ -79,6 +81,7 @@ const DoctorVerificationPage: React.FC = () => {
     try {
       if (data?.doctorId) {
         const payload = {
+          languages: data.personalDetails.language,
           degree: data.educationDetails.degree,
           masterDegree: data.postGraduationDetails.degree || "",
           specialisation: data.postGraduationDetails.specialty.length > 0 ? `${data.postGraduationDetails.superSpecialty}, ${data.postGraduationDetails.specialty}, ${data.educationDetails.specialty}` : data.educationDetails.specialty
