@@ -81,7 +81,7 @@ const DoctorVerificationPage: React.FC = () => {
         const payload = {
           degree: data.educationDetails.degree,
           masterDegree: data.postGraduationDetails.degree || "",
-          specialisation: data.postGraduationDetails ? `${data.postGraduationDetails.superSpecialty}, ${data.postGraduationDetails.specialty}, ${data.educationDetails.specialty}` : data.educationDetails.specialty
+          specialisation: data.postGraduationDetails.specialty.length > 0 ? `${data.postGraduationDetails.superSpecialty}, ${data.postGraduationDetails.specialty}, ${data.educationDetails.specialty}` : data.educationDetails.specialty
         }
         await onVerify(data?.doctorId, status, payload );
       }

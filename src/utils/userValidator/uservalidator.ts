@@ -44,7 +44,7 @@ const phone = joi
   .pattern(/^\d{10}$/)
   .messages({
     'string.pattern.base': 'Phone must be a 10-digit number.',
-    'string.empty': 'Phone is required.',
+    'string.empty': 'Phone number is required.',
   });
 
 const dateOfBirth = joi.date().messages({

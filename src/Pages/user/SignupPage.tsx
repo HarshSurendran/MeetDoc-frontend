@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
-import { register } from '../../services/user/userAuth';
-import errorHandler from '../../utils/errorHandler';
 import { useNavigate } from 'react-router-dom';
-import toast from 'react-hot-toast';
-import { Link } from 'react-router-dom';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Loader2, Mail, Lock, User, Phone } from "lucide-react";
 import GoogleLoginButton from '@/components/users/GoogleLoginButton';
+import { register } from '@/services/user/userAuth';
+import errorHandler from '@/utils/errorHandler';
+import toast from 'react-hot-toast';
+import { validateEmail, validateFullName, validatePassword, validatePhone } from '@/utils/userValidator/uservalidator';
 
-export interface FormData {
+interface FormData {
   name: string;
   email: string;
   password: string;
@@ -33,34 +37,28 @@ const SignupPage = () => {
 
   const [errors, setErrors] = useState<FormErrors>({});
   const [loading, setLoading] = useState(false);
-
   const navigate = useNavigate();
 
-  const validateForm = (): boolean => {
-    const newErrors: FormErrors = {};
-
-    // Name validation
-    if (!formData.name.trim()) {
-      newErrors.name = 'Name is required';
+  const validateForm = () => {
+    let newErrors: FormErrors  = {}   
+    const nameError = validateFullName(formData.name);
+    if (nameError) {
+      newErrors.name = nameError;
     }
+   
+    const emailError = validateEmail(formData.email)
+    if (emailError) {
+      newErrors.email = emailError;
+    };
 
-    // Email validation
-    if (!formData.email) {
-      newErrors.email = 'Email is required';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Please enter a valid email';
-    }
+    const passError = validatePassword(formData.password);
+    if (passError) {
+      newErrors.password = passError;
+    };
 
-    // Password validation
-    if (!formData.password) {
-      newErrors.password = 'Password is required';
-    } else if (formData.password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters';
-    }
-
-    // Phone validation
-    if (formData.phone && !/^\d{10}$/.test(formData.phone)) {
-      newErrors.phone = 'Please enter a valid 10-digit phone number';
+    const phoneError = validatePhone(formData.phone);
+    if (phoneError) {
+      newErrors.phone = phoneError;
     }
 
     setErrors(newErrors);
@@ -68,210 +66,190 @@ const SignupPage = () => {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (validateForm()) {
-      setLoading(true);
-      try {
-        console.log("Form submitted:-----------------------------------------", formData);
-        const response = await register(formData);
-        console.log('Form submitted:-----------------------------------------', response);
-        if (response?.data.mailSent) {
-          toast.success('Otp has been sent to your email');
-          navigate('/otp', { state: formData });
+        e.preventDefault();
+        if (validateForm()) {
+          setLoading(true);
+          try {
+            const response = await register(formData);
+            if (response?.data.mailSent) {
+              toast.success('Otp has been sent to your email');
+              navigate('/otp', { state: formData });
+            }
+          } catch (error) {
+            errorHandler(error);
+            console.error('Signup error:', error);
+          } finally {
+            setLoading(false);
+          }
         }
-      } catch (error) {
-        errorHandler(error);
-        console.error('Signup error:', error);
-      } finally {
-        setLoading(false);
-      }
-    }
-  };
+      };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-    // Clear error when user starts typing
-    if (errors[name as keyof FormErrors]) {
-      setErrors((prev) => ({
-        ...prev,
-        [name]: undefined,
-      }));
-    }
-  };
+        e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+      ) => {
+        const { name, value } = e.target;
+        setFormData((prev) => ({
+          ...prev,
+          [name]: value,
+        }));
+        // Clear error when user starts typing
+        if (errors[name as keyof FormErrors]) {
+          setErrors((prev) => ({
+            ...prev,
+            [name]: undefined,
+          }));
+        }
+      };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-          Create your account
-        </h2>
-        <p className="mt-2 text-center text-sm text-gray-600">
-          Join our online medical consultation platform
-        </p>
+    <div className="min-h-screen flex flex-col md:flex-row">
+    {/* Left Section - Illustration */}
+    <div className="hidden md:flex md:w-1/2 bg-blue-600 items-center justify-center p-8">
+      <div className="max-w-md text-white space-y-8">
+        <svg
+          className="w-full h-auto"
+          viewBox="0 0 400 300"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+         <rect width="400" height="300" fill="none"/>
+            <circle cx="200" cy="150" r="100" fill="white" fillOpacity="0.1"/>
+            <path d="M150 150 C150 100, 250 100, 250 150" stroke="white" strokeWidth="4"/>
+            <circle cx="160" cy="120" r="15" fill="white"/>
+            <circle cx="240" cy="120" r="15" fill="white"/>
+        </svg>
+        <div className="space-y-4">
+          <h2 className="text-3xl font-bold">Join MeetDoc</h2>
+          <p className="text-blue-100">
+            Create an account to connect with certified doctors and get reliable medical consultations
+          </p>
+        </div>
       </div>
+    </div>
 
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-          <form className="space-y-6" onSubmit={handleSubmit}>
-            {/* Name Field */}
-            <div>
-              <label
-                htmlFor="name"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Full Name <span className="text-red-500">*</span>
-              </label>
-              <div className="mt-1">
-                <input
-                  id="name"
-                  name="name"
-                  type="text"
-                  required
-                  value={formData.name}
-                  onChange={handleChange}
-                  className={`appearance-none block w-full px-3 py-2 border ${errors.name ? 'border-red-300' : 'border-gray-300'
-                    } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
-                />
-                {errors.name && (
-                  <p className="mt-1 text-sm text-red-600">{errors.name}</p>
-                )}
-              </div>
-            </div>
+      <div className="flex-1 flex items-center justify-center p-8">
+        <div className="w-full max-w-md space-y-6">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold text-blue-600 mb-2">Create Account</h1>
+            <p className="text-gray-600">Start your healthcare journey with MeetDoc</p>
+          </div>
 
-            {/* Email Field */}
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Email <span className="text-red-500">*</span>
-              </label>
-              <div className="mt-1">
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  required
-                  value={formData.email}
-                  onChange={handleChange}
-                  className={`appearance-none block w-full px-3 py-2 border ${errors.email ? 'border-red-300' : 'border-gray-300'
-                    } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
-                />
-                {errors.email && (
-                  <p className="mt-1 text-sm text-red-600">{errors.email}</p>
-                )}
-              </div>
-            </div>
+          <div className="space-y-4">
+            <GoogleLoginButton />
 
-            {/* Password Field */}
-            <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Password <span className="text-red-500">*</span>
-              </label>
-              <div className="mt-1">
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  required
-                  value={formData.password}
-                  onChange={handleChange}
-                  className={`appearance-none block w-full px-3 py-2 border ${errors.password ? 'border-red-300' : 'border-gray-300'
-                    } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
-                />
-                {errors.password && (
-                  <p className="mt-1 text-sm text-red-600">{errors.password}</p>
-                )}
-              </div>
-            </div>
-
-            {/* Gender Field */}
-            <div>
-              <label
-                htmlFor="gender"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Gender
-              </label>
-              <div className="mt-1">
-                <select
-                  id="gender"
-                  name="gender"
-                  value={formData.gender}
-                  onChange={handleChange}
-                  className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                >
-                  <option value="">Select gender</option>
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
-                  <option value="other">Other</option>
-                </select>
-              </div>
-            </div>
-
-            {/* Phone Field */}
-            <div>
-              <label
-                htmlFor="phone"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Phone Number
-              </label>
-              <div className="mt-1">
-                <input
-                  id="phone"
-                  name="phone"
-                  type="tel"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  className={`appearance-none block w-full px-3 py-2 border ${errors.phone ? 'border-red-300' : 'border-gray-300'
-                    } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
-                />
-                {errors.phone && (
-                  <p className="mt-1 text-sm text-red-600">{errors.phone}</p>
-                )}
-              </div>
-            </div>
-
-            {/* Submit Button */}
-            <div>
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {loading ? 'Creating account...' : 'Sign up'}
-              </button>
-            </div>
-          </form>
-
-          {/* Login Link */}
-          <div className="mt-6">
             <div className="relative">
-              <div className="relative flex justify-center text-sm">
-                <span className="px-2 text-gray-500">
-                  Already have an account?{' '}
-                  <Link
-                    to="/login"
-                    className="font-medium text-blue-600 hover:text-blue-500"
-                  >
-                    Log in
-                  </Link>
-                </span>
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-white px-2 text-gray-500">Or register with email</span>
               </div>
             </div>
           </div>
-          <div className="mt-6">
-            <GoogleLoginButton />
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-700">Full Name</label>
+              <div className="relative">
+                <User className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+                <Input
+                  name="name"
+                  placeholder="John Doe"
+                  className="pl-10"
+                  value={formData.name}
+                  onChange={handleChange}
+                />
+              </div>
+              {errors.name && <p className="text-sm text-red-500">{errors.name}</p>}
+            </div>
+
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-700">Email</label>
+              <div className="relative">
+                <Mail className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+                <Input
+                  name="email"
+                  type="email"
+                  placeholder="you@example.com"
+                  className="pl-10"
+                  value={formData.email}
+                  onChange={handleChange}
+                />
+              </div>
+              {errors.email && <p className="text-sm text-red-500">{errors.email}</p>}
+            </div>
+
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-700">Password</label>
+              <div className="relative">
+                <Lock className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+                <Input
+                  name="password"
+                  type="password"
+                  placeholder="Create a password"
+                  className="pl-10"
+                  value={formData.password}
+                  onChange={handleChange}
+                />
+              </div>
+              {errors.password && <p className="text-sm text-red-500">{errors.password}</p>}
+            </div>
+
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-700">Phone Number</label>
+              <div className="relative">
+                <Phone className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+                <Input
+                  name="phone"
+                  placeholder="Enter your phone number"
+                  className="pl-10"
+                  value={formData.phone}
+                  onChange={handleChange}
+                />
+              </div>
+              {errors.phone && <p className="text-sm text-red-500">{errors.phone}</p>}
+            </div>
+
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-700">Gender</label>
+              <Select
+                name="gender"
+                value={formData.gender}
+                onValueChange={(value) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    gender: value,
+                  }))
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select gender" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="male">Male</SelectItem>
+                  <SelectItem value="female">Female</SelectItem>
+                  <SelectItem value="other">Other</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700" disabled={loading}>
+              {loading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Creating account...
+                </>
+              ) : (
+                "Create Account"
+              )}
+            </Button>
+          </form>
+
+          <div className="text-center text-sm text-gray-600">
+            Already have an account?{' '}
+            <Button type="button" variant="link" onClick={() => navigate('/login')} className="text-blue-600">
+              Log in
+            </Button>
           </div>
         </div>
       </div>

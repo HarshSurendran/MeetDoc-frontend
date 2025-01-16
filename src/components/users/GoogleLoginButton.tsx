@@ -15,7 +15,7 @@ const GoogleLoginButton = () => {
     const handleSuccess = async (credentialResponse: any) => {
         try {
             const response = await sendGoogleToken(credentialResponse);
-            console.log("this is reposne form google signin--------------------------- ", response?.data.user);
+            
             if (response) {
               dispatch(addUser(response.data.user));
               dispatch(toggleAuthentication(true));
