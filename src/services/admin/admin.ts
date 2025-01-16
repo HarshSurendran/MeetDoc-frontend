@@ -1,7 +1,7 @@
 import { IUser } from "@/interfaces/user/IUser";
 import apiErrorHandler from "../../utils/apiErrorHandler";
 import { adminAxiosInstance } from "../instance/adminInstance"
-import { Console } from "console";
+
 
 
 

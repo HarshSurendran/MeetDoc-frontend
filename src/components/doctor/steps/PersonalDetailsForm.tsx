@@ -17,6 +17,15 @@ interface PersonalDetailsFormProps {
   onBack: () => void;
 }
 
+interface Errors{
+  name: string;
+  age: string;
+  email: string;
+  phone: string;
+  gender: string;
+  language: string;
+}
+
 const PersonalDetailsForm: React.FC<PersonalDetailsFormProps> = ({
   data,
   onUpdate,
@@ -24,27 +33,72 @@ const PersonalDetailsForm: React.FC<PersonalDetailsFormProps> = ({
   onBack,
 }) => {
   const [lang, setLang] = useState<string[]>([...data.language]);
+  const [errors, setErrors] = useState<Errors>({
+    name: "",
+    age: "",
+    phone: "",
+    email: "",
+    gender: "",
+    language: ""
+  })
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    setErrors({
+      name: "",
+      age: "",
+      phone: "",
+      email: "",
+      gender: "",
+      language: ""
+    })
     const age = data.age;
     if (age < 20 || age > 80) {
       toast.error('Age must be above 20 and below 80.');
+      setErrors((prev) => {
+        return {
+          ...prev,
+          age: "Age must be above 20 and below 80"
+        }
+      }
+      )
       return;
     }
+
     const emailError = validateEmail(data.email);
     if (emailError) {
       toast.error(emailError);
+      setErrors((prev) => {
+        return {
+          ...prev,
+          email: emailError
+        }
+      }
+      )
       return;
     }
     const nameError = validateFullName(data.name);
     if (nameError) {
       toast.error(nameError);
+      setErrors((prev) => {
+        return {
+          ...prev,
+          name: nameError
+        }
+      }
+      )
       return;
     }
     const phoneError = validatePhone(data.phone);
     if (phoneError) {
       toast.error(phoneError);
+      setErrors((prev) => {
+        return {
+          ...prev,
+          phone: phoneError
+        }
+      }
+      )
       return;
     }
     onUpdate({ language: lang });
@@ -67,27 +121,34 @@ const PersonalDetailsForm: React.FC<PersonalDetailsFormProps> = ({
       <h2 className="text-xl font-bold text-center">Personal Details</h2>
       <Input
         label="Full Name"
+        name='name'
         value={data.name}
         onChange={(e) => onUpdate({ name: e.target.value })}
         required
       />
+      {errors.name && <p className="text-red-500">{errors.name}</p>}
       <Input
         label="Phone"
+        name='phone'
         type="tel"
         value={data.phone}
         onChange={(e) => onUpdate({ phone: e.target.value })}
         required
       />
+      {errors.phone && <p className="text-red-500">{errors.phone}</p>}
       <Input
         label="Email"
+        name='email'
         type="email"
         value={data.email}
         onChange={(e) => onUpdate({ email: e.target.value })}
         required
       />
+      {errors.email && <p className="text-red-500">{errors.email}</p>}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <Select
           label="Gender"
+          name='gender'
           value={data.gender}
           onChange={(e) => onUpdate({ gender: e.target.value })}
           options={[
@@ -97,18 +158,22 @@ const PersonalDetailsForm: React.FC<PersonalDetailsFormProps> = ({
           ]}
           required
         />
+
         <Input
           label="Age"
+          name='age'
           type="number"
           value={data.age}
           onChange={(e) => onUpdate({ age: parseInt(e.target.value) })}
           required
         />
+        {errors.age && <p className="text-red-500">{errors.age}</p>}
       </div>
 
       <div>
         <Select
           label="Language"
+          name='language'
           onChange={(e) => handleLanguageChange(e)}
           options={[
             { value: 'English', label: 'English' },

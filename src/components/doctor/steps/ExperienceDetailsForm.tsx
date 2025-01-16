@@ -1,64 +1,9 @@
-// import Button from '../comps/Button';
-// import Input from '../comps/Input';
-// import Select from '../comps/Select';
-// import { ExperienceDetails } from './types';
-
-// interface ExperienceDetailsFormProps {
-//   data: ExperienceDetails;
-//   onUpdate: (data: Partial<ExperienceDetails>) => void;
-//   onNext: () => void;
-//   onBack: () => void;
-// }
-
-// const ExperienceDetailsForm: React.FC<ExperienceDetailsFormProps> = ({
-//   data,
-//   onUpdate,
-//   onNext,
-//   onBack,
-// }) => {
-//   const handleSubmit = (e: React.FormEvent) => {
-//     e.preventDefault();
-//     onNext();
-//   };
-
-//   return (
-//     <form onSubmit={handleSubmit} className="space-y-4">
-
-//       <Input
-//         label="Hospital Name"
-//         value={data.hospitalName}
-//         onChange={(e) => onUpdate({ hospitalName: e.target.value })}
-//       />
-//       <Select
-//         label="Position"
-//         value={data.position}
-//         onChange={(e) => onUpdate({ position: e.target.value })}
-//         options={[
-//           { value: 'resident', label: 'Resident' },
-//           { value: 'consultant', label: 'Consultant' },
-//           { value: 'hod', label: 'Head of Department' },
-//         ]}
-//         required
-//       />
-
-//       <div className="flex justify-between">
-//         <Button type="button" variant="secondary" onClick={onBack}>
-//           Back
-//         </Button>
-//         <Button type="submit">Next</Button>
-//       </div>
-//     </form>
-//   );
-// };
-
-// export default ExperienceDetailsForm;
-
+import { useState } from 'react';
 import toast from 'react-hot-toast';
 import Button from '../comps/Button';
 import Input from '../comps/Input';
 import Select from '../comps/Select';
 import { ExperienceDetails } from '../../../types/Authtypes/doctorTypes';
-import { useState } from 'react';
 
 interface ExperienceDetailsFormProps {
   data: ExperienceDetails[];
@@ -73,47 +18,77 @@ const ExperienceDetailsForm: React.FC<ExperienceDetailsFormProps> = ({
   onNext,
   onBack,
 }) => {
-  console.log(data, typeof data);
   const [experiences, setExperiences] = useState<ExperienceDetails[]>(data);
-  console.log(experiences, typeof experiences);
+  const [experienceErrors, setExperienceErrors] = useState<{ from?: string; to?: string }[]>([]);
 
   const handleAddExperience = () => {
     setExperiences([
       ...experiences,
       { hospitalName: '', position: '', from: new Date(), to: new Date() },
     ]);
+    setExperienceErrors([...experienceErrors, {}]);
   };
 
   const handleRemoveExperience = (index: number) => {
     const updatedExperiences = experiences.filter((_, i) => i !== index);
+    const updatedErrors = experienceErrors.filter((_, i) => i !== index);
     setExperiences(updatedExperiences);
+    setExperienceErrors(updatedErrors);
     onUpdate(updatedExperiences);
   };
 
-  const isDateValid = (fromDate: Date, toDate: Date): boolean => {
-    if (!fromDate || !toDate) return false;
+  const isDateValid = (fromDate: string, toDate: string, index: number): boolean => {
     const from = new Date(fromDate);
     const to = new Date(toDate);
-    console.log(from, to, new Date());
-    return from < to && from < new Date() && to <= new Date();
+    const today = new Date();
+
+    const newErrors = { ...experienceErrors[index] };
+
+    if (from >= to) {
+      newErrors.from = 'Start date must be before end date';
+      newErrors.to = 'End date must be after start date';
+    } else {
+      newErrors.from = undefined;
+      newErrors.to = undefined;
+    }
+
+    if (from > today) {
+      newErrors.from = 'Start date cannot be in the future';
+    }
+
+    if (to > today) {
+      newErrors.to = 'End date cannot be in the future';
+    }
+
+    const updatedErrors = [...experienceErrors];
+    updatedErrors[index] = newErrors;
+    setExperienceErrors(updatedErrors);
+
+    return !newErrors.from && !newErrors.to;
   };
 
-  const handleExperienceChange = (
-    index: number,
-    field: keyof ExperienceDetails,
-    value: any
-  ) => {
+  const handleExperienceChange = (index: number, field: keyof ExperienceDetails, value: any) => {
     const updatedExperiences = [...experiences];
     updatedExperiences[index][field] = value;
     setExperiences(updatedExperiences);
+
+    if (field === 'from' || field === 'to') {
+      isDateValid(updatedExperiences[index].from as string, updatedExperiences[index].to as string, index);
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!experiences.every((exp) => isDateValid(exp.from, exp.to))) {
+
+    const allValid = experiences.every((exp, index) =>
+      isDateValid(exp.from as string, exp.to as string, index)
+    );
+
+    if (!allValid) {
       toast.error('Please ensure all date ranges are valid.');
       return;
     }
+
     onUpdate(experiences);
     onNext();
   };
@@ -133,20 +108,17 @@ const ExperienceDetailsForm: React.FC<ExperienceDetailsFormProps> = ({
               &times;
             </button>
           </div>
+
           <Input
             label="Hospital Name"
             value={experience.hospitalName}
-            onChange={(e) =>
-              handleExperienceChange(index, 'hospitalName', e.target.value)
-            }
+            onChange={(e) => handleExperienceChange(index, 'hospitalName', e.target.value)}
             required
           />
           <Select
             label="Position"
             value={experience.position}
-            onChange={(e) =>
-              handleExperienceChange(index, 'position', e.target.value)
-            }
+            onChange={(e) => handleExperienceChange(index, 'position', e.target.value)}
             options={[
               { value: 'resident', label: 'Resident' },
               { value: 'consultant', label: 'Consultant' },
@@ -155,34 +127,35 @@ const ExperienceDetailsForm: React.FC<ExperienceDetailsFormProps> = ({
             required
           />
           <div className="grid grid-cols-2 gap-4">
-            <Input
-              label="From Date"
-              type="date"
-              value={`${experience.from ? new Date(experience.from).toISOString().split('T')[0] : ''}`}
-              onChange={(e) =>
-                handleExperienceChange(index, 'from', e.target.value)
-              }
-              required
-            />
-            <Input
-              label="To Date"
-              type="date"
-              value={`${experience.to ? new Date(experience.to).toISOString().split('T')[0] : ''}`}
-              onChange={(e) =>
-                handleExperienceChange(index, 'to', e.target.value)
-              }
-              required
-            />
+            <div>
+              <Input
+                label="From Date"
+                type="date"
+                value={experience.from ? new Date(experience.from).toISOString().split('T')[0] : ''}
+                onChange={(e) => handleExperienceChange(index, 'from', e.target.value)}
+                required
+              />
+              {experienceErrors[index]?.from && (
+                <p className="text-sm text-red-500">{experienceErrors[index].from}</p>
+              )}
+            </div>
+            <div>
+              <Input
+                label="To Date"
+                type="date"
+                value={experience.to ? new Date(experience.to).toISOString().split('T')[0] : ''}
+                onChange={(e) => handleExperienceChange(index, 'to', e.target.value)}
+                required
+              />
+              {experienceErrors[index]?.to && (
+                <p className="text-sm text-red-500">{experienceErrors[index].to}</p>
+              )}
+            </div>
           </div>
         </div>
       ))}
 
-      <Button
-        type="button"
-        variant="secondary"
-        onClick={handleAddExperience}
-        className="w-full"
-      >
+      <Button type="button" variant="secondary" onClick={handleAddExperience} className="w-full">
         + Add Experience
       </Button>
 
