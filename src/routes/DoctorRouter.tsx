@@ -10,7 +10,7 @@ import DashboardLayout from '@/Pages/doctor/DashboardLayout';
 import DoctorProfile from '@/components/doctor/Dashboard/DoctorProfile';
 import SlotGeneration from '@/components/doctor/Dashboard/SlotGeneration';
 import DailySlotView from '@/components/doctor/Dashboard/DailySlotView';
-import AppointmentManagement from '@/components/doctor/Dashboard/AppointmentManagement';
+import AppointmentManagement from '@/components/AppointmentManagement';
 
 
 

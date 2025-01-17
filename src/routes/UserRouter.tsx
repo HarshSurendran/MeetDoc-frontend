@@ -1,4 +1,3 @@
-import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import PublicRoute from '../hocs/users/PublicRoute';
 import LoginPage from '../Pages/user/LoginPage';
@@ -14,6 +13,7 @@ import DoctorDetailPage from '@/Pages/user/DoctorDetailPage';
 import PaymentPage from '@/components/users/Payments/PaymentPage';
 import PaymentRoute from '@/hocs/users/PaymentRoute';
 import PaymentSuccessPage from '@/Pages/user/PaymentSuccessPage';
+import AppointmentManagement from '@/components/AppointmentManagement';
 
 const UserRouter = () => {
   return (
@@ -24,10 +24,11 @@ const UserRouter = () => {
       <Route path="/otp" element={<PublicRoute component={OtpPage} />} />
       <Route path="/doctordetail/:id" element={<PrivateRoute component={DoctorDetailPage} />} />
       <Route path="users/payment" element={<PaymentRoute component={PaymentPage} />} />
-      <Route path='/payment-success' element={<PaymentSuccessPage/>}/>
+      <Route path="/payment-success" element={<PaymentSuccessPage/>}/>
       <Route element={<PrivateRoute component={UserDashboardLayout} />}>
         <Route path="/dashboard"  element={<Dashboard />} />
         <Route path="profile" element={<UserProfilePage />} />
+        <Route path="appointments" element={<AppointmentManagement userType='patient' />} />
         
         
       

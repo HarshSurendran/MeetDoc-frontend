@@ -153,3 +153,15 @@ export const getDoctorsForLandingPage = async () => {
     apiErrorHandler(error);
   }
 };
+
+export const getUserAppointments = async () => {
+  try {
+    const response = await userAxiosInstance.get(`users/appointments`);
+    if (response) {
+      return response.data;
+    }
+    return null;
+  } catch (error) {
+    apiErrorHandler(error);
+  }
+}

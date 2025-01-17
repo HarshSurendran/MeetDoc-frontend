@@ -62,3 +62,7 @@ export interface ISuccessPageProps {
     onNext: () => void;
     onBack: () => void;
   }
+
+  export interface IAppointmentListProps {
+    userType: 'doctor' | 'patient';
+  }

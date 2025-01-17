@@ -15,30 +15,14 @@ import {
 } from '@/components/ui/dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Video, Calendar, Clock, User } from 'lucide-react';
-import { BookingStatus, IBookedAppointmentType } from '@/types';
+import { BookingStatus, IAppointmentListProps, IBookedAppointmentType } from '@/types';
 import { getAppointments } from '@/services/doctor/doctor';
+import { getUserAppointments } from '@/services/user/user';
 
 
 
-interface AppointmentListProps {
-  userType: 'doctor' | 'patient';
-}
 
-const appointments = [
-  {
-    _id: "1",
-    patientName: "John Doe",
-    doctorName: "Dr. Smith",
-    date: "2025-01-17",
-    time: "10:00 AM",
-    duration: 30,
-    status: "Scheduled",
-    reason: "Annual checkup"
-  }
-  // ... more appointments
-];
-
-const AppointmentManagement: React.FC<AppointmentListProps> = ({
+const AppointmentManagement: React.FC<IAppointmentListProps> = ({
   userType 
 }) => {
   const [appointments, setAppointments] = useState<IBookedAppointmentType[]>([]);
@@ -51,11 +35,17 @@ const AppointmentManagement: React.FC<AppointmentListProps> = ({
   }, []);
 
   const fetchAppointments = async () => {
+    if (userType === 'patient') {
+      const response = await getUserAppointments();
+      if (response.status) {
+        setAppointments(response.data.appointments);
+      }
+      return;
+    }
     const response = await getAppointments();    
     if (response.status) {
       setAppointments(response.data.appointments);
     }
-    console.log(appointments);
   }
 
   const getStatusColor = (status: BookingStatus) => {
@@ -77,7 +67,9 @@ const AppointmentManagement: React.FC<AppointmentListProps> = ({
     const appointmentTime = new Date(`${appointment.date} ${appointment.time}`);
     const now = new Date();
     const diffInMinutes = (appointmentTime.getTime() - now.getTime()) / (1000 * 60);
-    return diffInMinutes <= 15 && diffInMinutes >= -appointment.duration;
+    console.log(diffInMinutes,"This is the diff in minutes")
+    // return diffInMinutes <= 15 && diffInMinutes >= -appointment.duration;
+    return true
   };
 
   const handleJoinCall = (appointmentId: string) => {
@@ -119,6 +111,7 @@ const AppointmentManagement: React.FC<AppointmentListProps> = ({
                           <span className="text-sm text-gray-600">{appointment.date}</span>
                           <Clock className="h-4 w-4 text-gray-500 ml-2" />
                           <span className="text-sm text-gray-600">{appointment.time}</span>
+                          
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
@@ -166,14 +159,14 @@ const AppointmentManagement: React.FC<AppointmentListProps> = ({
                   <p className="font-semibold">{selectedAppointment.doctorName}</p>
                 </div>
                 <div>
-                  <label className="text-sm text-gray-500">Date & Time</label>
+                  <label className="text-sm text-gray-500">Date & Time </label>
                   <p className="font-semibold">
-                    {selectedAppointment.date} at {selectedAppointment.time}
+                    {selectedAppointment.date} at {selectedAppointment.time} 
                   </p>
                 </div>
                 <div>
-                  <label className="text-sm text-gray-500">Duration</label>
-                  <p className="font-semibold">{selectedAppointment.duration} minutes</p>
+                  <label className="text-sm text-gray-500">Duration/ Booked on</label>
+                  <p className="font-semibold">{selectedAppointment.duration} minutes/ {selectedAppointment.bookingTime}</p>
                 </div>
                 <div className="md:col-span-2">
                   <label className="text-sm text-gray-500">Reason for Visit</label>
