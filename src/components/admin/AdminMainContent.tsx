@@ -13,10 +13,9 @@ import {
 } from 'recharts';
 import { Users, Calendar, DollarSign } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { getVerificationRequests, verifyDoctor } from '@/services/admin/admin';
+import { getVerificationRequests } from '@/services/admin/admin';
 import errorHandler from '@/utils/errorHandler';
-import { FormData } from '../../types/Authtypes/doctorTypes';
-import toast from 'react-hot-toast';
+import { FormData } from '../../types/doctorTypes';
 import { useNavigate } from 'react-router-dom';
 
 const revenueData = [

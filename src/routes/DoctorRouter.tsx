@@ -5,7 +5,7 @@ import SignupPage from '../Pages/doctor/SignupPage';
 import OtpPage from '../Pages/doctor/OtpPage';
 import PrivateRoute from '../hocs/doctors/PrivateRoute';
 import PublicRoute from '../hocs/doctors/PublicRoute';
-import DashboardStats from '@/components/doctor/DashboardStats';
+import DashboardStats from '@/components/doctor/Dashboard/DashboardStats';
 import DashboardLayout from '@/Pages/doctor/DashboardLayout';
 import DoctorProfile from '@/components/doctor/Dashboard/DoctorProfile';
 import SlotGeneration from '@/components/doctor/Dashboard/SlotGeneration';

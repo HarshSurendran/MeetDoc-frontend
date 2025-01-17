@@ -2,66 +2,50 @@ import toast from 'react-hot-toast';
 import Button from '../comps/Button';
 import Input from '../comps/Input';
 import Select from '../comps/Select';
-import { PersonalDetails } from '../../../types/Authtypes/doctorTypes';
 import { useState } from 'react';
 import {
   validateEmail,
   validateFullName,
   validatePhone,
 } from '../../../utils/userValidator/uservalidator';
+import { IPersonalDetailsFormErrors, IPersonalDetailsFormProps } from '@/types';
 
-interface PersonalDetailsFormProps {
-  data: PersonalDetails;
-  onUpdate: (data: Partial<PersonalDetails>) => void;
-  onNext: () => void;
-  onBack: () => void;
-}
 
-interface Errors{
-  name: string;
-  age: string;
-  email: string;
-  phone: string;
-  gender: string;
-  language: string;
-}
-
-const PersonalDetailsForm: React.FC<PersonalDetailsFormProps> = ({
+const PersonalDetailsForm: React.FC<IPersonalDetailsFormProps> = ({
   data,
   onUpdate,
   onNext,
   onBack,
 }) => {
   const [lang, setLang] = useState<string[]>([...data.language]);
-  const [errors, setErrors] = useState<Errors>({
-    name: "",
-    age: "",
-    phone: "",
-    email: "",
-    gender: "",
-    language: ""
-  })
+  const [errors, setErrors] = useState<IPersonalDetailsFormErrors>({
+    name: '',
+    age: '',
+    phone: '',
+    email: '',
+    gender: '',
+    language: '',
+  });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setErrors({
-      name: "",
-      age: "",
-      phone: "",
-      email: "",
-      gender: "",
-      language: ""
-    })
+      name: '',
+      age: '',
+      phone: '',
+      email: '',
+      gender: '',
+      language: '',
+    });
     const age = data.age;
     if (age < 20 || age > 80) {
       toast.error('Age must be above 20 and below 80.');
       setErrors((prev) => {
         return {
           ...prev,
-          age: "Age must be above 20 and below 80"
-        }
-      }
-      )
+          age: 'Age must be above 20 and below 80',
+        };
+      });
       return;
     }
 
@@ -71,10 +55,9 @@ const PersonalDetailsForm: React.FC<PersonalDetailsFormProps> = ({
       setErrors((prev) => {
         return {
           ...prev,
-          email: emailError
-        }
-      }
-      )
+          email: emailError,
+        };
+      });
       return;
     }
     const nameError = validateFullName(data.name);
@@ -83,10 +66,9 @@ const PersonalDetailsForm: React.FC<PersonalDetailsFormProps> = ({
       setErrors((prev) => {
         return {
           ...prev,
-          name: nameError
-        }
-      }
-      )
+          name: nameError,
+        };
+      });
       return;
     }
     const phoneError = validatePhone(data.phone);
@@ -95,10 +77,9 @@ const PersonalDetailsForm: React.FC<PersonalDetailsFormProps> = ({
       setErrors((prev) => {
         return {
           ...prev,
-          phone: phoneError
-        }
-      }
-      )
+          phone: phoneError,
+        };
+      });
       return;
     }
     onUpdate({ language: lang });
@@ -121,7 +102,7 @@ const PersonalDetailsForm: React.FC<PersonalDetailsFormProps> = ({
       <h2 className="text-xl font-bold text-center">Personal Details</h2>
       <Input
         label="Full Name"
-        name='name'
+        name="name"
         value={data.name}
         onChange={(e) => onUpdate({ name: e.target.value })}
         required
@@ -129,7 +110,7 @@ const PersonalDetailsForm: React.FC<PersonalDetailsFormProps> = ({
       {errors.name && <p className="text-red-500">{errors.name}</p>}
       <Input
         label="Phone"
-        name='phone'
+        name="phone"
         type="tel"
         value={data.phone}
         onChange={(e) => onUpdate({ phone: e.target.value })}
@@ -138,7 +119,7 @@ const PersonalDetailsForm: React.FC<PersonalDetailsFormProps> = ({
       {errors.phone && <p className="text-red-500">{errors.phone}</p>}
       <Input
         label="Email"
-        name='email'
+        name="email"
         type="email"
         value={data.email}
         onChange={(e) => onUpdate({ email: e.target.value })}
@@ -148,7 +129,7 @@ const PersonalDetailsForm: React.FC<PersonalDetailsFormProps> = ({
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <Select
           label="Gender"
-          name='gender'
+          name="gender"
           value={data.gender}
           onChange={(e) => onUpdate({ gender: e.target.value })}
           options={[
@@ -161,7 +142,7 @@ const PersonalDetailsForm: React.FC<PersonalDetailsFormProps> = ({
 
         <Input
           label="Age"
-          name='age'
+          name="age"
           type="number"
           value={data.age}
           onChange={(e) => onUpdate({ age: parseInt(e.target.value) })}
@@ -173,7 +154,7 @@ const PersonalDetailsForm: React.FC<PersonalDetailsFormProps> = ({
       <div>
         <Select
           label="Language"
-          name='language'
+          name="language"
           onChange={(e) => handleLanguageChange(e)}
           options={[
             { value: 'English', label: 'English' },

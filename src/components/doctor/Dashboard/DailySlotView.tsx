@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -20,19 +19,13 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store/appStore';
 import { getSlots } from '@/services/doctor/doctor';
 import errorHandler from '@/utils/errorHandler';
+import { ISlot } from '@/types/ISlots';
 
-interface Slot {
-  doctorId: string;
-  StartTime: Date;
-  EndTime: Date;
-  status: 'Available' | 'Pending' | 'Booked';
-  pendingBookingExpiry: Date | null;
-}
 
 
 const DailySlotView: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-  const [slots, setSlots] = useState<Slot[]>([]);
+  const [slots, setSlots] = useState<ISlot[]>([]);
 
   const doctor = useSelector((state: RootState)=> state.doctor.doctor)
 
@@ -57,7 +50,7 @@ const DailySlotView: React.FC = () => {
     isSameDay(new Date(slot.StartTime), selectedDate)
   ).sort((a, b) => new Date(a.StartTime).getTime() - new Date(b.StartTime).getTime());
 
-  const getStatusColor = (status: Slot['status']) => {
+  const getStatusColor = (status: ISlot['status']) => {
     switch (status) {
       case 'Available':
         return 'bg-emerald-50 border-emerald-200 hover:bg-emerald-100 text-emerald-700';
@@ -70,7 +63,7 @@ const DailySlotView: React.FC = () => {
     }
   };
 
-  const getStatusIcon = (status: Slot['status'], expiry: Date | null) => {
+  const getStatusIcon = (status: ISlot['status'], expiry: Date | null) => {
     if (status === 'Pending' && expiry) {
       return <AlertCircle className="h-4 w-4" />;
     }

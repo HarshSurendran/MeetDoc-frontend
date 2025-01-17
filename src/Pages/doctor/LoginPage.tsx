@@ -11,14 +11,11 @@ import { useDispatch } from 'react-redux';
 import { addDoctor } from '../../redux/slices/doctorSlice';
 import { Link } from 'react-router-dom';
 import { getPhotoUrl } from '@/services/doctor/doctor';
+import { Ilogin } from '@/types/IUserLogin';
 
-export interface FormData {
-  email: string;
-  password: string;
-}
 
 const LoginPage = () => {
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState<Ilogin>({
     email: '',
     password: '',
   });
@@ -38,7 +35,7 @@ const LoginPage = () => {
       return false;
     }
     // Password validation
-    const passError = validatePassword(formData.password);
+    const passError = validatePassword(formData?.password as string);
     if (passError) {
       setPassError(passError);
       return false;
@@ -53,9 +50,10 @@ const LoginPage = () => {
     if (validateForm()) {
       setLoading(true);
       try {
-        const response = await login(formData);
+        
+        const response = await login(formData as {email: string, password: string});
 
-        if (response) {          
+        if (response) {
           localStorage.setItem(
             'doctorAccessToken',
             response.data.doctorAccessToken
@@ -63,13 +61,14 @@ const LoginPage = () => {
           if (response.data.docData.photo) {
             const url = await getPhotoUrl(response.data.docData.photo);
             console.log(url);
-            response.data.docData.photo = url; 
+            response.data.docData.photo = url;
             console.log("Response after updating photo url")
           }
           dispatch(addDoctor(response.data.docData));
           toast.success('Logged in successfully');
           navigate('/doctor/dashboard');
         }
+        
       } catch (error) {
         errorHandler(error);
         console.error('Login error:', error);

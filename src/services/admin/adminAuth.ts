@@ -1,6 +1,6 @@
 import axios, { Axios, AxiosError, AxiosInstance, AxiosResponse } from 'axios';
-import { IloginResponse } from '../../interfaces/admin/ILoginResponse';
-import { Ilogin } from '../../interfaces/user/Ilogin';
+import { IloginResponse } from '../../types/IAdmin';
+import { Ilogin } from '../../types/';
 import { adminAxiosInstance } from '../instance/adminInstance';
 import apiErrorHandler from '../../utils/apiErrorHandler';
 
@@ -13,7 +13,7 @@ export const login = async (
       adminCredentials
     );
     if (response) {
-      return response.data;      
+      return response.data;
     }
   } catch (error) {
     apiErrorHandler(error);
@@ -30,7 +30,7 @@ export const logout = async (
       adminId
     );
     localStorage.setItem('adminAccessToken', '');
-    if (response) {      
+    if (response) {
       return response.data;
     }
   } catch (error) {

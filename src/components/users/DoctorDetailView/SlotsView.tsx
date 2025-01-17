@@ -24,21 +24,10 @@ import toast from 'react-hot-toast';
 import BookingConfirmationModal from './BookingConfirmationModal';
 import { useNavigate } from 'react-router-dom';
 import { addPayment } from '@/redux/slices/paymentSlice';
+import { ISlot, ISlotsViewProps } from '@/types';
 
-export interface ISlot {
-    _id: string;
-    doctorId: string;
-    StartTime: Date;
-    EndTime: Date;
-    status: 'Available' | 'Pending' | 'Booked';
-    pendingBookingExpiry: Date | null;
-}
 
-interface SlotsViewProps {
-    doctor: { id: string, name: string, specialisation: string, fee: number};
-}
-
-const SlotsView: React.FC<SlotsViewProps> = ({doctor}) => {
+const SlotsView: React.FC<ISlotsViewProps> = ({doctor}) => {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
     const [slots, setSlots] = useState<ISlot[]>([
         { _id: "q", doctorId: "1", StartTime: new Date("2025-01-14T09:00:00"), EndTime: new Date("2025-01-14T09:30:00"), status: "Available", pendingBookingExpiry: null },

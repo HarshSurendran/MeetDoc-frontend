@@ -4,12 +4,11 @@ import { useDispatch } from "react-redux";
 import { resetDoctor } from "@/redux/slices/doctorSlice";
 import { useNavigate } from "react-router-dom";
 import errorHandler from "@/utils/errorHandler";
+import { ICompletedPageProps } from "@/types";
 
-interface CompletedPageProps {
-    doctorId: string
-}
 
-const CompletedPage: React.FC<CompletedPageProps> = ({ doctorId }) => {  
+
+const CompletedPage: React.FC<ICompletedPageProps> = ({ doctorId }) => {  
     const dispatch = useDispatch();
     const navigate = useNavigate();
 

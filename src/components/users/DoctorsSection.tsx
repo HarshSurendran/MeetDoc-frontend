@@ -3,17 +3,12 @@ import { Button } from "../ui/button";
 import { Card } from "../ui/card";
 import { getDoctorsForLandingPage, getProfilePhoto } from "@/services/user/user";
 import { useNavigate } from "react-router-dom";
+import { IDoctorDetails } from "@/types";
 
-interface DoctorDetails {
-  _id: string,
-  name: string,
-  specialisation: string,
-  consultation: number,
-  photo: string,
-}
+
 
 const DoctorsSection = () => {
-  const [doctors, setDoctors] = useState<DoctorDetails[]>([
+  const [doctors, setDoctors] = useState<IDoctorDetails[]>([
     { _id: "1", name: "Afsal Madathingal", specialisation: "General Medicine", consultation: 783, photo: "src/assets/heroimage2.avif" },
     { _id: "2", name: "Afsal Madathingal", specialisation: "General Medicine", consultation: 783, photo: "src/assets/heroimage2.avif" },
     { _id: "3", name: "Afsal Madathingal", specialisation: "General Medicine", consultation: 783, photo: "src/assets/heroimage2.avif" },
@@ -29,7 +24,7 @@ const DoctorsSection = () => {
     const response = await getDoctorsForLandingPage();
     if (response.status) {
       let doctorArray = response.data.doctors;
-      doctorArray.forEach(async (doctor: DoctorDetails) => {
+      doctorArray.forEach(async (doctor: IDoctorDetails) => {
         const response = await getProfilePhoto(doctor.photo);
         if (response.status) {
           doctor.photo = response.data.url;

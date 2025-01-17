@@ -16,7 +16,7 @@ import {
 } from 'lucide-react';
 import { checkDataSubmitted } from '@/services/doctor/doctorAuth';
 import errorHandler from '@/utils/errorHandler';
-import { FormData } from '@/types/Authtypes/doctorTypes';
+import { FormData } from '@/types/doctorTypes';
 import { getCertificate, verifyDoctor } from '@/services/admin/admin';
 import toast from 'react-hot-toast';
 
@@ -62,8 +62,17 @@ const DoctorVerificationPage: React.FC = () => {
     }
   };
 
-  const onVerify = async (id: string, status: boolean, verifyData: { languages: string[], degree: string, specialisation: string, masterDegree: string}) => {
-    const payload =  { isVerified: status , ...verifyData}
+  const onVerify = async (
+    id: string,
+    status: boolean,
+    verifyData: {
+      languages: string[];
+      degree: string;
+      specialisation: string;
+      masterDegree: string;
+    }
+  ) => {
+    const payload = { isVerified: status, ...verifyData };
     const response = await verifyDoctor(id, payload);
     if (response) {
       console.log('Doctor verification status updated:', response);
@@ -83,10 +92,13 @@ const DoctorVerificationPage: React.FC = () => {
         const payload = {
           languages: data.personalDetails.language,
           degree: data.educationDetails.degree,
-          masterDegree: data.postGraduationDetails.degree || "",
-          specialisation: data.postGraduationDetails.specialty.length > 0 ? `${data.postGraduationDetails.superSpecialty}, ${data.postGraduationDetails.specialty}, ${data.educationDetails.specialty}` : data.educationDetails.specialty
-        }
-        await onVerify(data?.doctorId, status, payload );
+          masterDegree: data.postGraduationDetails.degree || '',
+          specialisation:
+            data.postGraduationDetails.specialty.length > 0
+              ? `${data.postGraduationDetails.superSpecialty}, ${data.postGraduationDetails.specialty}, ${data.educationDetails.specialty}`
+              : data.educationDetails.specialty,
+        };
+        await onVerify(data?.doctorId, status, payload);
       }
     } catch (error) {
       console.error('Verification failed:', error);

@@ -1,7 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { ChevronDown, ChevronUp, Search, Users, MoreVertical, Edit, Plus } from 'lucide-react';
-import { IUser } from '../../interfaces/user/IUser';
-import { addUser, editUser, getUsers, toggleBlock } from '../../services/admin/admin';
+import {
+  ChevronDown,
+  ChevronUp,
+  Search,
+  Users,
+  MoreVertical,
+  Edit,
+  Plus,
+} from 'lucide-react';
+import { IUser } from '../../types/IUser';
+import {
+  addUser,
+  editUser,
+  getUsers,
+  toggleBlock,
+} from '../../services/admin/admin';
 import { useNavigate } from 'react-router-dom';
 import errorHandler from '../../utils/errorHandler';
 import EditUserModal from './EditUserModal';
@@ -15,7 +28,7 @@ const UserManagementTable: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [sortField, setSortField] = useState<keyof IUser>('name');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
-  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);  
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [hoveredRow, setHoveredRow] = useState<string | null>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<IUser | null>(null);
@@ -28,7 +41,10 @@ const UserManagementTable: React.FC = () => {
   useEffect(() => {
     // Close dropdown when clicking outside
     const handleClickOutside = (event: MouseEvent) => {
-      if (activeDropdown && !(event.target as Element).closest('.dropdown-container')) {
+      if (
+        activeDropdown &&
+        !(event.target as Element).closest('.dropdown-container')
+      ) {
         setActiveDropdown(null);
       }
     };
@@ -39,8 +55,8 @@ const UserManagementTable: React.FC = () => {
 
   const fetchUser = async () => {
     try {
-      const response: IUser[] = await getUsers();      
-      if (response) {       
+      const response: IUser[] = await getUsers();
+      if (response) {
         setUsers(response);
       }
     } catch (error) {
@@ -49,20 +65,22 @@ const UserManagementTable: React.FC = () => {
   };
 
   const handleBlock = async (_id: string, event: React.MouseEvent) => {
-    event.stopPropagation(); 
+    event.stopPropagation();
     try {
-      const response = await toggleBlock(_id);      
+      const response = await toggleBlock(_id);
       if (response) {
-        setUsers(users.map((user) => {
-          if (user._id === _id) {
-            user.isBlocked = !user.isBlocked;
-          }
-          return user;
-        }));
-      }      
+        setUsers(
+          users.map((user) => {
+            if (user._id === _id) {
+              user.isBlocked = !user.isBlocked;
+            }
+            return user;
+          })
+        );
+      }
     } catch (error) {
-      errorHandler(error);      
-    }    
+      errorHandler(error);
+    }
   };
 
   const handleSort = (field: keyof IUser) => {
@@ -80,7 +98,7 @@ const UserManagementTable: React.FC = () => {
 
   const handleEditClick = (userId: string, event: React.MouseEvent) => {
     event.stopPropagation();
-    const userToEdit = users.find(user => user._id === userId);
+    const userToEdit = users.find((user) => user._id === userId);
     if (userToEdit) {
       setSelectedUser(userToEdit);
       setIsEditModalOpen(true);
@@ -102,15 +120,17 @@ const UserManagementTable: React.FC = () => {
   };
 
   const handleSaveUser = async (updatedUser: IUser) => {
-    try {      
+    try {
       const response = await editUser(updatedUser._id, updatedUser);
       if (response) {
-        setUsers(users.map(user =>
-          user._id === updatedUser._id ? updatedUser : user
-        ));
-        toast.success("User edited Successfully")
+        setUsers(
+          users.map((user) =>
+            user._id === updatedUser._id ? updatedUser : user
+          )
+        );
+        toast.success('User edited Successfully');
       }
-      console.log(updatedUser, "Reached edit", response);
+      console.log(updatedUser, 'Reached edit', response);
     } catch (error) {
       errorHandler(error);
     }
@@ -121,9 +141,10 @@ const UserManagementTable: React.FC = () => {
     setActiveDropdown(activeDropdown === userId ? null : userId);
   };
 
-  const filteredUsers = users.filter((user) =>
-    user.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    user.email?.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredUsers = users.filter(
+    (user) =>
+      user.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.email?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const sortedUsers = [...filteredUsers].sort((a, b) => {
@@ -150,24 +171,27 @@ const UserManagementTable: React.FC = () => {
           <Users className="w-6 h-6 mr-2" />
           <h1 className="text-2xl font-bold">User Management</h1>
         </div>
-        
+
         {/* Search Bar */}
         <div className="flex items-center gap-4 w-full md:w-auto">
-        <div className="relative w-full md:w-64">
-          <input
-            type="text"
-            placeholder="Search users..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          />
-          <Search className="absolute right-3 top-2.5 text-gray-400 w-5 h-5" />
+          <div className="relative w-full md:w-64">
+            <input
+              type="text"
+              placeholder="Search users..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+            <Search className="absolute right-3 top-2.5 text-gray-400 w-5 h-5" />
           </div>
-          <Button onClick={() => setIsAddModalOpen(true)} className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md flex items-center gap-2">
+          <Button
+            onClick={() => setIsAddModalOpen(true)}
+            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md flex items-center gap-2"
+          >
             <Plus className="w-5 h-5" />
             Add User
           </Button>
-          </div>
+        </div>
       </div>
 
       {/* Table */}
@@ -187,8 +211,12 @@ const UserManagementTable: React.FC = () => {
               >
                 Email <SortIcon field="email" />
               </th>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-blue-700">Phone</th>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-blue-700">Occupation</th>
+              <th className="px-6 py-3 text-left text-sm font-semibold text-blue-700">
+                Phone
+              </th>
+              <th className="px-6 py-3 text-left text-sm font-semibold text-blue-700">
+                Occupation
+              </th>
               <th
                 className="px-6 py-3 text-left text-sm font-semibold text-blue-700 cursor-pointer"
                 onClick={() => handleSort('rating')}
@@ -202,8 +230,8 @@ const UserManagementTable: React.FC = () => {
           </thead>
           <tbody className="divide-y divide-gray-200">
             {sortedUsers.map((user) => (
-              <tr 
-                key={user._id} 
+              <tr
+                key={user._id}
                 onClick={() => handleRowClick(user._id)}
                 onMouseEnter={() => setHoveredRow(user._id)}
                 onMouseLeave={() => {
@@ -217,9 +245,15 @@ const UserManagementTable: React.FC = () => {
                   </div>
                   <div className="text-sm text-gray-500">{user.gender}</div>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{user.email}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{user.phone}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{user.occupation}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  {user.email}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  {user.phone}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  {user.occupation}
+                </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
                     {user.rating}
@@ -227,7 +261,7 @@ const UserManagementTable: React.FC = () => {
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   <div className="flex items-center space-x-2 dropdown-container">
-                    <button 
+                    <button
                       onClick={(e) => handleBlock(user._id, e)}
                       className={`px-3 py-1 rounded-md text-white font-semibold transition-colors duration-200 ${
                         user.isBlocked
@@ -235,13 +269,14 @@ const UserManagementTable: React.FC = () => {
                           : 'bg-red-500 hover:bg-red-600'
                       }`}
                     >
-                      {user.isBlocked ? "Unblock" : "Block"}
+                      {user.isBlocked ? 'Unblock' : 'Block'}
                     </button>
 
-
-                    <div className={`relative transition-opacity duration-150 ${
-                      hoveredRow === user._id ? 'opacity-100' : 'opacity-0'
-                    }`}>
+                    <div
+                      className={`relative transition-opacity duration-150 ${
+                        hoveredRow === user._id ? 'opacity-100' : 'opacity-0'
+                      }`}
+                    >
                       <button
                         onClick={(e) => toggleDropdown(user._id, e)}
                         className="p-1 hover:bg-gray-100 rounded-full transition-colors duration-150"
@@ -268,19 +303,17 @@ const UserManagementTable: React.FC = () => {
             ))}
           </tbody>
         </table>
-        
       </div>
       {selectedUser && (
-          <EditUserModal
-            user={selectedUser}
-            isOpen={isEditModalOpen}
+        <EditUserModal
+          user={selectedUser}
+          isOpen={isEditModalOpen}
           onClose={() => {
             setSelectedUser(null);
-            setIsEditModalOpen(false)
-          }
-          }
-            onSave={handleSaveUser}
-          />
+            setIsEditModalOpen(false);
+          }}
+          onSave={handleSaveUser}
+        />
       )}
       {isAddModalOpen && (
         <AddUserModal
@@ -290,7 +323,6 @@ const UserManagementTable: React.FC = () => {
         />
       )}
     </div>
-    
   );
 };
 

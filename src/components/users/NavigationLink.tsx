@@ -1,19 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
 import React from "react";
+import { INavigationLinkProps } from "@/types";
 
-interface NavigationLinkProps {
-    item: {
-        name: string;
-        href: string;
-        icon: any;
-    };
-    currentPath: string;
-    setCurrentPath: (path: string) => void;
-    isMobile?: boolean;
-}
 
-const NavigationLink :React.FC<NavigationLinkProps> = ({ item, currentPath, setCurrentPath, isMobile = false }) => {
+
+const NavigationLink :React.FC<INavigationLinkProps> = ({ item, currentPath, setCurrentPath, isMobile = false }) => {
     const isActive = currentPath === item.href;
       const Icon = item.icon;
       const navigate = useNavigate();

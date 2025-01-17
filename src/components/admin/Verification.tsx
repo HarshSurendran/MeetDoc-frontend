@@ -1,6 +1,6 @@
 import { Card } from '@mui/material';
 import React from 'react';
-import { FormData } from '../../types/Authtypes/doctorTypes';
+import { FormData } from '../../types/doctorTypes';
 import { getVerificationRequests } from '@/services/admin/admin';
 import errorHandler from '@/utils/errorHandler';
 import { useNavigate } from 'react-router-dom';

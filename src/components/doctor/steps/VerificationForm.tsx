@@ -1,15 +1,10 @@
 import Button from '../comps/Button';
 import Select from '../comps/Select';
-import { VerificationDetails } from '../../../types/Authtypes/doctorTypes';
+import { IVerificationFormProps } from '@/types';
 
-interface VerificationFormProps {
-  data: VerificationDetails;
-  onUpdate: (data: Partial<VerificationDetails>) => void;
-  onNext: () => void;
-  onBack: () => void;
-}
 
-const VerificationForm: React.FC<VerificationFormProps> = ({
+
+const VerificationForm: React.FC<IVerificationFormProps> = ({
   data,
   onUpdate,
   onNext,

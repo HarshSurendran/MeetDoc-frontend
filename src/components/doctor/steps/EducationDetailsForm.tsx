@@ -2,37 +2,22 @@ import toast from 'react-hot-toast';
 import Button from '../comps/Button';
 import Input from '../comps/Input';
 import Select from '../comps/Select';
-import { EducationDetails } from '../../../types/Authtypes/doctorTypes';
 import {
   validateInstituteName,
   validateUniversityName,
 } from '../../../utils/doctorValidator/docValidator';
 import { useState } from 'react';
+import { IEducationFormErrors, IEducationFormProps } from '@/types';
 
-interface EducationFormProps {
-  data: EducationDetails;
-  onUpdate: (data: Partial<EducationDetails>) => void;
-  onBack: () => void;
-  onNext: () => void;
-}
 
-interface Errors {
-  certificateFile: string;
-  yearOfCompletion: string;
-  registerationNumber: string;
-  city: string;
-  speciality: string;
-  institution: string;
-  university: string;
-}
 
-const EducationDetailsForm: React.FC<EducationFormProps> = ({
+const EducationDetailsForm: React.FC<IEducationFormProps> = ({
   data,
   onUpdate,
   onBack,
   onNext,
 }) => {
-  const [errors, setErrors] = useState<Errors>({
+  const [errors, setErrors] = useState<IEducationFormErrors>({
     certificateFile: '',
     yearOfCompletion: '',
     registerationNumber: '',
@@ -40,9 +25,7 @@ const EducationDetailsForm: React.FC<EducationFormProps> = ({
     speciality: '',
     institution: '',
     university: '',
-
-  })
-
+  });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -54,15 +37,14 @@ const EducationDetailsForm: React.FC<EducationFormProps> = ({
       speciality: '',
       institution: '',
       university: '',
-    })
-
+    });
 
     if (!data.certificateFile) {
       toast.error('You must upload your certificate.');
       setErrors((prev) => ({
         ...prev,
         certificateFile: 'You must upload your certificate.',
-      }))
+      }));
       return;
     }
     const year = data.yearOfCompletion;
@@ -72,7 +54,7 @@ const EducationDetailsForm: React.FC<EducationFormProps> = ({
       setErrors((prev) => ({
         ...prev,
         yearOfCompletion: 'Please enter a valid year in YYYY format.',
-      }))
+      }));
       return;
     }
     const instituteNameError = validateInstituteName(data.institution);
@@ -81,7 +63,7 @@ const EducationDetailsForm: React.FC<EducationFormProps> = ({
       setErrors((prev) => ({
         ...prev,
         institution: instituteNameError,
-      }))
+      }));
       return;
     }
     const universityNameError = validateUniversityName(data.university);
@@ -103,15 +85,16 @@ const EducationDetailsForm: React.FC<EducationFormProps> = ({
     setErrors((prev) => ({
       ...prev,
       certificateFile: '',
-    }))
+    }));
 
     if (file) {
       if (!acceptedTypes.includes(file.type)) {
         toast.error('Please upload a valid certificate (PDF, PNG, or JPEG).');
         setErrors((prev) => ({
           ...prev,
-          certificateFile: 'Please upload a valid certificate (PDF, PNG, or JPEG).',
-        }))
+          certificateFile:
+            'Please upload a valid certificate (PDF, PNG, or JPEG).',
+        }));
         e.target.value = '';
         return;
       }
@@ -120,7 +103,7 @@ const EducationDetailsForm: React.FC<EducationFormProps> = ({
         setErrors((prev) => ({
           ...prev,
           certificateFile: 'File size should not exceed 2MB.',
-        }))
+        }));
         return;
       }
       onUpdate({ certificateFile: file });
@@ -137,7 +120,9 @@ const EducationDetailsForm: React.FC<EducationFormProps> = ({
         onChange={(e) => onUpdate({ institution: e.target.value })}
         required
       />
-      {errors.institution && <p className="text-red-500">{errors.institution}</p>}
+      {errors.institution && (
+        <p className="text-red-500">{errors.institution}</p>
+      )}
       <Input
         label="University"
         value={data.university}
@@ -153,7 +138,6 @@ const EducationDetailsForm: React.FC<EducationFormProps> = ({
           onChange={(e) => onUpdate({ registrationNumber: e.target.value })}
           required
         />
-        
 
         <Input
           label="City"
@@ -196,7 +180,9 @@ const EducationDetailsForm: React.FC<EducationFormProps> = ({
             }}
           />
           {data.certificateFile && (
-            <p className='text-green-500 p-0'>Selected file: {data.certificateFile.name}</p>
+            <p className="text-green-500 p-0">
+              Selected file: {data.certificateFile instanceof File ? data.certificateFile.name : ''}
+            </p>
           )}
           {errors.certificateFile && (
             <p className="text-red-500">{errors.certificateFile}</p>

@@ -1,11 +1,8 @@
+import { IStepIndicatorProps } from '@/types';
 import React from 'react';
 
-interface StepIndicatorProps {
-  currentStep: number;
-  totalSteps: number;
-}
 
-const StepIndicator: React.FC<StepIndicatorProps> = ({
+const StepIndicator: React.FC<IStepIndicatorProps> = ({
   currentStep,
   totalSteps,
 }) => {

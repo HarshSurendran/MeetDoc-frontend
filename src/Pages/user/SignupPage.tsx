@@ -9,38 +9,24 @@ import { register } from '@/services/user/userAuth';
 import errorHandler from '@/utils/errorHandler';
 import toast from 'react-hot-toast';
 import { validateEmail, validateFullName, validatePassword, validatePhone } from '@/utils/userValidator/uservalidator';
+import { IUserSignUp, IUserSignUpError } from '@/types';
 
-interface FormData {
-  name: string;
-  email: string;
-  password: string;
-  gender: string;
-  phone: string;
-}
 
-interface FormErrors {
-  name?: string;
-  email?: string;
-  password?: string;
-  gender?: string;
-  phone?: string;
-}
 
 const SignupPage = () => {
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState<IUserSignUp>({
     name: '',
     email: '',
     password: '',
     gender: '',
     phone: '',
   });
-
-  const [errors, setErrors] = useState<FormErrors>({});
+  const [errors, setErrors] = useState<IUserSignUpError>({});
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const validateForm = () => {
-    let newErrors: FormErrors  = {}   
+    let newErrors: IUserSignUpError  = {}   
     const nameError = validateFullName(formData.name);
     if (nameError) {
       newErrors.name = nameError;
@@ -92,8 +78,7 @@ const SignupPage = () => {
           ...prev,
           [name]: value,
         }));
-        // Clear error when user starts typing
-        if (errors[name as keyof FormErrors]) {
+        if (errors[name as keyof IUserSignUpError]) {
           setErrors((prev) => ({
             ...prev,
             [name]: undefined,

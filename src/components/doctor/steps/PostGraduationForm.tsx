@@ -2,21 +2,16 @@ import toast from 'react-hot-toast';
 import Button from '../comps/Button';
 import Input from '../comps/Input';
 import Select from '../comps/Select';
-import { PostGraduationDetails } from '../../../types/Authtypes/doctorTypes';
 import {
   validateInstituteName,
   validateUniversityName,
 } from '../../../utils/doctorValidator/docValidator';
 import { useState } from 'react';
+import { IPostGraduationFormProps } from '@/types';
 
-interface PostGraduationFormProps {
-  data: PostGraduationDetails;
-  onUpdate: (data: Partial<PostGraduationDetails>) => void;
-  onBack: () => void;
-  onNext: () => void;
-}
 
-const PostGraduationDetailsForm: React.FC<PostGraduationFormProps> = ({
+
+const PostGraduationDetailsForm: React.FC<IPostGraduationFormProps> = ({
   data,
   onUpdate,
   onBack,
@@ -153,7 +148,7 @@ const PostGraduationDetailsForm: React.FC<PostGraduationFormProps> = ({
                   handleFileChange(e);
                 }}
               />
-              {data.certificateFile && (
+              {data.certificateFile && data.certificateFile instanceof File && (
                 <p>Selected file: {data.certificateFile.name}</p>
               )}
             </div>

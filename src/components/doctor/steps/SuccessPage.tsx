@@ -1,15 +1,9 @@
 import { useState } from 'react';
 import Button from '../comps/Button';
-import { FormData } from '../../../types/Authtypes/doctorTypes';
+import { ISuccessPageProps } from '@/types';
 
-interface SuccessPageProps {
-  data: FormData;
-  onUpdate: (data: boolean) => void;
-  onSubmit: () => void;
-  onBack: () => void;
-}
 
-const SuccessPage: React.FC<SuccessPageProps> = ({
+const SuccessPage: React.FC<ISuccessPageProps> = ({
   data,
   onUpdate,
   onSubmit,

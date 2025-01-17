@@ -4,29 +4,35 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { IUser } from '../../interfaces/user/IUser';
-import { validateEmail, validateFullName, validatePassword, validatePhone, validatePincode } from '@/utils/userValidator/uservalidator';
+} from '@/components/ui/select';
+import { IUser } from '../../types/IUser';
+import {
+  validateEmail,
+  validateFullName,
+  validatePhone,
+  validatePincode,
+} from '@/utils/userValidator/uservalidator';
 import toast from 'react-hot-toast';
+import { IEditUserModalProps } from '@/types';
 
-interface EditUserModalProps {
-  user: IUser;
-  isOpen: boolean;
-  onClose: () => void;
-  onSave: (updatedUser: IUser) => Promise<void>;
-}
 
-const EditUserModal: React.FC<EditUserModalProps> = ({ user, isOpen, onClose, onSave }) => {
+
+const EditUserModal: React.FC<IEditUserModalProps> = ({
+  user,
+  isOpen,
+  onClose,
+  onSave,
+}) => {
   const [formData, setFormData] = useState<IUser>({ ...user });
   const [loading, setLoading] = useState(false);
 
@@ -34,25 +40,25 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ user, isOpen, onClose, on
     const { name, value } = e.target;
     if (name.includes('.')) {
       const [parent, child] = name.split('.');
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
         [parent]: {
           ...prev[parent],
-          [child]: value
-        }
+          [child]: value,
+        },
       }));
     } else {
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
-        [name]: value
+        [name]: value,
       }));
     }
   };
 
   const handleGenderChange = (value: string) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      gender: value
+      gender: value,
     }));
   };
 
@@ -62,7 +68,7 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ user, isOpen, onClose, on
       setLoading(true);
       const valEmail = validateEmail(formData.email);
       const valName = validateFullName(formData.name);
-     
+
       if (formData.phone) {
         const valPhone = validatePhone(formData.phone);
         if (valPhone) {
@@ -70,16 +76,17 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ user, isOpen, onClose, on
           throw new Error();
         }
       }
-      
-      if (formData.address?.pincode || formData.address?.pincode == 0) {
-        const valPincode = validatePincode(formData.address.pincode);
-        if (valPincode) {
-          toast.error("Please enter a valid Pincode.");
+
+      if (formData.address?.pincode || formData.address?.pincode === '0') {
+        console.log(formData.address.pincode)
+        const errorPincode = validatePincode(formData.address.pincode);
+        if (errorPincode) {
+          toast.error(errorPincode);
           throw new Error();
         }
       }
 
-      if (valEmail || valName ) {
+      if (valEmail || valName) {
         toast.error(valEmail || valName);
         throw new Error();
       }
@@ -98,7 +105,7 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ user, isOpen, onClose, on
         <DialogHeader>
           <DialogTitle>Edit User Information</DialogTitle>
         </DialogHeader>
-        
+
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Personal Information Section */}
           <div className="space-y-4">
@@ -114,7 +121,7 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ user, isOpen, onClose, on
                   required
                 />
               </div>
-              
+
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
                 <Input
@@ -129,8 +136,8 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ user, isOpen, onClose, on
 
               <div className="space-y-2">
                 <Label htmlFor="gender">Gender</Label>
-                <Select 
-                  value={formData.gender} 
+                <Select
+                  value={formData.gender}
                   onValueChange={handleGenderChange}
                   required
                 >
@@ -161,9 +168,14 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ user, isOpen, onClose, on
                   id="date_of_birth"
                   name="date_of_birth"
                   type="date"
-                  value={formData.date_of_birth ? new Date(formData.date_of_birth).toISOString().split('T')[0] : ''}
+                  value={
+                    formData.date_of_birth
+                      ? new Date(formData.date_of_birth)
+                          .toISOString()
+                          .split('T')[0]
+                      : ''
+                  }
                   onChange={handleInputChange}
-                  
                 />
               </div>
 
@@ -174,7 +186,6 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ user, isOpen, onClose, on
                   name="occupation"
                   value={formData.occupation}
                   onChange={handleInputChange}
-                  
                 />
               </div>
             </div>
@@ -191,7 +202,6 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ user, isOpen, onClose, on
                   name="address.district"
                   value={formData.address?.district}
                   onChange={handleInputChange}
-                  
                 />
               </div>
 
@@ -202,7 +212,6 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ user, isOpen, onClose, on
                   name="address.locality"
                   value={formData.address?.locality}
                   onChange={handleInputChange}
-                  
                 />
               </div>
 
@@ -213,7 +222,6 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ user, isOpen, onClose, on
                   name="address.pincode"
                   value={formData.address?.pincode}
                   onChange={handleInputChange}
-                  
                 />
               </div>
 
@@ -224,7 +232,6 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ user, isOpen, onClose, on
                   name="address.state"
                   value={formData.address?.state}
                   onChange={handleInputChange}
-                  
                 />
               </div>
 
@@ -235,7 +242,6 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ user, isOpen, onClose, on
                   name="address.country"
                   value={formData.address?.country}
                   onChange={handleInputChange}
-                  
                 />
               </div>
             </div>

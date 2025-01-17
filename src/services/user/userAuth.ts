@@ -1,9 +1,7 @@
-import axios, { Axios, AxiosError, AxiosInstance, AxiosResponse } from 'axios';
+import { AxiosResponse } from 'axios';
 import { userAxiosInstance } from '../instance/userInstance';
-import { Ilogin, IloginResponse } from '../../interfaces/user/Ilogin';
+import { Ilogin, IloginResponse, IUserSignUp } from '../../types/';
 import apiErrorHandler from '../../utils/apiErrorHandler';
-import { IUser } from '../../interfaces/user/IUser';
-import { FormData } from '../../Pages/user/SignupPage';
 
 // export const login = async (credentials: ILoginCredential) => {
 //     try {
@@ -28,7 +26,7 @@ export const login = async (
     );
     console.log('This is response from login', response);
     if (response) {
-      return response.data;      
+      return response.data;
     }
   } catch (error) {
     console.log('This is error from login', error);
@@ -50,7 +48,7 @@ export const logout = async (
 };
 
 export const register = async (
-  data: FormData
+  data: IUserSignUp
 ): Promise<AxiosResponse | undefined> => {
   try {
     const response = await userAxiosInstance.post('/auth/register', data);
@@ -75,15 +73,19 @@ export const verifyOtp = async (
     if (response) {
       return response;
     }
-  } catch (error) {    
+  } catch (error) {
     apiErrorHandler(error);
-     return Promise.reject();
+    return Promise.reject();
   }
-}
+};
 
-export const sendGoogleToken = async (token: string) : Promise<AxiosResponse | undefined> => {
+export const sendGoogleToken = async (
+  token: string
+): Promise<AxiosResponse | undefined> => {
   try {
-    const response = await userAxiosInstance.post("/auth/google/callback", { token });
+    const response = await userAxiosInstance.post('/auth/google/callback', {
+      token,
+    });
     if (response) {
       return response.data;
     }
@@ -91,5 +93,4 @@ export const sendGoogleToken = async (token: string) : Promise<AxiosResponse | u
     apiErrorHandler(error);
     return Promise.reject();
   }
-
-}
+};

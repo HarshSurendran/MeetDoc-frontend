@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import {
-  PaymentElement,
   Elements,
-  useStripe,
-  useElements
 } from '@stripe/react-stripe-js';
 import PaymentForm from './PaymentForm';
 import { createPaymentIntent, updateSlot } from '@/services/user/user';
@@ -15,7 +12,6 @@ import { useNavigate } from 'react-router-dom';
 import { resetPayment } from '@/redux/slices/paymentSlice';
 
 
-// Initialize Stripe
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PKEY);
 
 

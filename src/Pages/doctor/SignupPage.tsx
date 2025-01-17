@@ -4,25 +4,11 @@ import errorHandler from '../../utils/errorHandler';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { Link } from 'react-router-dom';
+import { IDoctorSignup, IDoctorSignupErrors } from '@/types/IDoctor';
 
-export interface FormData {
-  name: string;
-  email: string;
-  password: string;
-  gender: string;
-  phone: string;
-}
-
-interface FormErrors {
-  name?: string;
-  email?: string;
-  password?: string;
-  gender?: string;
-  phone?: string;
-}
 
 const SignupPage = () => {
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState<IDoctorSignup>({
     name: '',
     email: '',
     password: '',
@@ -30,13 +16,13 @@ const SignupPage = () => {
     phone: '',
   });
 
-  const [errors, setErrors] = useState<FormErrors>({});
+  const [errors, setErrors] = useState<IDoctorSignupErrors>({});
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
   const validateForm = (): boolean => {
-    const newErrors: FormErrors = {};
+    const newErrors: IDoctorSignupErrors = {};
     // Name validation
     if (!formData.name.trim()) {
       newErrors.name = 'Name is required';
@@ -95,7 +81,7 @@ const SignupPage = () => {
       [name]: value,
     }));
 
-    if (errors[name as keyof FormErrors]) {
+    if (errors[name as keyof IDoctorSignupErrors]) {
       setErrors((prev) => ({
         ...prev,
         [name]: undefined,

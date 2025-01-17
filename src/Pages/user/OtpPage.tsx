@@ -1,4 +1,4 @@
-import React, {
+import  {
   useState,
   useRef,
   KeyboardEvent,
@@ -22,7 +22,6 @@ const OtpPage = () => {
   const dispatch = useDispatch();
   const formData = location.state;
 
-  // Create refs for each input
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const timerInterval = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -159,7 +158,7 @@ const OtpPage = () => {
   const progressPercentage = (timer / 60) * 100;
   const circumference = 2 * Math.PI * 20;
   const strokeDashoffset =
-    circumference - (progressPercentage / 100) * circumference;
+  circumference - (progressPercentage / 100) * circumference;
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">

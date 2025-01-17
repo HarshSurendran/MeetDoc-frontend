@@ -4,7 +4,7 @@ import EducationDetailsForm from '../../components/doctor/steps/EducationDetails
 import VerificationForm from '../../components/doctor/steps/VerificationForm';
 import PersonalDetailsForm from '../../components/doctor/steps/PersonalDetailsForm';
 import SuccessPage from '../../components/doctor/steps/SuccessPage';
-import { ExperienceDetails, FormData } from '../../types/Authtypes/doctorTypes';
+import { ExperienceDetails, FormData } from '../../types/doctorTypes';
 import ExperienceDetailsForm from '../../components/doctor/steps/ExperienceDetailsForm';
 import PostGraduationDetailsForm from '../../components/doctor/steps/PostGraduationForm';
 import {
@@ -103,7 +103,7 @@ const DoctorVerification: React.FC = () => {
   const updateFormData = (step: keyof FormData, data: any) => {
     setFormData((prev) => ({
       ...prev,
-      [step]: { ...prev[step], ...data },
+      [step]: { ...(prev[step] as object), ...data },
     }));
   };
 

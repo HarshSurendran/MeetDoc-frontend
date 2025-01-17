@@ -1,7 +1,6 @@
 
 import { Calendar, DollarSign, LogOut, Users } from 'lucide-react'
-import React, {  useState } from 'react'
-import { NavLink, useNavigate, useSearchParams } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import {
     AlertDialog,
     AlertDialogAction,

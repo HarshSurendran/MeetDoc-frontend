@@ -10,24 +10,11 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { CalendarClock, CreditCard, User, Stethoscope } from "lucide-react";
+import { IBookingModalProps } from '@/types';
 
-interface BookingModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onConfirm: () => void;
-  doctorDetails: {
-    name: string;
-    specialisation: string;
-    fee: number;
-  };
-  slotDetails: {
-    StartTime: Date;
-    EndTime: Date;
-  };
-  children?: ReactNode;
-}
 
-const BookingConfirmationModal: React.FC<BookingModalProps> = ({
+
+const BookingConfirmationModal: React.FC<IBookingModalProps> = ({
   isOpen,
   onClose,
   onConfirm,

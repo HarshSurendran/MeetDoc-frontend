@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+
 import Footer from '@/components/users/Footer';
 import BenefitsSection from '@/components/users/BenefitsSection';
 import StatsSection from '@/components/users/StatsSection';
@@ -8,7 +8,6 @@ import FAQSection from "@/components/users/FaqSection";
 import DoctorsSection from "@/components/users/DoctorsSection";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store/appStore";
-import { Header } from "@radix-ui/react-accordion";
 import HeaderPreLogin from "@/components/users/HeaderPreLogin";
 import HeaderPostLogin from "@/components/users/HeaderPostLogin";
 

@@ -1,4 +1,3 @@
-import React from 'react';
 import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
 import { sendGoogleToken } from '@/services/user/userAuth';
 import errorHandler from '@/utils/errorHandler';

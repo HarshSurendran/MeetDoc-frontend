@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Calendar } from '@/components/ui/calendar';
 import {
@@ -23,17 +22,11 @@ import { RootState } from '@/redux/store/appStore';
 import { generateSlots } from '@/services/doctor/doctor';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import { ISlotGeneratorForm } from '@/types/ISlots';
 
-export interface SlotGeneratorForm {
-  startDate: Date | undefined;
-  endDate: Date | undefined;
-  startTime: Date | undefined;
-  stopTime: Date | undefined;
-  duration: number;
-}
 
 const SlotGeneration = () => {
-  const [form, setForm] = useState<SlotGeneratorForm>({
+  const [form, setForm] = useState<ISlotGeneratorForm>({
     startDate: undefined,
     endDate: undefined,
     startTime: undefined,
@@ -56,7 +49,6 @@ const SlotGeneration = () => {
     e.preventDefault();
     setError("");
     setIsLoading(true);
-    // Combine dates and times
     if (form.startDate && form.endDate && form.startTime && form.stopTime) {
       
       if (form.startDate < new Date()) {

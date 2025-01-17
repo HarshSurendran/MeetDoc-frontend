@@ -4,41 +4,48 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { IUser } from '../../interfaces/user/IUser';
-import { validateEmail, validateFullName, validatePassword, validatePhone, validatePincode } from '@/utils/userValidator/uservalidator';
+} from '@/components/ui/select';
+import { IUser } from '../../types/IUser';
+import {
+  validateEmail,
+  validateFullName,
+  validatePassword,
+  validatePhone,
+  validatePincode,
+} from '@/utils/userValidator/uservalidator';
 import toast from 'react-hot-toast';
+import { IAddUserModalProps } from '@/types';
 
-interface AddUserModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onSave: (newUser: IUser) => Promise<void>;
-}
 
-const AddUserModal: React.FC<AddUserModalProps> = ({ isOpen, onClose, onSave }) => {
-  const [formData, setFormData] = useState<IUser>({
-    name: "",
-    email: "",
-    gender: "",
-    phone: "",
-    date_of_birth: "",
-    occupation: "",
+
+const AddUserModal: React.FC<IAddUserModalProps> = ({
+  isOpen,
+  onClose,
+  onSave,
+}) => {
+  const [formData, setFormData] = useState<Partial<IUser>>({
+    name: '',
+    email: '',
+    gender: '',
+    phone: '',
+    date_of_birth: new Date(),
+    occupation: '',
     address: {
-      district: "",
-      locality: "",
-      pincode: 0,
-      state: "",
-      country: "",
+      district: '',
+      locality: '',
+      pincode: '',
+      state: '',
+      country: '',
     },
   });
   const [loading, setLoading] = useState(false);
@@ -47,15 +54,15 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ isOpen, onClose, onSave }) 
     const { name, value } = e.target;
     if (name.includes('.')) {
       const [parent, child] = name.split('.');
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
         [parent]: {
-          ...prev[parent],
+          ...(prev[parent as keyof typeof formData] as any),
           [child]: value,
         },
       }));
     } else {
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
         [name]: value,
       }));
@@ -63,7 +70,7 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ isOpen, onClose, onSave }) 
   };
 
   const handleGenderChange = (value: string) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       gender: value,
     }));
@@ -73,10 +80,10 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ isOpen, onClose, onSave }) 
     e.preventDefault();
     try {
       setLoading(true);
-      const valEmail = validateEmail(formData.email);
-      const valPassword = validatePassword(formData.password);
-      const valName = validateFullName(formData.name);
-     
+      const valEmail = validateEmail(formData.email || '');
+      const valPassword = validatePassword(formData.password || '');
+      const valName = validateFullName(formData.name || '');
+
       if (formData.phone) {
         const valPhone = validatePhone(formData.phone);
         if (valPhone) {
@@ -84,20 +91,23 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ isOpen, onClose, onSave }) 
           throw new Error();
         }
       }
-      
-      if (formData.address?.pincode || formData.address?.pincode == 0) {
-        const valPincode = validatePincode(formData.address.pincode);
+
+      if (formData.address?.pincode || formData.address?.pincode === '0') {
+        const valPincode = validatePincode(Number(formData.address.pincode));
         if (valPincode) {
-          toast.error("Please enter a valid Pincode.");
+          toast.error('Please enter a valid Pincode.');
           throw new Error();
         }
       }
 
-      if (valEmail || valPassword || valName ) {
+      if (valEmail || valPassword || valName) {
         toast.error(valEmail || valPassword || valName);
         throw new Error();
       }
-      await onSave(formData);
+      await onSave({
+        ...formData,
+        _id: formData._id || '',
+      } as IUser);
       onClose();
     } catch (error) {
       console.error('Error adding user:', error);
@@ -143,8 +153,8 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ isOpen, onClose, onSave }) 
 
               <div className="space-y-2">
                 <Label htmlFor="gender">Gender</Label>
-                <Select 
-                  value={formData.gender} 
+                <Select
+                  value={formData.gender}
                   onValueChange={handleGenderChange}
                 >
                   <SelectTrigger>
@@ -167,15 +177,15 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ isOpen, onClose, onSave }) 
                   onChange={handleInputChange}
                   required
                 />
-            </div>
-            <div className="space-y-2">
+              </div>
+              <div className="space-y-2">
                 <Label htmlFor="password">Password</Label>
                 <Input
                   id="password"
                   name="password"
                   value={formData.password}
                   onChange={handleInputChange}
-                  type='password'
+                  type="password"
                   required
                 />
               </div>
@@ -186,7 +196,7 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ isOpen, onClose, onSave }) 
                   id="date_of_birth"
                   name="date_of_birth"
                   type="date"
-                  value={formData.date_of_birth}
+                  value={formData.date_of_birth ? formData.date_of_birth.toISOString().split('T')[0] : ''}
                   onChange={handleInputChange}
                   required
                 />

@@ -14,23 +14,15 @@ import {
 } from "lucide-react";
 import { format } from 'date-fns';
 import { getBookingDetails } from '@/services/user/user';
+import { IAppointmentDetails } from '@/types';
 
-interface AppointmentDetails {
-  doctorName: string;
-  specialisation: string;
-  appointmentDate: Date;
-  startTime: Date;
-  endTime: Date;
-  location: string;
-  appointmentId: string;
-  fee: number;
-}
+
 
 
 const PaymentSuccessPage: React.FC = () => {
   const [searchParams] = useSearchParams();
   const paymentIntentId = searchParams.get('payment_intent');
-  const [appointmentDetails, setAppointmentDetails] = useState<AppointmentDetails>({
+  const [appointmentDetails, setAppointmentDetails] = useState<IAppointmentDetails>({
     doctorName: "",
     specialisation: "",
     appointmentDate: new Date(),

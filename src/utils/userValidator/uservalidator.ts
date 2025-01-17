@@ -97,7 +97,7 @@ export const validateFullName = (name: string) => {
   return null;
 };
 
-export const validatePincode = (pincode: number) => {
+export const validatePincode = (pincode: string) => {
     const { error } = pinCode.validate(pincode);
     if (error) {
         return error.details[0].message;

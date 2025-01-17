@@ -1,4 +1,4 @@
-import { FormData } from '../../types/Authtypes/doctorTypes';
+import { FormData } from '../../types/doctorTypes';
 import apiErrorHandler from '../../utils/apiErrorHandler';
 import { doctorAxiosInstance } from '../instance/doctorInstance';
 

@@ -1,10 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Camera, Calendar, Clock, User, MapPin, Phone, Mail, Briefcase } from 'lucide-react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import {
+  Camera,
+  Calendar,
+  Clock,
+  MapPin,
+  Phone,
+  Mail,
+  Briefcase,
+} from 'lucide-react';
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from 'recharts';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import {
   Table,
   TableBody,
@@ -12,27 +27,20 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { IUser } from '@/interfaces/user/IUser';
+} from '@/components/ui/table';
+import { IUser } from '@/types/IUser';
 import { getUser } from '@/services/admin/admin';
 import errorHandler from '@/utils/errorHandler';
-import demoProfile from '../../assets/heroimage.jpg'
+import demoProfile from '../../assets/heroimage.jpg';
+import { IConsultation } from '@/types';
 
-interface Consultation {
-  date: string;
-  doctorName: string;
-  specialization: string;
-  status: 'completed' | 'cancelled' | 'upcoming';
-  amount: number;
-}
+
 
 const UserDetailView = () => {
-  const [user, setUser] = useState<Partial<IUser> | null>({
-
-  });
+  const [user, setUser] = useState<Partial<IUser> | null>({});
   const { id } = useParams();
   const [imageError, setImageError] = useState<string | null>(null);
-  
+
   // Sample appointment data - replace with actual data
   const appointmentData = [
     { month: 'Jan', appointments: 2 },
@@ -43,20 +51,20 @@ const UserDetailView = () => {
     { month: 'Jun', appointments: 3 },
   ];
   // Sample consultation history - replace with actual data
-  const consultationHistory: Consultation[] = [
+  const consultationHistory: IConsultation[] = [
     {
       date: '2024-01-15',
       doctorName: 'Dr. Smith',
       specialization: 'Cardiology',
       status: 'completed',
-      amount: 150
+      amount: 150,
     },
     {
       date: '2024-02-01',
       doctorName: 'Dr. Johnson',
       specialization: 'Dermatology',
       status: 'completed',
-      amount: 120
+      amount: 120,
     },
     // Add more consultation records as needed
   ];
@@ -66,18 +74,18 @@ const UserDetailView = () => {
       fetchUser(id);
     }
   }, []);
-  
+
   const fetchUser = async (id: string) => {
     try {
       const response = await getUser(id);
       if (response) {
-        console.log(response, "Response from get uiser");
+        console.log(response, 'Response from get uiser');
         setUser(response.data);
       }
     } catch (error) {
       errorHandler(error);
     }
-  }
+  };
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -101,7 +109,7 @@ const UserDetailView = () => {
     // Handle the image upload to backend here
   };
 
-  const getStatusColor = (status: Consultation['status']) => {
+  const getStatusColor = (status: IConsultation['status']) => {
     switch (status) {
       case 'completed':
         return 'text-green-600 bg-green-100';
@@ -121,14 +129,14 @@ const UserDetailView = () => {
             {/* Profile Image Section */}
             <div className="relative">
               <div className="w-48 h-48 rounded-full overflow-hidden bg-gray-100">
-                <img 
-                  src= {user?.photo || demoProfile }  
-                  alt="Profile" 
+                <img
+                  src={user?.photo || demoProfile}
+                  alt="Profile"
                   className="w-full h-full object-cover"
                 />
               </div>
-              <label 
-                htmlFor="profile-upload" 
+              <label
+                htmlFor="profile-upload"
                 className="absolute bottom-2 right-2 p-2 bg-white rounded-full shadow-lg cursor-pointer hover:bg-gray-50"
               >
                 <Camera className="w-5 h-5 text-gray-600" />
@@ -186,7 +194,7 @@ const UserDetailView = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <p className="text-sm text-gray-500">District</p>
-              <p className="font-medium">{ user?.address?.district}</p>
+              <p className="font-medium">{user?.address?.district}</p>
             </div>
             <div>
               <p className="text-sm text-gray-500">Locality</p>
@@ -202,7 +210,7 @@ const UserDetailView = () => {
             </div>
             <div>
               <p className="text-sm text-gray-500">Pincode</p>
-              <p className="font-medium">{ user?.address?.pincode}</p>
+              <p className="font-medium">{user?.address?.pincode}</p>
             </div>
           </div>
         </CardContent>
@@ -224,10 +232,10 @@ const UserDetailView = () => {
                 <XAxis dataKey="month" />
                 <YAxis />
                 <Tooltip />
-                <Line 
-                  type="monotone" 
-                  dataKey="appointments" 
-                  stroke="#2563eb" 
+                <Line
+                  type="monotone"
+                  dataKey="appointments"
+                  stroke="#2563eb"
                   strokeWidth={2}
                   dot={{ fill: '#2563eb' }}
                 />
@@ -259,15 +267,22 @@ const UserDetailView = () => {
             <TableBody>
               {consultationHistory.map((consultation, index) => (
                 <TableRow key={index}>
-                  <TableCell>{new Date(consultation.date).toLocaleDateString()}</TableCell>
+                  <TableCell>
+                    {new Date(consultation.date).toLocaleDateString()}
+                  </TableCell>
                   <TableCell>{consultation.doctorName}</TableCell>
                   <TableCell>{consultation.specialization}</TableCell>
                   <TableCell>
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(consultation.status)}`}>
-                      {consultation.status.charAt(0).toUpperCase() + consultation.status.slice(1)}
+                    <span
+                      className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(consultation.status)}`}
+                    >
+                      {consultation.status.charAt(0).toUpperCase() +
+                        consultation.status.slice(1)}
                     </span>
                   </TableCell>
-                  <TableCell className="text-right">${consultation.amount}</TableCell>
+                  <TableCell className="text-right">
+                    ${consultation.amount}
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>

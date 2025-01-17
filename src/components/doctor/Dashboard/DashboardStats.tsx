@@ -1,17 +1,10 @@
 import React from 'react';
 import { DollarSign, Users, Star } from 'lucide-react';
+import { IStatsCardProps } from '@/types';
 
-interface StatsCardProps {
-  title: string;
-  value: string | number;
-  icon: React.ReactNode;
-  trend?: {
-    value: number;
-    isPositive: boolean;
-  };
-}
 
-const StatsCard: React.FC<StatsCardProps> = ({ title, value, icon, trend }) => (
+
+const StatsCard: React.FC<IStatsCardProps> = ({ title, value, icon, trend }) => (
   <div className="bg-white rounded-lg p-6 shadow-sm">
     <div className="flex items-center justify-between">
       <div>

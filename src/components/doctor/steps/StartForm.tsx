@@ -1,6 +1,4 @@
-import { useState } from 'react';
 import Button from '../comps/Button';
-import { FormData } from '../../../types/Authtypes/doctorTypes';
 
 interface StartPageProps {
   onNext: () => void;
