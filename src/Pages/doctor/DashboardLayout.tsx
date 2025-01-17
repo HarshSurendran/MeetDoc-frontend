@@ -40,7 +40,7 @@ const DashboardLayout: React.FC = () => {
   const sideLinks = [
     { name: 'Dashboard', icon: <Home className="h-5 w-5 mr-3" />, pathName: "/doctor/dashboard", },
     { name: 'Appointments', icon: <Calendar className="h-5 w-5 mr-3" />, pathName: "/doctor/appointments", },
-    { name: 'Revenue', icon: <DollarSign className="h-5 w-5 mr-3" />, pathName: "/doctor/revenue", },
+    { name: 'Generate Slots', icon: <DollarSign className="h-5 w-5 mr-3" />, pathName: "/doctor/slots", },
     { name: 'Profile', icon: <User className="h-5 w-5 mr-3" />, pathName: "/doctor/profile", },
     { name: 'Settings', icon: <Settings className="h-5 w-5 mr-3" />, pathName: "/doctor/settings", },
   ];

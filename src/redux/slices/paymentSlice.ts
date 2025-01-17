@@ -14,7 +14,8 @@ const paymentSlice = createSlice({
                 name: "",
                 specialisation: "",
 
-            }
+            },
+            reason: "",
         },
     },
     reducers: {
@@ -31,7 +32,8 @@ const paymentSlice = createSlice({
             state.payment.doctor = {
                 name: "",
                 specialisation:"",
-            }
+                }
+            state.payment.reason = "";
         },
     },
 });

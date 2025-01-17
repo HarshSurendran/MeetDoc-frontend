@@ -30,14 +30,13 @@ import { ISlot, ISlotsViewProps } from '@/types';
 const SlotsView: React.FC<ISlotsViewProps> = ({doctor}) => {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
     const [slots, setSlots] = useState<ISlot[]>([
-        { _id: "q", doctorId: "1", StartTime: new Date("2025-01-14T09:00:00"), EndTime: new Date("2025-01-14T09:30:00"), status: "Available", pendingBookingExpiry: null },
-        { _id: "e", doctorId: "1", StartTime: new Date("2025-01-14T09:30:00"), EndTime: new Date("2025-01-14T10:00:00"), status: "Booked", pendingBookingExpiry: null },
-        { _id: "s", doctorId: "1", StartTime: new Date("2025-01-14T10:00:00"), EndTime: new Date("2025-01-14T10:30:00"), status: "Available", pendingBookingExpiry: null },
+        { _id: "", doctorId: "", StartTime: new Date("2025-01-14T09:00:00"), EndTime: new Date("2025-01-14T09:30:00"), status: "Available", pendingBookingExpiry: null },
+      
     ]);
     const userId = useSelector((state: RootState) => state.user.user._id);
     const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
     const [selectedSlot, setSelectedSlot] = useState<ISlot | null>(null);
-
+    const [reason, setReason] = useState<string>('');
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -108,7 +107,8 @@ const SlotsView: React.FC<ISlotsViewProps> = ({doctor}) => {
             doctor: {
                 name: doctor.name,
                 specialisation: doctor.specialisation,
-            }
+            },
+            reason: reason
         }
         dispatch(addPayment(paymentDetails));        
         navigate('/users/payment');
@@ -249,6 +249,8 @@ const SlotsView: React.FC<ISlotsViewProps> = ({doctor}) => {
                 isOpen={isPaymentModalOpen}
                 onClose={() => setIsPaymentModalOpen(false)}
                 onConfirm={handleConfirmBooking}
+                reason={reason}
+                setReason={setReason}
                 doctorDetails={{
                     name: doctor.name,
                     specialisation: doctor.specialisation,

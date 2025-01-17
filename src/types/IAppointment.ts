@@ -8,3 +8,16 @@ export interface IAppointmentDetails {
   appointmentId: string;
   fee: number;
 }
+
+
+export interface IBookedAppointmentType {
+  id: string;
+  patientName: string;
+  doctorName: string;
+  date: string;
+  time: string;
+  duration: number;
+  status: string;
+  reason: string;
+  meetingLink?: string;
+}

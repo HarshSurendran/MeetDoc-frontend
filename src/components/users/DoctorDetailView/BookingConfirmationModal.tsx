@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { useState } from 'react';
 import { format } from 'date-fns';
 import { Button } from "@/components/ui/button";
 import {
@@ -9,19 +9,29 @@ import {
   DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog";
-import { CalendarClock, CreditCard, User, Stethoscope } from "lucide-react";
+import { CalendarClock, CreditCard, User, Stethoscope, AlertCircle } from "lucide-react";
 import { IBookingModalProps } from '@/types';
-
-
 
 const BookingConfirmationModal: React.FC<IBookingModalProps> = ({
   isOpen,
   onClose,
+  setReason,
   onConfirm,
+  reason,
   doctorDetails,
   slotDetails,
-  children
 }) => {
+  const [error, setError] = useState('');
+
+  const handleConfirm = () => {
+    if (!reason.trim()) {
+      setError('Please enter the reason for your appointment.');
+      return;
+    }
+    setError('');
+    onConfirm();
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-md">
@@ -67,26 +77,37 @@ const BookingConfirmationModal: React.FC<IBookingModalProps> = ({
             <div>
               <h4 className="font-semibold text-green-900">Consultation Fee</h4>
               <p className="text-sm text-green-700">
-              ₹ {doctorDetails.fee}
+                ₹ {doctorDetails.fee}
               </p>
             </div>
           </div>
+
+          {/* Reason for Appointment Input */}
+          <div>
+            <label className="block text-gray-700 font-semibold mb-1">Reason for Appointment <span className="text-red-500">*</span></label>
+            <textarea
+              className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+              placeholder="Enter the reason for your appointment"
+              rows={3}
+              value={reason}
+              onChange={(e) => setReason(e.target.value)}
+            />
+            {error && (
+              <p className="flex items-center mt-1 text-sm text-red-600">
+                <AlertCircle className="w-4 h-4 mr-1" />
+                {error}
+              </p>
+            )}
+          </div>
         </div>
-
-        {/* {children && <div className="mt-4">{children}</div>} */}
-
 
         {/* Action Buttons */}
         <DialogFooter className="flex-col sm:flex-row gap-2">
-          <Button
-            variant="outline"
-            onClick={onClose}
-            className="w-full sm:w-auto"
-          >
+          <Button variant="outline" onClick={onClose} className="w-full sm:w-auto">
             Cancel
           </Button>
           <Button
-            onClick={onConfirm}
+            onClick={handleConfirm}
             className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700"
           >
             Proceed to Payment

@@ -2,7 +2,7 @@ import apiErrorHandler from '@/utils/apiErrorHandler';
 import { userAxiosInstance } from '../instance/userInstance';
 import { User } from '@/types/userTypes';
 import { IUser } from '@/types/IUser';
-import { ISlot } from '@/components/users/DoctorDetailView/SlotsView';
+import { ISlot } from '@/types/ISlots';
 
 export const getUserData = async (id: string) => {
   try {
@@ -109,6 +109,7 @@ export const createPaymentIntent = async (
   userId: string,
   doctorId: string,
   fee: number,
+  reason: string,
   date: Date
 ) => {
   try {
@@ -117,6 +118,7 @@ export const createPaymentIntent = async (
       userId,
       doctorId,
       fee,
+      reason,
       date,
     });
     if (response) {
