@@ -1,9 +1,7 @@
 import apiErrorHandler from '@/utils/apiErrorHandler';
 import { doctorAxiosInstance } from '../instance/doctorInstance';
 import { IDoctorProfile } from '@/types/IDoctor';
-import { exitCode } from 'process';
-import { SlotGeneratorForm } from '@/components/doctor/Dashboard/SlotGeneration';
-
+import { ISlotGeneratorForm } from '@/types/ISlots';
 export const sendFile = async (file: File) => {
   try {
     const formData = new FormData();
@@ -67,7 +65,7 @@ export const getPhotoUrl = async (key: string) => {
   }
 };
 
-export const generateSlots = async (slotdetails: SlotGeneratorForm) => {
+export const generateSlots = async (slotdetails: ISlotGeneratorForm) => {
   try {
     const response = await doctorAxiosInstance.post(
       'doctors/generateslots',
@@ -93,3 +91,15 @@ export const getSlots = async (doctorId: string) => {
     apiErrorHandler(error);
   }
 };
+
+export const getAppointments = async () => {
+  try {
+    const response = await doctorAxiosInstance.get(`doctors/appointments`);
+    if (response) {
+      return response.data;
+    }
+    return null;
+  } catch (error) {
+    apiErrorHandler(error);
+  }
+}

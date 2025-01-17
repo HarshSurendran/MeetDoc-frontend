@@ -10,14 +10,16 @@ export interface IAppointmentDetails {
 }
 
 
+export type BookingStatus = 'Scheduled' | 'InProgress' | 'Completed' | 'Cancelled';
+
 export interface IBookedAppointmentType {
-  id: string;
+  _id: string;
   patientName: string;
   doctorName: string;
   date: string;
   time: string;
   duration: number;
-  status: string;
+  bookingStatus: BookingStatus;
   reason: string;
   meetingLink?: string;
 }

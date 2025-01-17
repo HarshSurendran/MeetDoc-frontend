@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { 
   Card, 
   CardContent, 
@@ -15,33 +15,58 @@ import {
 } from '@/components/ui/dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Video, Calendar, Clock, User } from 'lucide-react';
-import { IBookedAppointmentType } from '@/types';
+import { BookingStatus, IBookedAppointmentType } from '@/types';
+import { getAppointments } from '@/services/doctor/doctor';
 
-// Types
-type AppointmentStatus = 'scheduled' | 'in-progress' | 'completed' | 'cancelled';
 
 
 interface AppointmentListProps {
-  appointments: IBookedAppointmentType[];
   userType: 'doctor' | 'patient';
 }
 
-const AppointmentManagement: React.FC<AppointmentListProps> = ({ 
-  appointments, 
+const appointments = [
+  {
+    _id: "1",
+    patientName: "John Doe",
+    doctorName: "Dr. Smith",
+    date: "2025-01-17",
+    time: "10:00 AM",
+    duration: 30,
+    status: "Scheduled",
+    reason: "Annual checkup"
+  }
+  // ... more appointments
+];
+
+const AppointmentManagement: React.FC<AppointmentListProps> = ({
   userType 
 }) => {
+  const [appointments, setAppointments] = useState<IBookedAppointmentType[]>([]);
   const [selectedAppointment, setSelectedAppointment] = useState<IBookedAppointmentType | null>(null);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
 
-  const getStatusColor = (status: string) => {
+
+  useEffect(() => {
+    fetchAppointments();
+  }, []);
+
+  const fetchAppointments = async () => {
+    const response = await getAppointments();    
+    if (response.status) {
+      setAppointments(response.data.appointments);
+    }
+    console.log(appointments);
+  }
+
+  const getStatusColor = (status: BookingStatus) => {
     switch (status) {
-      case 'scheduled':
+      case 'Scheduled':
         return 'bg-blue-100 text-blue-800';
-      case 'in-progress':
+      case 'InProgress':
         return 'bg-green-100 text-green-800';
-      case 'completed':
+      case 'Completed':
         return 'bg-gray-100 text-gray-800';
-      case 'cancelled':
+      case 'Cancelled':
         return 'bg-red-100 text-red-800';
       default:
         return 'bg-gray-100 text-gray-800';
@@ -73,7 +98,7 @@ const AppointmentManagement: React.FC<AppointmentListProps> = ({
             <div className="space-y-4">
               {appointments.map((appointment) => (
                 <Card 
-                  key={appointment.id}
+                  key={appointment._id}
                   className="hover:shadow-lg transition-shadow cursor-pointer"
                   onClick={() => {
                     setSelectedAppointment(appointment);
@@ -97,14 +122,14 @@ const AppointmentManagement: React.FC<AppointmentListProps> = ({
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
-                        <Badge className={getStatusColor(appointment.status)}>
-                          {appointment.status}
+                        <Badge className={getStatusColor(appointment.bookingStatus)}>
+                          {appointment.bookingStatus}
                         </Badge>
                         {isAppointmentStartingSoon(appointment) && (
                           <Button 
                             onClick={(e) => {
                               e.stopPropagation();
-                              handleJoinCall(appointment.id);
+                              handleJoinCall(appointment._id);
                             }}
                             className="bg-blue-600 hover:bg-blue-700"
                           >
@@ -159,7 +184,7 @@ const AppointmentManagement: React.FC<AppointmentListProps> = ({
               {isAppointmentStartingSoon(selectedAppointment) && (
                 <div className="flex justify-end mt-4">
                   <Button 
-                    onClick={() => handleJoinCall(selectedAppointment.id)}
+                    onClick={() => handleJoinCall(selectedAppointment._id)}
                     className="bg-blue-600 hover:bg-blue-700"
                   >
                     <Video className="h-4 w-4 mr-2" />
