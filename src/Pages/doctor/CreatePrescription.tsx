@@ -13,7 +13,7 @@ import {
 import { Calendar } from '@/components/ui/calendar';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { 
-  Plus, Trash2, Calendar as CalendarIcon, FileText, Pill 
+  Plus, Trash2, Calendar as CalendarIcon, FileText, Pill , MessageSquare, ClipboardMinus
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { useForm, useFieldArray } from 'react-hook-form';
@@ -21,6 +21,8 @@ import { ICreatePrescriptionDto, IPrescription } from '@/types';
 import { createPrescription } from '@/services/doctor/doctor';
 import errorHandler from '@/utils/errorHandler';
 import toast from 'react-hot-toast';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/redux/store/appStore';
 
 
 
@@ -35,7 +37,7 @@ const PrescriptionForm: React.FC = () => {
     },
     mode: 'onBlur'
   });
-
+  const doctor = useSelector((state: RootState) => state.doctor.doctor);
   const { control, handleSubmit } = form;
   const { fields, append, remove } = useFieldArray({
     control,
@@ -50,8 +52,8 @@ const PrescriptionForm: React.FC = () => {
        dosageInstructions: data.dosageInstructions,
        additionalNotes: data.additionalNotes,
        followUpDate: data.followUpDate,
-       patientId: '', // add the patient id
-       doctorId: '' // add the doctor id
+       patientId: '677e146dd7ebc9fbb8acb606', // add the patient id
+       doctorId: doctor._id
      }
      const response = await createPrescription(createPrescriptionData);
      if (response.status) {
@@ -91,7 +93,8 @@ const PrescriptionForm: React.FC = () => {
                 rules={{ required: "Diagnosis is required" }}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-lg font-semibold text-blue-800">Diagnosis</FormLabel>
+                    <FormLabel className="text-lg font-semibold text-blue-800 flex items-center gap-2">
+                      <ClipboardMinus className="h-5 w-5" /> Diagnosis</FormLabel>
                     <FormControl>
                       <Input placeholder="Enter patient diagnosis" {...field} />
                     </FormControl>
@@ -207,7 +210,8 @@ const PrescriptionForm: React.FC = () => {
                 </ScrollArea>
               </div>
               <div className="space-y-2">
-                <FormLabel className="text-lg font-semibold text-blue-800">
+                <FormLabel className="text-lg font-semibold text-blue-800 flex items-center gap-2">
+                  <MessageSquare className="h-5 w-5" />
                   Additional Notes
                 </FormLabel>
                 <FormControl>
