@@ -2,6 +2,7 @@ import apiErrorHandler from '@/utils/apiErrorHandler';
 import { doctorAxiosInstance } from '../instance/doctorInstance';
 import { IDoctorProfile } from '@/types/IDoctor';
 import { ISlotGeneratorForm } from '@/types/ISlots';
+import { ICreatePrescriptionDto } from '@/types';
 export const sendFile = async (file: File) => {
   try {
     const formData = new FormData();
@@ -95,6 +96,21 @@ export const getSlots = async (doctorId: string) => {
 export const getAppointments = async () => {
   try {
     const response = await doctorAxiosInstance.get(`doctors/appointments`);
+    if (response) {
+      return response.data;
+    }
+    return null;
+  } catch (error) {
+    apiErrorHandler(error);
+  }
+}
+
+export const createPrescription = async (data: ICreatePrescriptionDto) => {
+  try {
+    const response = await doctorAxiosInstance.post(
+      'doctors/prescription',
+      data
+    );
     if (response) {
       return response.data;
     }

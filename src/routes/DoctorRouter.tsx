@@ -11,6 +11,7 @@ import DoctorProfile from '@/components/doctor/Dashboard/DoctorProfile';
 import SlotGeneration from '@/components/doctor/Dashboard/SlotGeneration';
 import DailySlotView from '@/components/doctor/Dashboard/DailySlotView';
 import AppointmentManagement from '@/components/AppointmentManagement';
+import PrescriptionForm from '@/Pages/doctor/CreatePrescription';
 
 
 
@@ -23,7 +24,8 @@ const DoctorRouter = () => {
         <Route path="slots" element={ <SlotGeneration/>} />
         <Route path="profile" element={<DoctorProfile/>} />
         <Route path="settings" element={<div>Settings Page</div>} />
-        <Route path='bookedappointments' element={<AppointmentManagement userType='doctor'  />} />
+        <Route path='bookedappointments' element={<AppointmentManagement userType='doctor' />} />
+        <Route path='prescription' element={<PrescriptionForm />} />
       </Route>
 
       <Route

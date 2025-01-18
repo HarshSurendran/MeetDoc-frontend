@@ -6,3 +6,4 @@ export * from './doctorTypes';
 export * from './userTypes';
 export * from './IAdminProps';
 export * from './IDoctorProps';
+export * from './IPrescription';
