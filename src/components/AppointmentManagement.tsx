@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { 
   Card, 
   CardContent, 
@@ -18,7 +18,10 @@ import { Video, Calendar, Clock, User } from 'lucide-react';
 import { BookingStatus, IAppointmentListProps, IBookedAppointmentType } from '@/types';
 import { getAppointments } from '@/services/doctor/doctor';
 import { getUserAppointments } from '@/services/user/user';
-
+import { Navigate, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { connectwebrtcSocket, disconnectwebrtcSocket, joinRoom } from '@/redux/actions/webrtcAction';
+import { AppDispatch } from '@/redux/store/appStore';
 
 
 
@@ -27,12 +30,27 @@ const AppointmentManagement: React.FC<IAppointmentListProps> = ({
 }) => {
   const [appointments, setAppointments] = useState<IBookedAppointmentType[]>([]);
   const [selectedAppointment, setSelectedAppointment] = useState<IBookedAppointmentType | null>(null);
+
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
 
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchAppointments();
   }, []);
+
+  // useEffect(() => {
+  //   if (!webrtcConnected.current) {
+  //     dispatch(connectwebrtcSocket());
+  //     webrtcConnected.current = true;
+  //   } 
+  //   return () => {
+  //     if(webrtcConnected.current){        
+  //       dispatch(disconnectwebrtcSocket());
+  //       webrtcConnected.current = false;
+  //     }
+  //   }
+  // }, [dispatch]);
 
   const fetchAppointments = async () => {
     if (userType === 'patient') {
@@ -67,15 +85,17 @@ const AppointmentManagement: React.FC<IAppointmentListProps> = ({
     const appointmentTime = new Date(`${appointment.date} ${appointment.time}`);
     const now = new Date();
     const diffInMinutes = (appointmentTime.getTime() - now.getTime()) / (1000 * 60);
-    console.log(diffInMinutes,"This is the diff in minutes")
+    // console.log(diffInMinutes,"This is the diff in minutes")
     // return diffInMinutes <= 15 && diffInMinutes >= -appointment.duration;
     return true
   };
 
-  const handleJoinCall = (appointmentId: string) => {
-    // Handle video call logic here
-    console.log(`Joining call for appointment: ${appointmentId}`);
-  };
+  const handleJoinCall = useCallback(async (appointmentId: string) => {
+  // Handle video call logic here
+    if (userType === 'doctor') {
+      navigate(`/doctor/videocall/${appointmentId}`);
+    }
+  }, [navigate, userType]);
 
   return (
     <div className="container mx-auto p-4">
