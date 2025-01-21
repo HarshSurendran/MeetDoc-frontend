@@ -1,4 +1,4 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { AnyAction, configureStore } from '@reduxjs/toolkit';
 import userReducer from '../slices/userSlice';
 import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
@@ -6,6 +6,8 @@ import persistStore from 'redux-persist/es/persistStore';
 import adminReducer from '../slices/adminSlice';
 import doctorReducer from '../slices/doctorSlice';
 import paymentReducer from "../slices/paymentSlice";
+import webrtcSocketReducer from '../reducers/webrtcReducer';
+import { thunk, ThunkDispatch } from 'redux-thunk';
 
 const userPersistConfig = {
   key: 'user',
@@ -36,16 +38,18 @@ const appStore = configureStore({
     user: persistedUserReducer,
     admin: persistedAdminReducer,
     doctor: persistedDoctorReducer,
-    payment: paymentReducer
+    payment: paymentReducer,
+    webrtcSocket: webrtcSocketReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
         ignoredActions: ['persist/PERSIST', 'persist/REHYDRATE'],
       },
-    }),
-});
+    }).concat(thunk),
+})
 
 export const persistor = persistStore(appStore);
 export type RootState = ReturnType<typeof appStore.getState>;
+export type AppDispatch = ThunkDispatch<RootState, void, AnyAction>; 
 export default appStore;
