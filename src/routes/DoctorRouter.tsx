@@ -11,22 +11,23 @@ import DoctorProfile from '@/components/doctor/Dashboard/DoctorProfile';
 import SlotGeneration from '@/components/doctor/Dashboard/SlotGeneration';
 import DailySlotView from '@/components/doctor/Dashboard/DailySlotView';
 import AppointmentManagement from '@/components/AppointmentManagement';
-import VideoCallPage from '@/Pages/doctor/VideoCallPage';
-
-
+import VideoCallPage from '@/Pages/VideoCallPage';
 
 const DoctorRouter = () => {
   return (
     <Routes>
       <Route path="/" element={<PrivateRoute component={DashboardLayout} />}>
         <Route path="dashboard" element={<DashboardStats />} />
-        <Route path="appointments" element={<DailySlotView/>} />
-        <Route path="slots" element={ <SlotGeneration/>} />
-        <Route path="profile" element={<DoctorProfile/>} />
+        <Route path="appointments" element={<DailySlotView />} />
+        <Route path="slots" element={<SlotGeneration />} />
+        <Route path="profile" element={<DoctorProfile />} />
         <Route path="settings" element={<div>Settings Page</div>} />
-        <Route path='bookedappointments' element={<AppointmentManagement userType='doctor'  />} />
+        <Route
+          path="bookedappointments"
+          element={<AppointmentManagement userType="doctor" />}
+        />
       </Route>
-      <Route path='/videocall/:id' element={<VideoCallPage/>} />
+      <Route path="/videocall/:id" element={<PrivateRoute component={VideoCallPage}/>}/>
 
       <Route
         path="/registration"
