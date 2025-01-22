@@ -119,3 +119,26 @@ export const createPrescription = async (data: ICreatePrescriptionDto) => {
     apiErrorHandler(error);
   }
 }
+
+export const getPatientsForChat = async() => {
+  try {
+    const response = await doctorAxiosInstance.get(`chat/doctor/recent`);
+    if (response) {
+      return response.data
+    }
+    return null;
+  } catch (error) {
+    apiErrorHandler(error);
+  }
+}
+
+export const getMessages = async (patientId: string) => {
+  try {
+    const response = await doctorAxiosInstance.get(`chat/doctor/messages/${patientId}`);
+    if (response) {
+      return response.data
+    }
+  } catch (error) {
+    apiErrorHandler(error)
+  }
+}

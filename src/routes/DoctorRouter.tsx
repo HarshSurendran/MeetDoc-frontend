@@ -13,6 +13,8 @@ import DailySlotView from '@/components/doctor/Dashboard/DailySlotView';
 import AppointmentManagement from '@/components/AppointmentManagement';
 import VideoCallPage from '@/Pages/VideoCallPage';
 import PrescriptionForm from '@/Pages/doctor/CreatePrescription';
+import ChatInterface from '@/Pages/doctor/ChatInterface';
+import ChatPage from '@/Pages/ChatPage';
 
 
 
@@ -32,7 +34,9 @@ const DoctorRouter = () => {
         <Route path='bookedappointments' element={<AppointmentManagement userType='doctor' />} />
         <Route path='prescription' element={<PrescriptionForm />} />
       </Route>
-      <Route path="/videocall/:id" element={<PrivateRoute component={VideoCallPage}/>}/>
+      <Route path="/videocall/:id" element={<PrivateRoute component={VideoCallPage} />} />
+      
+      <Route path='/chat' element={<ChatInterface />}/>
 
       <Route
         path="/registration"
