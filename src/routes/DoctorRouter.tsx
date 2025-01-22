@@ -12,6 +12,8 @@ import SlotGeneration from '@/components/doctor/Dashboard/SlotGeneration';
 import DailySlotView from '@/components/doctor/Dashboard/DailySlotView';
 import AppointmentManagement from '@/components/AppointmentManagement';
 import VideoCallPage from '@/Pages/doctor/VideoCallPage';
+import ChatInterface from '@/Pages/doctor/ChatInterface';
+import ChatPage from '@/Pages/ChatPage';
 
 
 
@@ -26,7 +28,9 @@ const DoctorRouter = () => {
         <Route path="settings" element={<div>Settings Page</div>} />
         <Route path='bookedappointments' element={<AppointmentManagement userType='doctor'  />} />
       </Route>
-      <Route path='/videocall/:id' element={<VideoCallPage/>} />
+      <Route path='/videocall/:id' element={<VideoCallPage />} />
+      
+      <Route path='/chat' element={<ChatInterface />} />
 
       <Route
         path="/registration"

@@ -7,6 +7,7 @@ import adminReducer from '../slices/adminSlice';
 import doctorReducer from '../slices/doctorSlice';
 import paymentReducer from "../slices/paymentSlice";
 import webrtcSocketReducer from '../reducers/webrtcReducer';
+import chatReducer from '../slices/chatSlice';
 import { thunk, ThunkDispatch } from 'redux-thunk';
 
 const userPersistConfig = {
@@ -40,6 +41,7 @@ const appStore = configureStore({
     doctor: persistedDoctorReducer,
     payment: paymentReducer,
     webrtcSocket: webrtcSocketReducer,
+    chat: chatReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
