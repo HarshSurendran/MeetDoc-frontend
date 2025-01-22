@@ -136,10 +136,11 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { chatSocketService } from '../../services/chat/chatService';
 import { RootState } from '../../redux/store/appStore';
 
-import { getMessages, getPatientsForChat, sendMessageApi } from '@/services/doctor/doctor';
+import { getMessages, getPatientsForChat, sendMessageApi, toggleIsRead } from '@/services/doctor/doctor';
 
 import { setIsMessagesLoading, setIsPeopleLoading, setMessages, setPeoples, setSelectedUser } from '@/redux/slices/chatSlice';
 import errorHandler from '@/utils/errorHandler';
+import { User } from '@/types/chatTypes';
 
 
 
@@ -152,7 +153,7 @@ const DoctorChatInterface = () => {
   // const [patients, setPatients] = useState<Patient[]>([]);
   // const [typingUsers, setTypingUsers] = useState("");
   const lastMessageRef = useRef<HTMLDivElement>(null);
-  const { selectedUser, messages, peoples, isMessagesLoading, isPeopleLoading } = useSelector((state: RootState) => state.chat);
+  const { selectedUser, messages, peoples, isMessagesLoading, isPeopleLoading, onlineUsers } = useSelector((state: RootState) => state.chat);
   const doctor = useSelector((state: RootState) => state.doctor.doctor);
   const dispatch = useDispatch();
   
@@ -230,6 +231,12 @@ const DoctorChatInterface = () => {
     }
   };
 
+  const handleSelectUser = async (selectedUserData: User) => {
+    dispatch(setSelectedUser(selectedUserData));
+    console.log("selected user", selectedUserData)
+    const response = await toggleIsRead(doctor._id, selectedUserData.id);
+  }
+
   // const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   //   setMessageInput(e.target.value);
   //   if (selectedUser) {
@@ -240,6 +247,7 @@ const DoctorChatInterface = () => {
   const filteredPeoples = peoples.filter(patient =>
     patient.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
 
   const formatTime = (date: Date) => {
     return new Date(date).toLocaleTimeString('en-US', { 
@@ -274,7 +282,7 @@ const DoctorChatInterface = () => {
                 className={`w-full p-4 flex items-start gap-3 hover:bg-gray-100 transition-colors ${
                   selectedUser?.id === patient.id ? 'bg-blue-50' : ''
                   }`}
-                onClick={() => dispatch(setSelectedUser(patient))}
+                onClick={() => handleSelectUser(patient)}
               >
                 <Avatar className="h-12 w-12">
                   <AvatarImage src={patient.avatar} />
@@ -287,12 +295,12 @@ const DoctorChatInterface = () => {
                       {formatTime(patient.lastSeen)}
                     </span>
                   </div>
-                  <p className="text-sm text-gray-500 truncate">{patient.lastMessage}</p>
+                  {/* <p className="text-sm text-gray-500 truncate">{patient.lastMessage}</p> */}
                   <div className="flex items-center gap-2 mt-1">
                     <span className={`h-2 w-2 rounded-full ${
-                      patient.status === 'online' ? 'bg-green-500' : 'bg-gray-400'
+                      onlineUsers.includes(patient.id) ? 'bg-green-500' : 'bg-gray-400'
                     }`} />
-                    <span className="text-xs text-gray-500">{patient.status}</span>
+                    <span className="text-xs text-gray-500">{onlineUsers.includes(patient.id) ? 'online' : 'offline'}</span>
                   </div>
                 </div>
                 {patient.unreadCount ? (
@@ -322,7 +330,7 @@ const DoctorChatInterface = () => {
                   <div>
                     <h2 className="font-semibold">{selectedUser.name}</h2>
                     <p className="text-sm text-gray-500">
-                    {selectedUser.status === 'online' 
+                    {onlineUsers.includes(selectedUser.id) 
                         ? 'Online'
                         : selectedUser.lastSeen 
                           ? `Last seen ${formatTime(selectedUser.lastSeen)}`
@@ -336,7 +344,7 @@ const DoctorChatInterface = () => {
                   <Button variant="ghost" size="icon">
                     <Phone className="h-5 w-5" />
                   </Button>
-                  <Button variant="ghost" size="icon">
+                  <Button variant="ghost" size="icon" >
                     <Video className="h-5 w-5" />
                   </Button>
                   <DropdownMenu>

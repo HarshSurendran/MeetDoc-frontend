@@ -14,14 +14,15 @@ import {
   DialogTitle 
 } from '@/components/ui/dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Video, Calendar, Clock, User } from 'lucide-react';
+import { Video, Calendar, Clock, User, Text } from 'lucide-react';
 import { BookingStatus, IAppointmentListProps, IBookedAppointmentType } from '@/types';
-import { getAppointments } from '@/services/doctor/doctor';
+import { getAppointment, getAppointments, sendMessageApi } from '@/services/doctor/doctor';
 import { getUserAppointments } from '@/services/user/user';
 import { Navigate, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { connectwebrtcSocket, disconnectwebrtcSocket, joinRoom } from '@/redux/actions/webrtcAction';
-import { AppDispatch } from '@/redux/store/appStore';
+import { AppDispatch, RootState } from '@/redux/store/appStore';
+import toast from 'react-hot-toast';
 
 
 
@@ -32,6 +33,8 @@ const AppointmentManagement: React.FC<IAppointmentListProps> = ({
   const [selectedAppointment, setSelectedAppointment] = useState<IBookedAppointmentType | null>(null);
 
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+  const doctor = useSelector((state: RootState) => state.doctor.doctor);
+  const user = useSelector((state: RootState) => state.user.user);
 
   const navigate = useNavigate();
 
@@ -90,11 +93,27 @@ const AppointmentManagement: React.FC<IAppointmentListProps> = ({
     return true
   };
 
-  const handleJoinCall = useCallback(async (appointmentId: string) => {
+  const handleJoinCall = useCallback(async (appointmentData: IBookedAppointmentType) => {
   // Handle video call logic here
+    // if (userType === 'doctor') {
+    //   navigate(`/doctor/videocall/${appointmentId}`);
+    // }
+    // if (userType === 'patient') {
+    //   navigate(`/user/videocall/${appointmentId}`);
+    // }
+    const response = await getAppointment(appointmentData._id);
+    if(!response.status){
+      toast.error('Something went wrong. Please try again.');
+      return
+    }    
+    const appointment = response.data.appointment;    
     if (userType === 'doctor') {
-      navigate(`/doctor/videocall/${appointmentId}`);
+      const response = await sendMessageApi(doctor._id, "doctor", appointment.patientId, `Hey ${appointmentData.patientName}, I am Dr.${doctor.name}, are you ready for the video call?`);
+      if(response.status){
+        navigate(`/doctor/chat`)
+      }
     }
+    
   }, [navigate, userType]);
 
   return (
@@ -142,12 +161,12 @@ const AppointmentManagement: React.FC<IAppointmentListProps> = ({
                           <Button 
                             onClick={(e) => {
                               e.stopPropagation();
-                              handleJoinCall(appointment._id);
+                              handleJoinCall(appointment);
                             }}
                             className="bg-blue-600 hover:bg-blue-700"
                           >
-                            <Video className="h-4 w-4 mr-2" />
-                            {userType === 'doctor' ? 'Start Call' : 'Join Call'}
+                            <Text className="h-4 w-4 mr-2" />
+                            {userType === 'doctor' ? 'Start Chat' : 'Join Chat'}
                           </Button>
                         )}
                       </div>
@@ -197,11 +216,11 @@ const AppointmentManagement: React.FC<IAppointmentListProps> = ({
               {isAppointmentStartingSoon(selectedAppointment) && (
                 <div className="flex justify-end mt-4">
                   <Button 
-                    onClick={() => handleJoinCall(selectedAppointment._id)}
+                    onClick={() => handleJoinCall(selectedAppointment)}
                     className="bg-blue-600 hover:bg-blue-700"
                   >
                     <Video className="h-4 w-4 mr-2" />
-                    {userType === 'doctor' ? 'Start Video Call' : 'Join Video Call'}
+                    {userType === 'doctor' ? 'Start Chat' : 'Join Chat'}
                   </Button>
                 </div>
               )}

@@ -67,7 +67,8 @@ export const {
   updatePeopleStatus,
   setError,
   setIsPeopleLoading,
-  setIsMessagesLoading
+  setIsMessagesLoading,
+  updateOnlineUsers
 } = chatSlice.actions;
 
 export default chatSlice.reducer;

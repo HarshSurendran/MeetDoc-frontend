@@ -303,7 +303,9 @@ import { RootState } from '../../redux/store/appStore';
 
 import { setIsMessagesLoading, setIsPeopleLoading, setMessages, setPeoples, setSelectedUser } from '@/redux/slices/chatSlice';
 import errorHandler from '@/utils/errorHandler';
-import { getDoctorsForChat, getMessages, sendMessageApi } from '@/services/user/user';
+import { getDoctorsForChat, getMessages, sendMessageApi, toggleIsRead } from '@/services/user/user';
+import { User } from '@/types/chatTypes';
+
 
 
 
@@ -311,7 +313,7 @@ const UserChatInterface = () => {
   const [messageInput, setMessageInput] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const lastMessageRef = useRef<HTMLDivElement>(null);
-  const { selectedUser, messages, peoples, isMessagesLoading, isPeopleLoading } = useSelector((state: RootState) => state.chat);
+  const { selectedUser, messages, peoples, isMessagesLoading, isPeopleLoading, onlineUsers } = useSelector((state: RootState) => state.chat);
   const user = useSelector((state: RootState) => state.user.user);
   const dispatch = useDispatch();
   
@@ -389,6 +391,11 @@ const UserChatInterface = () => {
     }
   };
 
+  const handleSelectUser = async (selectedUserData: User) => {
+    dispatch(setSelectedUser(selectedUserData));
+    const response = await toggleIsRead(user._id, selectedUserData.id);
+  }
+
   // const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   //   setMessageInput(e.target.value);
   //   if (selectedUser) {
@@ -433,7 +440,7 @@ const UserChatInterface = () => {
                 className={`w-full p-4 flex items-start gap-3 hover:bg-gray-100 transition-colors ${
                   selectedUser?.id === patient.id ? 'bg-blue-50' : ''
                   }`}
-                onClick={() => dispatch(setSelectedUser(patient))}
+                onClick={()=> handleSelectUser(patient)}
               >
                 <Avatar className="h-12 w-12">
                   <AvatarImage src={patient.avatar} />
@@ -446,12 +453,12 @@ const UserChatInterface = () => {
                       {formatTime(patient.lastSeen)}
                     </span>
                   </div>
-                  <p className="text-sm text-gray-500 truncate">{patient.lastMessage}</p>
+                  {/* <p className="text-sm text-gray-500 truncate">{patient.lastMessage}</p> */}
                   <div className="flex items-center gap-2 mt-1">
                     <span className={`h-2 w-2 rounded-full ${
-                      patient.status === 'online' ? 'bg-green-500' : 'bg-gray-400'
+                      onlineUsers.includes(patient.id) ? 'bg-green-500' : 'bg-gray-400'
                     }`} />
-                    <span className="text-xs text-gray-500">{patient.status}</span>
+                    <span className="text-xs text-gray-500">{onlineUsers.includes(patient.id) ? 'Online' : 'Offline'}</span>
                   </div>
                 </div>
                 {patient.unreadCount ? (
@@ -481,7 +488,7 @@ const UserChatInterface = () => {
                   <div>
                     <h2 className="font-semibold">{selectedUser.name}</h2>
                     <p className="text-sm text-gray-500">
-                    {selectedUser.status === 'online' 
+                    {onlineUsers.includes(selectedUser.id)
                         ? 'Online'
                         : selectedUser.lastSeen 
                           ? `Last seen ${formatTime(selectedUser.lastSeen)}`

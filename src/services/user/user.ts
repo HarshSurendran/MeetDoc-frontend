@@ -200,3 +200,14 @@ export const sendMessageApi = async (senderId: string, senderType: "patient" | "
     apiErrorHandler(error);
   }
 }
+
+export const toggleIsRead = async (senderId: string, receiverId: string) => {
+  try {
+    const response = await userAxiosInstance.post(`chat/toggleisread`, { senderId, receiverId });
+    if(response) {
+      return response.data;
+    }
+  } catch (error) {
+    apiErrorHandler(error);
+  }
+}

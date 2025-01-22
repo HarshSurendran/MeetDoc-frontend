@@ -153,3 +153,25 @@ export const sendMessageApi = async (senderId: string, senderType: string, recei
     apiErrorHandler(error);
   }
 }
+
+export const getAppointment = async (id: string) => {
+  try {
+    const response = await doctorAxiosInstance.get(`doctors/appointments/${id}`);
+    if(response) {
+      return response.data;
+    }
+  } catch (error) {
+    apiErrorHandler(error);
+  }
+}
+
+export const toggleIsRead = async (senderId: string, receiverId: string) => {
+  try {
+    const response = await doctorAxiosInstance.post(`chat/toggleisread`, { senderId, receiverId });
+    if(response) {
+      return response.data;
+    }
+  } catch (error) {
+    apiErrorHandler(error);
+  }
+}

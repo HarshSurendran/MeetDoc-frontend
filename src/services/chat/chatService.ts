@@ -132,9 +132,7 @@
 
 import { io, Socket } from 'socket.io-client';
 import appStore from '../../redux/store/appStore';
-import { addMessage, setTypingStatus } from '../../redux/slices/chatSlice';
-import { Message } from 'react-hook-form';
-
+import { addMessage, setTypingStatus, updateOnlineUsers } from '../../redux/slices/chatSlice';
 const SOCKET_SERVER_URL = import.meta.env.VITE_CHAT_SOCKET_URL;
 
 class ChatSocketService {
@@ -166,16 +164,20 @@ class ChatSocketService {
       const state = appStore.getState();
       const selectedUser = state.chat.selectedUser;
       console.log('Received new message:', message,"selected user is", selectedUser);
-      if (selectedUser?.id !== message.senderId) {
+      if (selectedUser?.id !== message.receiverId) {
         //todo: Handle this situation when message recived is not from the selected user
         console.log('Received new but not from selected user', message);
+        return;
       }
+
       appStore.dispatch(addMessage(message));
+      //todo: Handle is read change situtation
+      // const result = toggleIsRead(message.senderId, message.receiverId);
     });
 
-    this.socket.on('onlineUsers', ({ onlineUsers }) => {
-      console.log('Online users:', onlineUsers);
-      appStore.dispatch(onlineUsers)
+    this.socket.on('onlineUsers', (payload) => {
+      console.log('Online users:', payload.onlineUsers);
+      appStore.dispatch(updateOnlineUsers( payload.onlineUsers))
     })
 
     this.socket.on('disconnect', () => {
