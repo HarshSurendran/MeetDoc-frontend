@@ -142,3 +142,14 @@ export const getMessages = async (patientId: string) => {
     apiErrorHandler(error)
   }
 }
+
+export const sendMessageApi = async (senderId: string, senderType: string, receiverId: string, content: string) => {
+  try {
+    const response = await doctorAxiosInstance.post(`chat/message`, { senderId, senderType, receiverId, content });
+    if(response) {
+      return response.data;
+    }
+  } catch (error) {
+    apiErrorHandler(error);
+  }
+}

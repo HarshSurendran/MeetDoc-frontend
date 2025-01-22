@@ -11,7 +11,7 @@ class ChatSocketService {
     connectChatSocket() {
         if (!this.socket) {
             console.log("requesting connection to chat socket");
-            this.socket = io(`${SOCKET_SERVER_URL}`, {
+            this.socket = io(`${SOCKET_SERVER_URL}/chat`, {
             transports: ['websocket'],
             });
 

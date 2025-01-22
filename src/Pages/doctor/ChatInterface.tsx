@@ -90,7 +90,7 @@
 //     }
 //   }, [])
   
-//   const filteredPatients = patients?.filter(patient =>
+//   const filteredPeoples = patients?.filter(patient =>
 //     patient.name.toLowerCase().includes(searchQuery.toLowerCase())
 //   );
 
@@ -117,12 +117,11 @@
 //     });
 //   };
 
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { SearchIcon, Send, Video, Phone, MoreVertical } from 'lucide-react';
 import { 
   Card,
-  CardContent,
 } from "@/components/ui/card";
 import {
   DropdownMenu,
@@ -134,126 +133,111 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { socketService } from '../../services/chat/chatService';
+import { chatSocketService } from '../../services/chat/chatService';
 import { RootState } from '../../redux/store/appStore';
-import {
-  setSelectedPatient,
-  setMessages,
-  setPatients,
-} from '../../redux/slices/chatSlice';
-import { getMessages, getPatientsForChat } from '@/services/doctor/doctor';
-import { Message, Patient } from '@/types/chatTypes';
+
+import { getMessages, getPatientsForChat, sendMessageApi } from '@/services/doctor/doctor';
+
+import { setIsMessagesLoading, setIsPeopleLoading, setMessages, setPeoples, setSelectedUser } from '@/redux/slices/chatSlice';
+import errorHandler from '@/utils/errorHandler';
 
 
 
-const DoctorChatInterface = () => {
-  // const dispatch = useDispatch();
-  // const { 
-  //   selectedPatient,
-  //   patients,
-  //   messages,
-  //   typingUsers,
-  //   isLoading
-  // } = useSelector((state: RootState) => state.chat);
-  const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
+const DoctorChatInterface = () => { 
+  
+  // const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
   const [messageInput, setMessageInput] = useState('');
-  const [messages, setMessages] = useState<Message[]>([]);
+  // const [messages, setMessages] = useState<Message[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [patients, setPatients] = useState<Patient[]>([]);
-  const [typingUsers, setTypingUsers] = useState("");
+  // const [patients, setPatients] = useState<Patient[]>([]);
+  // const [typingUsers, setTypingUsers] = useState("");
   const lastMessageRef = useRef<HTMLDivElement>(null);
+  const { selectedUser, messages, peoples, isMessagesLoading, isPeopleLoading } = useSelector((state: RootState) => state.chat);
   const doctor = useSelector((state: RootState) => state.doctor.doctor);
+  const dispatch = useDispatch();
   
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      socketService.connect(token);
-    }
-    fetchPatients();
-    
-
+    const token = localStorage.getItem('doctorAccessToken');
+    if (token) {      
+      chatSocketService.connect(token, doctor._id);
+      fetchPeople();
+    };    
     return () => {
-      socketService.disconnect();
+      chatSocketService.disconnect();
     };
   }, []);
 
   useEffect(() => {
-    if (selectedPatient) {
-      fetchMessages(selectedPatient.id);
+    if (selectedUser) {
+      fetchMessages(selectedUser.id);
     }
-  }, [selectedPatient]);
+  }, [selectedUser]);
 
-  // const fetchPatients = async () => {
-  //   try {
-  //     const response = await fetch('/api/chat/doctor/recent', {
-  //       headers: {
-  //         'Authorization': `Bearer ${localStorage.getItem('token')}`
-  //       }
-  //     });
-  //     const data = await response.json();
-  //     dispatch(setPatients(data));
-  //   } catch (error) {
-  //     console.error('Error fetching patients:', error);
-  //   }
-  // };
-
-  const fetchPatients = useCallback(async () => {
-    const response = await getPatientsForChat();
-    if (response.status) {
-      console.log("This are the patients", response.data)
-      const transformedData = response.data.messages.map(({ _id, user, lastMessage, unreadCount }: { _id: string, user: any, lastMessage: any, unreadCount: number }) => ({
-        id: _id.toString(),  
-        name: user.name,
-        avatar: user.photo || null, 
-        lastMessage: lastMessage?.content || null, 
-        lastSeen: lastMessage?.timestamp || new Date(), 
-        unreadCount: unreadCount || 0,
-        status: 'offline',
-      }));
-      console.log(transformedData, "transformed data")
-      // dispatch(setPatients(transformedData));
-      setPatients(transformedData);
+  useEffect(() => {
+    if (lastMessageRef.current) {
+      lastMessageRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
     }
+  }, [messages]);
+ 
+  const fetchPeople = useCallback(async () => {
+    dispatch(setIsPeopleLoading(true));
+    try {
+      const response = await getPatientsForChat();
+      if (response.status) {
+        const transformedData = response.data.messages.map(({ _id, user, lastMessage, unreadCount }: { _id: string, user: any, lastMessage: any, unreadCount: number }) => ({
+          id: _id.toString(),  
+          name: user.name,
+          avatar: user.photo || null, 
+          lastMessage: lastMessage?.content || null, 
+          lastSeen: lastMessage?.timestamp || new Date(), 
+          unreadCount: unreadCount || 0,
+          status: 'offline',
+        }));
+        dispatch(setPeoples(transformedData));      
+      }
+    } catch (error) {
+      errorHandler(error);
+    } finally {
+      dispatch(setIsPeopleLoading(false));
+    }
+     
   }, [])
 
-  // const fetchMessages = async (patientId: string) => {
-  //   try {
-  //     const response = await fetch(`/api/chat/doctor/messages/${patientId}`, {
-  //       headers: {
-  //         'Authorization': `Bearer ${localStorage.getItem('token')}`
-  //       }
-  //     });
-  //     const data = await response.json();
-  //     dispatch(setMessages(data));
-  //   } catch (error) {
-  //     console.error('Error fetching messages:', error);
-  //   }
-  // };
-
   const fetchMessages = useCallback(async (patientId: string) => {
-        const response = await getMessages(patientId);
-        if (response.status) {
-          // dispatch(setMessages(response.data.messages));
-        }
-  }, [selectedPatient])
-  
+    dispatch(setIsMessagesLoading(true));
+    try {
+      const response = await getMessages(patientId);
+      if (response.status) {
+        dispatch(setMessages(response.data.messages));
+      }
+    } catch (error) {
+      errorHandler(error);
+    } finally {
+      dispatch(setIsMessagesLoading(false));
+    }
+  }, [selectedUser]);
 
-  const handleSendMessage = () => {
-    if (messageInput.trim() && selectedPatient) {
-      socketService.sendMessage(selectedPatient.id, messageInput);
+  const handleSendMessage = async () => {
+    if (messageInput.trim() && selectedUser) {
+      const response = await  sendMessageApi(doctor._id, "doctor", selectedUser.id, messageInput);
+      console.log("message sent", response);
+      if (response?.status) {
+        dispatch(setMessages([...messages,response.data]));
+      }
+      chatSocketService.sendMessage(doctor._id, "doctor", selectedUser.id, messageInput);      
       setMessageInput('');
     }
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setMessageInput(e.target.value);
-    if (selectedPatient) {
-      socketService.sendTypingStatus(selectedPatient.id);
-    }
-  };
+  // const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setMessageInput(e.target.value);
+  //   if (selectedUser) {
+  //     // chatSocketService.sendTypingStatus(selectedPatient.id);
+  //   }
+  // };
 
-  const filteredPatients = patients.filter(patient =>
+  const filteredPeoples = peoples.filter(patient =>
     patient.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
@@ -280,14 +264,17 @@ const DoctorChatInterface = () => {
               />
             </div>
           </div>
+          {isPeopleLoading ? (
+            "Loading..."
+          ) : (
           <ScrollArea className="h-[calc(100vh-10rem)]">
-            {filteredPatients.map((patient) => (
+            {filteredPeoples.map((patient) => (
               <button
                 key={patient.id}
                 className={`w-full p-4 flex items-start gap-3 hover:bg-gray-100 transition-colors ${
-                  selectedPatient?.id === patient.id ? 'bg-blue-50' : ''
-                }`}
-                // onClick={() => dispatch(setSelectedPatient(patient))}
+                  selectedUser?.id === patient.id ? 'bg-blue-50' : ''
+                  }`}
+                onClick={() => dispatch(setSelectedUser(patient))}
               >
                 <Avatar className="h-12 w-12">
                   <AvatarImage src={patient.avatar} />
@@ -315,32 +302,33 @@ const DoctorChatInterface = () => {
                 ) : null}
               </button>
             ))}
-          </ScrollArea>
+        </ScrollArea>)
+        }
         </Card>
 
         {/* Chat Area */}
         <Card className="md:col-span-3 h-full flex flex-col">
-          {selectedPatient ? (
+          {selectedUser ? (
             <>
               {/* Chat Header */}
               <div className="p-4 border-b flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <Avatar className="h-10 w-10">
-                    <AvatarImage src={selectedPatient.avatar} />
+                    <AvatarImage src={selectedUser.avatar} />
                     <AvatarFallback>
-                      {selectedPatient.name.split(' ').map(n => n[0]).join('')}
+                      {selectedUser.name.split(' ').map(n => n[0]).join('')}
                     </AvatarFallback>
                   </Avatar>
                   <div>
-                    <h2 className="font-semibold">{selectedPatient.name}</h2>
+                    <h2 className="font-semibold">{selectedUser.name}</h2>
                     <p className="text-sm text-gray-500">
-                    {selectedPatient.status === 'online' 
+                    {selectedUser.status === 'online' 
                         ? 'Online'
-                        : selectedPatient.lastSeen 
-                          ? `Last seen ${formatTime(selectedPatient.lastSeen)}`
+                        : selectedUser.lastSeen 
+                          ? `Last seen ${formatTime(selectedUser.lastSeen)}`
                           : 'Offline'
                       }
-                      {/* {typingUsers[selectedPatient.id] && ' • Typing...'} */}
+                      {/* {typingUsers[selectedUser.id] && ' • Typing...'} */}
                     </p>
                   </div>
                 </div>
@@ -367,30 +355,36 @@ const DoctorChatInterface = () => {
               </div>
 
               {/* Messages Area */}
-              <ScrollArea className="flex-1 p-4 max-h-[calc(100vh-10rem)]">
-                <div className="space-y-4">
-                  {messages.map((message, index) => (
-                    <div
-                      key={message.id}
-                      // ref={index === messages.length - 1 ? lastMessageRef : null} 
-                      className={`flex ${message.senderType == 'doctor' ? 'justify-end' : 'justify-start'}`}
-                    >
+              {isMessagesLoading ? "Loading..." :
+                <ScrollArea className="flex-1 p-4 max-h-[calc(100vh-10rem)]">
+                  <div className="space-y-4">
+                    {messages.map((message, index) => (
                       <div
-                        className={`max-w-[70%] p-3 rounded-lg ${
-                          message.senderType == 'doctor'
-                            ? 'bg-blue-500 text-white'
-                            : 'bg-gray-100 text-gray-900'
-                        }`}
+                        key={message._id}
+                        ref={index === messages.length - 1 ? lastMessageRef : null}
+                        className={`flex ${message.senderType == 'doctor' ? 'justify-end' : 'justify-start'}`}
                       >
-                        <p>{message.content}</p>
-                        <span className="text-xs opacity-70 mt-1 block">
-                          {formatTime(message.timestamp)}
-                        </span>
+                        <div
+                          className={`max-w-[70%] p-3 rounded-lg ${message.senderType == 'doctor'
+                              ? 'bg-blue-500 text-white'
+                              : 'bg-gray-100 text-gray-900'
+                            }`}
+                        >
+                          <p>{message.content}</p>
+                          <div className="flex justify-between">
+                            <span className="text-xs opacity-70 mt-1 block">
+                              {formatTime(message.timestamp)}
+                            </span>
+                            <span className="ml-2">
+                              {message.isRead ? '✓✓' : '✓'}
+                            </span>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  ))}
-                </div>
-              </ScrollArea>
+                    ))}
+                  </div>
+                </ScrollArea>
+              }
 
               {/* Message Input */}
               <div className="p-4 border-t">
@@ -421,3 +415,4 @@ const DoctorChatInterface = () => {
 };
 
 export default DoctorChatInterface;
+

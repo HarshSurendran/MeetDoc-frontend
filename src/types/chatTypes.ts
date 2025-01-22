@@ -1,6 +1,6 @@
 
 export interface Message {
-    id: string;
+    _id: string;
     content: string;
     senderId: string;
     receiverId: string;
@@ -10,7 +10,7 @@ export interface Message {
     isRead: boolean;
   }
   
-  export interface Patient {
+  export interface User {
     id: string;
     name: string;
     avatar?: string;
@@ -20,11 +20,22 @@ export interface Message {
     unreadCount: number;
   }
   
-  export interface ChatState {
-    selectedPatient: Patient | null;
-    patients: Patient[];
-    messages: Message[];
-    isLoading: boolean;
-    error: string | null;
-    typingUsers: { [key: string]: boolean };
-  }
+  // export interface ChatState {
+  //   selectedPatient: Patient | null;
+  //   patients: Patient[];
+  //   messages: Message[];
+  //   isLoading: boolean;
+  //   error: string | null;
+  //   typingUsers: { [key: string]: boolean };
+// }
+  
+export interface ChatState {  
+    selectedUser: User | null,
+    peoples: User[],
+    messages: Message[],
+    isMessagesLoading: boolean,
+    isPeopleLoading: boolean,
+    error: string | null,
+  typingUsers: { [key: string]: boolean },
+  onlineUsers: string[]
+}

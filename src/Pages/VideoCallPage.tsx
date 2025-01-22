@@ -24,7 +24,7 @@ import peerService from '../services/peer/peerService';
 
 const VideoCallPage: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const [isConnecting, setIsConnecting] = useState<boolean>(false);
+  const [isConnecting, setIsConnecting] = useState<boolean>(true);
   const [isMuted, setIsMuted] = useState<boolean>(false);
   const [isVideoOff, setIsVideoOff] = useState<boolean>(false);
   const [isLocalBig, setIsLocalBig] = useState<boolean>(false);

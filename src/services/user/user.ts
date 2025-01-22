@@ -165,3 +165,38 @@ export const getUserAppointments = async () => {
     apiErrorHandler(error);
   }
 }
+
+
+export const getDoctorsForChat = async() => {
+  try {
+    const response = await userAxiosInstance.get(`chat/patient/recent`);
+    if (response) {
+      return response.data
+    }
+    return null;
+  } catch (error) {
+    apiErrorHandler(error);
+  }
+}
+
+export const getMessages = async (doctorId: string) => {
+  try {
+    const response = await userAxiosInstance.get(`chat/patient/messages/${doctorId}`);
+    if (response) {
+      return response.data
+    }
+  } catch (error) {
+    apiErrorHandler(error)
+  }
+}
+
+export const sendMessageApi = async (senderId: string, senderType: "patient" | "doctor", receiverId: string, content: string) => {
+  try {
+    const response = await userAxiosInstance.post(`chat/message`, { senderId, senderType, receiverId, content });
+    if(response) {
+      return response.data;
+    }
+  } catch (error) {
+    apiErrorHandler(error);
+  }
+}

@@ -1,24 +1,26 @@
-import { ChatState, Message, Patient } from '@/types/chatTypes';
+import { ChatState, Message, User } from '@/types/chatTypes';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 const initialState: ChatState = {
-  selectedPatient: null,
-  patients: [],
+  selectedUser: null,
+  peoples: [],
   messages: [],
-  isLoading: false,
+  isMessagesLoading: false,
+  isPeopleLoading: false,
   error: null,
   typingUsers: {},
+  onlineUsers: [],
 };
 
 const chatSlice = createSlice({
   name: 'chat',
   initialState,
   reducers: {
-    setPatients: (state, action: PayloadAction<Patient[]>) => {
-      state.patients = action.payload;
+    setPeoples: (state, action: PayloadAction<User[]>) => {
+      state.peoples = action.payload;
     },
-    setSelectedPatient: (state, action: PayloadAction<Patient | null>) => {
-      state.selectedPatient = action.payload;
+    setSelectedUser: (state, action: PayloadAction<User | null>) => {
+      state.selectedUser = action.payload;
     },
     setMessages: (state, action: PayloadAction<Message[]>) => {
       state.messages = action.payload;
@@ -29,8 +31,11 @@ const chatSlice = createSlice({
     setTypingStatus: (state, action: PayloadAction<{ userId: string; isTyping: boolean }>) => {
       state.typingUsers[action.payload.userId] = action.payload.isTyping;
     },
-    updatePatientStatus: (state, action: PayloadAction<{ patientId: string; status: 'online' | 'offline' }>) => {
-      const patient = state.patients.find(p => p.id === action.payload.patientId);
+    updateOnlineUsers: (state, action) => {
+      state.onlineUsers = action.payload;
+    },
+    updatePeopleStatus: (state, action: PayloadAction<{ patientId: string; status: 'online' | 'offline' }>) => {
+      const patient = state.peoples.find(p => p.id === action.payload.patientId);
       if (patient) {
         patient.status = action.payload.status;
         if (action.payload.status === 'offline') {
@@ -38,24 +43,31 @@ const chatSlice = createSlice({
         }
       }
     },
-    setLoading: (state, action: PayloadAction<boolean>) => {
-      state.isLoading = action.payload;
-    },
+    // setLoading: (state, action: PayloadAction<boolean>) => {
+    //   state.isLoading = action.payload;
+    // },
     setError: (state, action: PayloadAction<string | null>) => {
       state.error = action.payload;
+    },
+    setIsPeopleLoading: (state, action: PayloadAction<boolean>) => {
+      state.isPeopleLoading = action.payload;
+    },
+    setIsMessagesLoading: (state, action: PayloadAction<boolean>) => {
+      state.isMessagesLoading = action.payload;
     },
   },
 });
 
 export const {
-  setPatients,
-  setSelectedPatient,
+  setPeoples,
+  setSelectedUser,
   setMessages,
   addMessage,
   setTypingStatus,
-  updatePatientStatus,
-  setLoading,
+  updatePeopleStatus,
   setError,
+  setIsPeopleLoading,
+  setIsMessagesLoading
 } = chatSlice.actions;
 
 export default chatSlice.reducer;

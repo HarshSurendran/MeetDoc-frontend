@@ -14,7 +14,6 @@ import AppointmentManagement from '@/components/AppointmentManagement';
 import VideoCallPage from '@/Pages/VideoCallPage';
 import PrescriptionForm from '@/Pages/doctor/CreatePrescription';
 import ChatInterface from '@/Pages/doctor/ChatInterface';
-import ChatPage from '@/Pages/ChatPage';
 
 
 

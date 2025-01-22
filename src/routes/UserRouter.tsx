@@ -14,6 +14,7 @@ import PaymentPage from '@/components/users/Payments/PaymentPage';
 import PaymentRoute from '@/hocs/users/PaymentRoute';
 import PaymentSuccessPage from '@/Pages/user/PaymentSuccessPage';
 import AppointmentManagement from '@/components/AppointmentManagement';
+import UserChatInterface from '@/Pages/user/UserChatInterface';
 
 const UserRouter = () => {
   return (
@@ -33,6 +34,7 @@ const UserRouter = () => {
         
       
       </Route>
+      <Route path='chat' element={<PrivateRoute component={UserChatInterface} />} />
       <Route path='*' element={<UserErrorPage/>} />
     </Routes>
   );
