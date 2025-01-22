@@ -12,6 +12,9 @@ import SlotGeneration from '@/components/doctor/Dashboard/SlotGeneration';
 import DailySlotView from '@/components/doctor/Dashboard/DailySlotView';
 import AppointmentManagement from '@/components/AppointmentManagement';
 import VideoCallPage from '@/Pages/VideoCallPage';
+import PrescriptionForm from '@/Pages/doctor/CreatePrescription';
+
+
 
 const DoctorRouter = () => {
   return (
@@ -26,6 +29,8 @@ const DoctorRouter = () => {
           path="bookedappointments"
           element={<AppointmentManagement userType="doctor" />}
         />
+        <Route path='bookedappointments' element={<AppointmentManagement userType='doctor' />} />
+        <Route path='prescription' element={<PrescriptionForm />} />
       </Route>
       <Route path="/videocall/:id" element={<PrivateRoute component={VideoCallPage}/>}/>
 
