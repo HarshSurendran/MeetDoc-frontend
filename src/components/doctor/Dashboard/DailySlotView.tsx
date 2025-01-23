@@ -20,6 +20,7 @@ import { RootState } from '@/redux/store/appStore';
 import { getSlots } from '@/services/doctor/doctor';
 import errorHandler from '@/utils/errorHandler';
 import { ISlot } from '@/types/ISlots';
+import AppointmentManagement from '@/components/AppointmentManagement';
 
 
 
@@ -71,8 +72,9 @@ const DailySlotView: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 md:p-8">
-      <Card className="max-w-4xl mx-auto">
+    <>
+    <div className="min-h- bg-gray-50 p-4 ">
+      <Card className=" mx-auto">
         <CardHeader className="space-y-1 border-b">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0">
             <div>
@@ -199,7 +201,10 @@ const DailySlotView: React.FC = () => {
           </div>
         </CardContent>
       </Card>
-    </div>
+      </div>
+
+      <AppointmentManagement userType='doctor'/>
+      </>
   );
 };
 

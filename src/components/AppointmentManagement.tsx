@@ -94,13 +94,6 @@ const AppointmentManagement: React.FC<IAppointmentListProps> = ({
   };
 
   const handleJoinCall = useCallback(async (appointmentData: IBookedAppointmentType) => {
-  // Handle video call logic here
-    // if (userType === 'doctor') {
-    //   navigate(`/doctor/videocall/${appointmentId}`);
-    // }
-    // if (userType === 'patient') {
-    //   navigate(`/user/videocall/${appointmentId}`);
-    // }
     const response = await getAppointment(appointmentData._id);
     if(!response.status){
       toast.error('Something went wrong. Please try again.');
