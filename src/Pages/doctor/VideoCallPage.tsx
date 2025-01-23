@@ -481,20 +481,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -624,12 +610,7 @@ const VideoCallPage: React.FC = () => {
 
       dispatch(onEndCall(() => {
         console.log('Call ended ');
-        
-        if (localStreamRef.current) {
-          stopStream(localStreamRef.current);
-        }
-        navigate(`/doctor/prescription/${appointmentId}`);
-      
+        endCall();
       }));
 
       // peerService.peer.ontrack = (event) => {
@@ -735,11 +716,24 @@ const VideoCallPage: React.FC = () => {
     }
   };
 
-  const endCall = () => {
+  const endCall = () => {    
     if (localStreamRef.current) {      
       stopStream(localStreamRef.current);
+      localStreamRef.current = null;
     }
-    dispatch(disconnectwebrtcSocket({target: remoteSocketId as string}));
+  
+    if (localVideoRef.current) {
+      localVideoRef.current.srcObject = null;
+    }
+    if (remoteVideoRef.current) {
+      remoteVideoRef.current.srcObject = null;
+    }
+  
+    if (peerService.peer) {
+      peerService.peer.close();
+    }
+  
+    dispatch(disconnectwebrtcSocket({ target: remoteSocketId as string }));
     navigate(`/doctor/prescription/${appointmentId}`);
   };
 
@@ -748,7 +742,6 @@ const VideoCallPage: React.FC = () => {
       stream.getTracks().forEach(track => track.stop());
     }
   }
-
 
   if (isConnecting) {
     return (

@@ -49,10 +49,7 @@ const UserVideoCallPage: React.FC = () => {
       );
       dispatch(onEndCall(() => {
         console.log('Call ended ');
-        if (localStreamRef.current) {
-          stopStream(localStreamRef.current);
-          navigate("/");
-        }
+        endCall();
       }));
       // dispatch(
       //   onPatientJoined(async (payload) => {
@@ -84,7 +81,7 @@ const UserVideoCallPage: React.FC = () => {
     return () => {
       peerService.peer.removeEventListener('track', handleRemoteVideoStream);
     };
-  }, [peerService.peer]);
+  }, [] );
 
   const handleRemoteVideoStream = (event: RTCTrackEvent) => {
     console.log('Remote track added from useEffect ecent handler');
@@ -152,11 +149,29 @@ const UserVideoCallPage: React.FC = () => {
   };
 
   const endCall = () => {
-    if (localStreamRef.current) {
-      stopStream(localStreamRef.current);
-    }
-    dispatch(disconnectwebrtcSocket({ target: remoteSocketId as string }));
-    navigate(-1);
+    // if (localStreamRef.current) {
+    //   stopStream(localStreamRef.current);
+    // }
+    // dispatch(disconnectwebrtcSocket({ target: remoteSocketId as string }));
+    // navigate(-1);
+    if (localStreamRef.current) {      
+          stopStream(localStreamRef.current);
+          localStreamRef.current = null;
+        }
+      
+        if (localVideoRef.current) {
+          localVideoRef.current.srcObject = null;
+        }
+        if (remoteVideoRef.current) {
+          remoteVideoRef.current.srcObject = null;
+        }
+      
+        if (peerService.peer) {
+          peerService.peer.close();
+        }
+      
+        dispatch(disconnectwebrtcSocket({ target: remoteSocketId as string }));
+        navigate(-1);
   };
 
   if (isConnecting) {
