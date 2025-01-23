@@ -37,5 +37,12 @@ export interface ChatState {
     isPeopleLoading: boolean,
     error: string | null,
   typingUsers: { [key: string]: boolean },
-  onlineUsers: string[]
+  onlineUsers: string[],
+  incomingVideoCall: {
+    isIncoming: boolean,
+    from: string,
+    to: string,
+    videoCallId: string
+  },
+  redirectToChat: boolean,
 }

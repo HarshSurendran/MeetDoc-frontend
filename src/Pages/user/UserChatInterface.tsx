@@ -305,6 +305,7 @@ import { setIsMessagesLoading, setIsPeopleLoading, setMessages, setPeoples, setS
 import errorHandler from '@/utils/errorHandler';
 import { getDoctorsForChat, getMessages, sendMessageApi, toggleIsRead } from '@/services/user/user';
 import { User } from '@/types/chatTypes';
+import CallNotificationModal from '@/components/users/IncomingVideoCallModal';
 
 
 
@@ -313,7 +314,7 @@ const UserChatInterface = () => {
   const [messageInput, setMessageInput] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const lastMessageRef = useRef<HTMLDivElement>(null);
-  const { selectedUser, messages, peoples, isMessagesLoading, isPeopleLoading, onlineUsers } = useSelector((state: RootState) => state.chat);
+  const { selectedUser, messages, peoples, isMessagesLoading, isPeopleLoading, onlineUsers, incomingVideoCall } = useSelector((state: RootState) => state.chat);
   const user = useSelector((state: RootState) => state.user.user);
   const dispatch = useDispatch();
   
@@ -474,6 +475,7 @@ const UserChatInterface = () => {
 
         {/* Chat Area */}
         <Card className="md:col-span-3 h-full flex flex-col">
+          {incomingVideoCall.isIncoming && <CallNotificationModal />}
           {selectedUser ? (
             <>
               {/* Chat Header */}
@@ -499,12 +501,12 @@ const UserChatInterface = () => {
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Button variant="ghost" size="icon">
+                  {/* <Button variant="ghost" size="icon">
                     <Phone className="h-5 w-5" />
                   </Button>
                   <Button variant="ghost" size="icon">
                     <Video className="h-5 w-5" />
-                  </Button>
+                  </Button> */}
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button variant="ghost" size="icon">

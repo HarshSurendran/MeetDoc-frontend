@@ -28,6 +28,7 @@ const doctorSlice = createSlice({
       photo: '',
     },
     isAuthenticated: false,
+    appointmentId: ""
   },
   reducers: {
     addDoctor: (state, action) => {
@@ -49,6 +50,7 @@ const doctorSlice = createSlice({
       state.doctor._id = action.payload?._id;
       state.doctor.photo = action.payload?.photo;
       state.isAuthenticated = true;
+      state.appointmentId = "";
     },
     toggleAuth: (state, action) => {
       state.isAuthenticated = action.payload;
@@ -82,9 +84,13 @@ const doctorSlice = createSlice({
         photo: '',
       };
       state.isAuthenticated = false;
+      state.appointmentId = "";
+    },
+    setAppointmentId: (state, action) => {
+      state.appointmentId = action.payload;
     },
   },
 });
 
-export const { addDoctor, addPhoto, toggleAuth, resetDoctor } = doctorSlice.actions;
+export const { addDoctor, addPhoto, toggleAuth, resetDoctor, setAppointmentId } = doctorSlice.actions;
 export default doctorSlice.reducer;

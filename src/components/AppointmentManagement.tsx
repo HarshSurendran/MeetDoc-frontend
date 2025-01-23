@@ -23,6 +23,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { connectwebrtcSocket, disconnectwebrtcSocket, joinRoom } from '@/redux/actions/webrtcAction';
 import { AppDispatch, RootState } from '@/redux/store/appStore';
 import toast from 'react-hot-toast';
+import { setAppointmentId } from '@/redux/slices/doctorSlice';
 
 
 
@@ -34,9 +35,8 @@ const AppointmentManagement: React.FC<IAppointmentListProps> = ({
 
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const doctor = useSelector((state: RootState) => state.doctor.doctor);
-  const user = useSelector((state: RootState) => state.user.user);
-
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     fetchAppointments();
@@ -109,7 +109,8 @@ const AppointmentManagement: React.FC<IAppointmentListProps> = ({
     const appointment = response.data.appointment;    
     if (userType === 'doctor') {
       const response = await sendMessageApi(doctor._id, "doctor", appointment.patientId, `Hey ${appointmentData.patientName}, I am Dr.${doctor.name}, are you ready for the video call?`);
-      if(response.status){
+      if (response.status) {
+        dispatch(setAppointmentId(appointment._id));
         navigate(`/doctor/chat`)
       }
     }

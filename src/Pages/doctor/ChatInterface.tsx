@@ -119,7 +119,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { SearchIcon, Send, Video, Phone, MoreVertical } from 'lucide-react';
+import { SearchIcon, Send, Video,  MoreVertical } from 'lucide-react';
 import { 
   Card,
 } from "@/components/ui/card";
@@ -141,6 +141,9 @@ import { getMessages, getPatientsForChat, sendMessageApi, toggleIsRead } from '@
 import { setIsMessagesLoading, setIsPeopleLoading, setMessages, setPeoples, setSelectedUser } from '@/redux/slices/chatSlice';
 import errorHandler from '@/utils/errorHandler';
 import { User } from '@/types/chatTypes';
+import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
+import { v4 as uuid } from 'uuid';
 
 
 
@@ -153,9 +156,10 @@ const DoctorChatInterface = () => {
   // const [patients, setPatients] = useState<Patient[]>([]);
   // const [typingUsers, setTypingUsers] = useState("");
   const lastMessageRef = useRef<HTMLDivElement>(null);
-  const { selectedUser, messages, peoples, isMessagesLoading, isPeopleLoading, onlineUsers } = useSelector((state: RootState) => state.chat);
-  const doctor = useSelector((state: RootState) => state.doctor.doctor);
+  const { selectedUser, messages, peoples, isMessagesLoading, isPeopleLoading, onlineUsers, incomingVideoCall } = useSelector((state: RootState) => state.chat);
+  const {doctor, appointmentId} = useSelector((state: RootState) => state.doctor);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   
 
   useEffect(() => {
@@ -237,6 +241,17 @@ const DoctorChatInterface = () => {
     const response = await toggleIsRead(doctor._id, selectedUserData.id);
   }
 
+  const HandleVideoCall = async (selectedUser: User) => {
+    if (appointmentId) {
+      //todo: check whether appointment id matches the selected user
+      const videoCallId = appointmentId;
+      chatSocketService.sendVideoCallId(doctor._id, selectedUser.id, videoCallId);
+      navigate(`/doctor/videocall/${videoCallId}`);
+    } else {
+      toast.error("Please select an appointment and start the call.");
+    }
+  }
+
   // const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   //   setMessageInput(e.target.value);
   //   if (selectedUser) {
@@ -247,6 +262,7 @@ const DoctorChatInterface = () => {
   const filteredPeoples = peoples.filter(patient =>
     patient.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
 
 
   const formatTime = (date: Date) => {
@@ -341,10 +357,10 @@ const DoctorChatInterface = () => {
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Button variant="ghost" size="icon">
+                  {/* <Button variant="ghost" size="icon">
                     <Phone className="h-5 w-5" />
-                  </Button>
-                  <Button variant="ghost" size="icon" >
+                  </Button> */}
+                  <Button variant="ghost" size="icon" onClick={()=> HandleVideoCall(selectedUser)}>
                     <Video className="h-5 w-5" />
                   </Button>
                   <DropdownMenu>

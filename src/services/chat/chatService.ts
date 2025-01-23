@@ -132,7 +132,7 @@
 
 import { io, Socket } from 'socket.io-client';
 import appStore from '../../redux/store/appStore';
-import { addMessage, setTypingStatus, updateOnlineUsers } from '../../redux/slices/chatSlice';
+import { addMessage, incomingVideoCall, resetVideoCall, setTypingStatus, toggleRedicrectToChat, updateOnlineUsers } from '../../redux/slices/chatSlice';
 const SOCKET_SERVER_URL = import.meta.env.VITE_CHAT_SOCKET_URL;
 
 class ChatSocketService {
@@ -183,6 +183,30 @@ class ChatSocketService {
     this.socket.on('disconnect', () => {
       console.log('Disconnected from WebSocket');
     });
+
+    this.socket.on('VideoCallInitiated', ({ from, to, videoCallId }) => {
+      console.log("VideoCallInitiated", { from, to, videoCallId });
+      appStore.dispatch(incomingVideoCall({ from, to, videoCallId }));
+    });
+
+    this.socket.on('RecieverNotOnline', ({ from, to, videoCallId }) => {
+      console.log("RecieverNotOnline", { from, to, videoCallId });
+      appStore.dispatch(toggleRedicrectToChat(true));
+      appStore.dispatch(resetVideoCall());
+    });
+
+    this.socket.on('VideoCallAccepted', ({ from, to, videoCallId }) => {
+      console.log("VideoCallAccepted", { from, to, videoCallId });
+      //todo: Handle navigation to video call screen
+      appStore.dispatch(resetVideoCall());
+    });
+
+    this.socket.on('VideoCallRejected', ({ from, to, videoCallId }) => {
+      console.log("VideoCallRejected -----------", { from, to, videoCallId });
+      appStore.dispatch(toggleRedicrectToChat(true));
+      appStore.dispatch(resetVideoCall());
+    })
+
   }
 
   sendMessage(senderId: string, senderType: 'patient' | 'doctor', receiverId: string, content: string) {
@@ -193,7 +217,35 @@ class ChatSocketService {
       receiverId,
       content,
     });
+  }
 
+  sendVideoCallId(from: string, to: string, videoCallId: string) {
+    if (!this.socket) return;
+    this.socket.emit('VideoCallInitiated', {
+      from,
+      to,
+      videoCallId,
+    });
+    appStore.dispatch(incomingVideoCall({ from, to, videoCallId }));
+  }
+
+  rejectVideoCall(from: string, to: string, videoCallId: string) {
+    console.log("VideoCallRejected", { from, to, videoCallId });
+    if (!this.socket) return;
+    this.socket.emit('VideoCallRejected', {
+      from,
+      to,
+      videoCallId,
+    });
+  }
+
+  acceptVideoCall(from: string, to: string, videoCallId: string) {
+    if (!this.socket) return;
+    this.socket.emit('VideoCallAccepted', {
+      from,
+      to,
+      videoCallId,
+    });
   }
 
   disconnect() {

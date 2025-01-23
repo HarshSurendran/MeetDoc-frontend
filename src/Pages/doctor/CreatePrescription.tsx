@@ -18,11 +18,12 @@ import {
 import { format } from 'date-fns';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { ICreatePrescriptionDto, IPrescription } from '@/types';
-import { createPrescription } from '@/services/doctor/doctor';
+import { createPrescription, getAppointment } from '@/services/doctor/doctor';
 import errorHandler from '@/utils/errorHandler';
 import toast from 'react-hot-toast';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store/appStore';
+import { useNavigate, useParams } from 'react-router-dom';
 
 
 
@@ -39,26 +40,39 @@ const PrescriptionForm: React.FC = () => {
   });
   const doctor = useSelector((state: RootState) => state.doctor.doctor);
   const { control, handleSubmit } = form;
+  const appointmentId = useParams<{ id: string }>().id;
   const { fields, append, remove } = useFieldArray({
     control,
     name: "medications"
   });
+  const navigate = useNavigate();
 
   async function sendPrescriptionToBackend(data: IPrescription) {
     try {
+      if (!appointmentId) {
+        toast.error("Failed to fetch appointment details");
+      }
+      const appointmentResponse = await getAppointment(appointmentId as string);
+      if (!appointmentResponse.status) {
+        toast.error("Failed to fetch appointment details");
+      }
+      const appointment = appointmentResponse.data.appointment;
+
+
      const createPrescriptionData: ICreatePrescriptionDto = {
        diagnosis: data.diagnosis,
        medications: data.medications,
        dosageInstructions: data.dosageInstructions,
        additionalNotes: data.additionalNotes,
        followUpDate: data.followUpDate,
-       patientId: '677e146dd7ebc9fbb8acb606', // add the patient id
+       patientId: appointment.patientId, 
        doctorId: doctor._id
      }
      const response = await createPrescription(createPrescriptionData);
      if (response.status) {
        toast.success("Prescription created successfully");
-       // navigate the doctor to the place needed. 
+       //todo: redirect to bussiness page(payment details page)
+       navigate(`/doctor/dashboard`)
      }
      
     } catch (error) {
@@ -67,7 +81,6 @@ const PrescriptionForm: React.FC = () => {
   }
 
   const onSubmit = (data: IPrescription) => {
-    console.log('Prescription submitted:', data);
     sendPrescriptionToBackend(data);
   };
 

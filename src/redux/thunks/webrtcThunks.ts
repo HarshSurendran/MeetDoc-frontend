@@ -29,6 +29,12 @@ class WebrtcSocketService {
         }
     }
 
+    onJoinRoom(callback: (payload: any) => void) {
+        if (this.socket) {
+            this.socket.on('join-room', callback);
+        }
+    }
+
     sendOffer(payload :{ target: string, offer: RTCSessionDescriptionInit }) {
         if (this.socket) {
             this.socket.emit('offer', payload);
@@ -39,13 +45,7 @@ class WebrtcSocketService {
         if (this.socket) {
             this.socket.on('offer', callback);
         }
-    }
-
-    onAnswer(callback: (payload: { target: string, answer: RTCSessionDescriptionInit }) => void) {
-        if (this.socket) {
-            this.socket.on('answer', callback);
-        }
-    }
+    }    
 
     sendAnswer(payload: { target: string, answer: RTCSessionDescriptionInit }) {
         if (this.socket) {
@@ -53,11 +53,12 @@ class WebrtcSocketService {
         }
     }
         
-    onJoinRoom(callback: (payload: any) => void) {
+    onAnswer(callback: (payload: { target: string, answer: RTCSessionDescriptionInit }) => void) {
         if (this.socket) {
-            this.socket.on('join-room', callback);
+            this.socket.on('answer', callback);
         }
     }
+   
 
     onPatientJoined(callback: (payload: any) => void) {
         if (this.socket) {
@@ -89,8 +90,16 @@ class WebrtcSocketService {
         }
     }
 
-    disconnect() {
+    onEndCall(callback: (payload: any) => void) {
         if (this.socket) {
+            this.socket.on('end-call', callback);
+        }
+    }
+
+    disconnect(payload: { target: string }) {
+        if (this.socket) {
+            console.log('Disconnecting from WebSocket for webrtc');
+            this.socket.emit('end-call', payload);
             this.socket.disconnect();
             this.socket = null;
         };

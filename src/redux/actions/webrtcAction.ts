@@ -53,6 +53,13 @@ export const onAnswer = (callback: (payload: { target: string, answer: RTCSessio
     };
 }
 
+export const onEndCall = (Callback: () => void ) => {
+  return (dispatch: Dispatch) => {
+    webrtcSocketService.onEndCall(Callback);
+    dispatch(socketDisconnected());
+  }
+}
+
 export const negotiationNeeded = (to: string, offer: RTCSessionDescriptionInit, ) => {
   return () => {
     webrtcSocketService.sendNegotiationOffer({ target: to, offer });
@@ -77,9 +84,11 @@ export const onNegotiationAnswer = (callback: (payload: { target: string, answer
   };
 }
 
-export const disconnectwebrtcSocket = () => {
+export const disconnectwebrtcSocket = (payload: { target: string }) => {
   return (dispatch: Dispatch) => {
-    webrtcSocketService.disconnect();
+    webrtcSocketService.disconnect(payload);
     dispatch(socketDisconnected());
   };
 };
+
+

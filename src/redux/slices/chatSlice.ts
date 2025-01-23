@@ -10,6 +10,13 @@ const initialState: ChatState = {
   error: null,
   typingUsers: {},
   onlineUsers: [],
+  incomingVideoCall: {
+    isIncoming: false,
+    from: "",
+    to: "",
+    videoCallId: ""
+  },
+  redirectToChat: false,
 };
 
 const chatSlice = createSlice({
@@ -55,6 +62,21 @@ const chatSlice = createSlice({
     setIsMessagesLoading: (state, action: PayloadAction<boolean>) => {
       state.isMessagesLoading = action.payload;
     },
+    incomingVideoCall: (state, action) => {
+      state.incomingVideoCall.isIncoming = true;
+      state.incomingVideoCall.from = action.payload.from;
+      state.incomingVideoCall.to = action.payload.to;
+      state.incomingVideoCall.videoCallId = action.payload.videoCallId;
+    },
+    resetVideoCall: (state) => {
+      state.incomingVideoCall.isIncoming = false;
+      state.incomingVideoCall.from = "";
+      state.incomingVideoCall.to = "";
+      state.incomingVideoCall.videoCallId = "";
+    },
+    toggleRedicrectToChat: (state, action) => {
+      state.redirectToChat = action.payload;
+    },
   },
 });
 
@@ -68,7 +90,10 @@ export const {
   setError,
   setIsPeopleLoading,
   setIsMessagesLoading,
-  updateOnlineUsers
+  updateOnlineUsers,
+  incomingVideoCall,
+  resetVideoCall,
+  toggleRedicrectToChat,
 } = chatSlice.actions;
 
 export default chatSlice.reducer;
