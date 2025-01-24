@@ -9,6 +9,7 @@ import { useParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { IDoctorProfile } from '@/types/IDoctor';
 import HeaderPostLogin from '@/components/users/HeaderPostLogin';
+import ReviewSection from '@/components/users/DoctorDetailView/ReviewSection';
 
 const DoctorDetailPage = () => {
   const [doctor, setDoctor] = useState<Partial<IDoctorProfile>>({});
@@ -116,15 +117,7 @@ const DoctorDetailPage = () => {
 
           {/* Right Column - Reviews */}
           <div>
-            <Card className="lg:min-h-screen">
-              <CardContent className="p-6 ">
-                <h2 className="text-2xl font-bold mb-4">Reviews</h2>
-
-                <div className="mt-4">
-                  <Button className="w-full">Check Availability</Button>
-                </div>
-              </CardContent>
-            </Card>
+            <ReviewSection doctorId={doctorId as string} />
           </div>
         </div>
       </div>

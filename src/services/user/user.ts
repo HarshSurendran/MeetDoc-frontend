@@ -245,3 +245,27 @@ export const sendReview = async (reviewData: ICreateReview) => {
     apiErrorHandler(error);    
   }
 }
+
+export const getReviews = async (doctorId: string) => {
+  try {
+    const response = await userAxiosInstance.get(`review/${doctorId}`);
+    if (response) {
+      return response.data;
+    }
+    return null;
+  } catch (error) {
+    apiErrorHandler(error);
+  }
+}
+
+export const getYourReviews = async () => {
+  try {
+    const response = await userAxiosInstance.get('users/reviews');
+    if (response) {
+      return response.data;
+    }
+    return null;
+  } catch (error) {
+    apiErrorHandler(error);
+  }
+}

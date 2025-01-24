@@ -17,6 +17,7 @@ import AppointmentManagement from '@/components/AppointmentManagement';
 import UserChatInterface from '@/Pages/user/UserChatInterface';
 import UserVideoCallPage from '@/Pages/user/UserVideoCallPage';
 import PrescriptionPage from '@/components/users/PrescriptionSection';
+import UserReviewsPage from '@/Pages/user/YourReviewsPage';
 
 const UserRouter = () => {
   return (
@@ -32,7 +33,8 @@ const UserRouter = () => {
         <Route path="/dashboard"  element={<Dashboard />} />
         <Route path="profile" element={<UserProfilePage />} />
         <Route path="appointments" element={<AppointmentManagement userType='patient' />} />
-        <Route path='prescription' element={<PrescriptionPage/>} />
+        <Route path='prescription' element={<PrescriptionPage />} />
+        <Route path='reviews' element={<UserReviewsPage />}/>
         
       </Route>
       <Route path='/video-call/:id' element={<PrivateRoute component={UserVideoCallPage} />} />

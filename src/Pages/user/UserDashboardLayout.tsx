@@ -46,7 +46,8 @@ const UserDashboardLayout = () => {
     { name: 'Payments', href: '/payments', icon: CreditCard },
     { name: 'Feedback', href: '/feedback', icon: MessageSquare },
     { name: 'Chat', href: '/chat', icon: MessageCircleMore },
-    { name: 'Prescriptions', href: '/prescription', icon: ClipboardPlus},
+    { name: 'Prescriptions', href: '/prescription', icon: ClipboardPlus },
+    { name: 'Your Reviews' , href: '/reviews', icon: BellRing },
     { name: 'Profile', href: '/profile', icon: User },
   ];
     
