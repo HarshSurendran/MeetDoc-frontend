@@ -14,7 +14,9 @@ import {
   User,
   Menu,
   BellRing,
-  LogOut
+  LogOut,
+  MessageCircleMore,
+  ClipboardPlus 
 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -43,6 +45,8 @@ const UserDashboardLayout = () => {
     { name: 'Reports', href: '/reports', icon: FileText },
     { name: 'Payments', href: '/payments', icon: CreditCard },
     { name: 'Feedback', href: '/feedback', icon: MessageSquare },
+    { name: 'Chat', href: '/chat', icon: MessageCircleMore },
+    { name: 'Prescriptions', href: '/prescription', icon: ClipboardPlus},
     { name: 'Profile', href: '/profile', icon: User },
   ];
     

@@ -94,6 +94,10 @@ const AppointmentManagement: React.FC<IAppointmentListProps> = ({
   };
 
   const handleJoinCall = useCallback(async (appointmentData: IBookedAppointmentType) => {
+    if (userType === 'patient') {
+      toast.error('Doctor will contact you soon.');
+      return
+    }
     const response = await getAppointment(appointmentData._id);
     if(!response.status){
       toast.error('Something went wrong. Please try again.');

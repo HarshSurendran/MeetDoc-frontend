@@ -14,6 +14,7 @@ import AppointmentManagement from '@/components/AppointmentManagement';
 import PrescriptionForm from '@/Pages/doctor/CreatePrescription';
 import ChatInterface from '@/Pages/doctor/ChatInterface';
 import VideoCallPage from '@/Pages/doctor/VideoCallPage';
+import DoctorErrorPage from '@/Pages/doctor/DoctorErrorPage';
 
 
 
@@ -44,6 +45,7 @@ const DoctorRouter = () => {
       <Route path="/login" element={<PublicRoute component={LoginPage} />} />
       <Route path="/signup" element={<PublicRoute component={SignupPage} />} />
       <Route path="/otp" element={<PublicRoute component={OtpPage} />} />
+      <Route path='*' element={<DoctorErrorPage/>} />
     </Routes>
   );
 };

@@ -181,7 +181,7 @@ const DoctorChatInterface = () => {
 
   useEffect(() => {
     if (lastMessageRef.current) {
-      lastMessageRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
+      lastMessageRef.current.scrollIntoView({ behavior: "instant", block: "end" });
     }
   }, [messages]);
  

@@ -211,3 +211,14 @@ export const toggleIsRead = async (senderId: string, receiverId: string) => {
     apiErrorHandler(error);
   }
 }
+
+export const fetchPrescriptions = async () => {
+  try {
+    const response = await userAxiosInstance.get('users/prescriptions');
+    if (response) {
+      return response.data
+    }
+  } catch (error) {
+    apiErrorHandler(error);
+  }
+}

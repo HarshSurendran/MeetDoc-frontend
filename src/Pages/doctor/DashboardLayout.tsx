@@ -4,10 +4,12 @@ import {
   X,
   Home,
   Calendar,
-  DollarSign,
+  IndianRupee ,
+  BetweenHorizontalStart ,
   User,
   Settings,
   LogOut,
+  MessageSquare
 } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/store/appStore';
@@ -40,8 +42,11 @@ const DashboardLayout: React.FC = () => {
   const sideLinks = [
     { name: 'Dashboard', icon: <Home className="h-5 w-5 mr-3" />, pathName: "/doctor/dashboard", },
     { name: 'Appointments', icon: <Calendar className="h-5 w-5 mr-3" />, pathName: "/doctor/appointments", },
-    { name: 'Generate Slots', icon: <DollarSign className="h-5 w-5 mr-3" />, pathName: "/doctor/slots", },
+    { name: 'Generate Slots', icon: <BetweenHorizontalStart className="h-5 w-5 mr-3" />, pathName: "/doctor/slots", },
+    { name: 'Revenue', icon: <IndianRupee  className="h-5 w-5 mr-3" />, pathName: "/doctor/revenue", },
+    
     { name: 'Profile', icon: <User className="h-5 w-5 mr-3" />, pathName: "/doctor/profile", },
+    { name: 'Chat', icon: <MessageSquare className="h-5 w-5 mr-3"/>, pathName: "/doctor/chat"},
     { name: 'Settings', icon: <Settings className="h-5 w-5 mr-3" />, pathName: "/doctor/settings", },
   ];
 
