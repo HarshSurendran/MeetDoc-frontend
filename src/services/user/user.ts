@@ -3,6 +3,7 @@ import { userAxiosInstance } from '../instance/userInstance';
 import { User } from '@/types/userTypes';
 import { IUser } from '@/types/IUser';
 import { ISlot } from '@/types/ISlots';
+import { ICreateReview } from '@/types';
 
 export const getUserData = async (id: string) => {
   try {
@@ -216,9 +217,31 @@ export const fetchPrescriptions = async () => {
   try {
     const response = await userAxiosInstance.get('users/prescriptions');
     if (response) {
-      return response.data
+      return response.data;
     }
   } catch (error) {
     apiErrorHandler(error);
+  }
+}
+
+export const getAppointment = async (appointmentId: string) => {
+  try {
+    const response = await userAxiosInstance.get(`users/appointments/${appointmentId}`);
+    if (response) {
+      return response.data;
+    }
+  } catch (error) {
+    apiErrorHandler(error);
+  }
+}
+
+export const sendReview = async (reviewData: ICreateReview) => {
+  try {
+    const response = await userAxiosInstance.post('review', reviewData);
+    if (response) {
+      return response.data;
+    }
+  } catch (error) {
+    apiErrorHandler(error);    
   }
 }

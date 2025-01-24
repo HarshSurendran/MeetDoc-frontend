@@ -17,17 +17,21 @@ import {
 } from '../../redux/actions/webrtcAction';
 import { AppDispatch } from '../../redux/store/appStore';
 import peerService from '../../services/peer/peerService';
+import ReviewModal from '@/components/users/ReviewModal';
+import { getAppointment } from '@/services/user/user';
 
 const UserVideoCallPage: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const [isConnecting, setIsConnecting] = useState<boolean>(true);
   const [isMuted, setIsMuted] = useState<boolean>(false);
   const [isVideoOff, setIsVideoOff] = useState<boolean>(false);
+  const [doctorId, setDoctorId] = useState<string | null>(null);
 
   const localVideoRef = useRef<HTMLVideoElement>(null);
   const remoteVideoRef = useRef<HTMLVideoElement>(null);
   const localStreamRef = useRef<MediaStream | null>(null);
   const { id: videoId } = useParams<{ id: string }>();
+  const [reviewModalOpen, setReviewModalOpen] = useState(false);
   const navigate = useNavigate();
   const [remoteSocketId, setRemoteSocketId] = useState<string | null>(null);
 
@@ -148,12 +152,8 @@ const UserVideoCallPage: React.FC = () => {
     }
   };
 
-  const endCall = () => {
-    // if (localStreamRef.current) {
-    //   stopStream(localStreamRef.current);
-    // }
-    // dispatch(disconnectwebrtcSocket({ target: remoteSocketId as string }));
-    // navigate(-1);
+  const endCall = async () => {
+    
     if (localStreamRef.current) {      
           stopStream(localStreamRef.current);
           localStreamRef.current = null;
@@ -170,8 +170,16 @@ const UserVideoCallPage: React.FC = () => {
           peerService.peer.close();
         }
       
-        dispatch(disconnectwebrtcSocket({ target: remoteSocketId as string }));
-        navigate(-1);
+    dispatch(disconnectwebrtcSocket({ target: remoteSocketId as string }));
+    
+    if(videoId){
+      const response = await getAppointment(videoId as string);
+      if (response.status) {
+        const appointmentData = response.data.appointment
+        setDoctorId(appointmentData.doctorId);
+      }
+      setReviewModalOpen(true);
+    }
   };
 
   if (isConnecting) {
@@ -188,6 +196,8 @@ const UserVideoCallPage: React.FC = () => {
   }
 
   return (
+  <>
+      {reviewModalOpen && <ReviewModal doctorId={doctorId as string} appointmentId={ videoId as string} /> }
     <div className="relative h-screen bg-black flex flex-col">
       <div className="flex-grow relative">
         <video
@@ -230,7 +240,8 @@ const UserVideoCallPage: React.FC = () => {
           </Button>
         </div>
       </div>
-    </div>
+      </div>
+      </>
   );
 };
 
