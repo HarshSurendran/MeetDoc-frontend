@@ -3,7 +3,7 @@ import AdminLoginPage from "../Pages/admin/AdminLoginPage";
 import PrivateRoute from "../hocs/admins/PrivateRoute"
 import PublicRoute from "../hocs/admins/PublicRoute";
 import AdminLayout from "../Pages/admin/AdminLayout";
-import AdminMainContent from "@/components/admin/AdminMainContent";
+import AdminMainContent from "@/components/admin/AdminDashboard";
 import UserManagementTable from "@/components/admin/UserManagement";
 import UserDetailView from "@/components/admin/UserDetailView";
 import DoctorVerificationPage from "@/Pages/admin/DoctorVerificationPage";

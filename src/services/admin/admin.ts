@@ -101,3 +101,37 @@ export const getCertificate = async (key: string) => {
     return Promise.reject();
   }
 };
+
+export const getMonthlyData = async () => {
+  try {
+    const response = await adminAxiosInstance.get('/admin/monthly-data');
+    return response.data;
+  } catch (error) {
+    apiErrorHandler(error);
+    return Promise.reject();
+  }
+};
+
+export const getRevenueData = async () => {
+  try {
+    const response = await adminAxiosInstance.get('/admin/revenue-data');
+    if (response) {
+      return response.data;
+    }
+    return null;
+  } catch (error) {
+    apiErrorHandler(error);
+  }
+}
+
+export const totalData = async () => {
+  try {
+    const response = await adminAxiosInstance.get('/admin/total-data');
+    if(response) {
+      return response.data;
+    }
+  } catch (error) {
+    apiErrorHandler(error);
+    return Promise.reject();
+  }
+};
