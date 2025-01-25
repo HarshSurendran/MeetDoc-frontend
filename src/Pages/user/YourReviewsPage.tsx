@@ -15,22 +15,23 @@ import {
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { format } from 'date-fns';
-import { IReviewDisplay } from '@/types';
+import { IReviewDisplay, IUpdateReview } from '@/types';
 import errorHandler from '@/utils/errorHandler';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store/appStore';
-import { getYourReviews } from '@/services/user/user';
+import { deleteReview, getYourReviews, updateReview } from '@/services/user/user';
+import toast from 'react-hot-toast';
 
-interface Review {
-  _id: string;
-  for: {
-    name: string;
-    specialisation: string;
-  };
-  message: string;
-  rating: number;
-  createdAt: string;
-}
+// interface Review {
+//   _id: string;
+//   for: {
+//     name: string;
+//     specialisation: string;
+//   };
+//   message: string;
+//   rating: number;
+//   createdAt: string;
+// }
 
 const UserReviewsPage: React.FC = () => {
   const [reviews, setReviews] = useState<IReviewDisplay[]>([
@@ -57,41 +58,58 @@ const UserReviewsPage: React.FC = () => {
     //   }
   ]);
 
-  const [editingReview, setEditingReview] = useState<Review | null>(null);
-    const [deleteConfirmation, setDeleteConfirmation] = useState<string | null>(null);
+  const [editingReview, setEditingReview] = useState<IReviewDisplay | null>(null);
+  const [deleteConfirmation, setDeleteConfirmation] = useState<string | null>(null);
 
-    useEffect(() => {
-        fetchReviews();
-    }, []);
+  useEffect(() => {
+      fetchReviews();
+  }, []);
 
-    const fetchReviews = async () => {
-        try {
-            const response = await getYourReviews();
-            if (response.status) {
-                setReviews(response.data.reviews);
-            }            
-        } catch (error) {
-            errorHandler(error);
-        }
-    }
+  const fetchReviews = async () => {
+      try {
+          const response = await getYourReviews();
+          if (response.status) {
+              setReviews(response.data.reviews);
+          }            
+      } catch (error) {
+          errorHandler(error);
+      }
+  }
 
-  const handleEditReview = (review: Review) => {
+  const handleEditReview = (review: IReviewDisplay) => {
     setEditingReview(review);
   };
 
-  const handleUpdateReview = () => {
+  const handleUpdateReview = async () => {
     if (!editingReview) return;
+    const updateReviewDto: IUpdateReview = {
+      _id: editingReview._id,
+      for: editingReview.for._id,
+      from: editingReview.from?._id,
+      message: editingReview.message,
+      rating: editingReview.rating
+    }
+    const response = await updateReview(updateReviewDto);
+    if (response.status) {
+      toast.success('Review updated successfully.');
+      setReviews(reviews.map(r => 
+        r._id === editingReview._id ? editingReview : r
+      ));
+    } else {
+      toast.error('Failed to update review. Try again after sometime.');
+    }
     
-    // TODO: Implement actual API update
-    // setReviews(reviews.map(r => 
-    //   r._id === editingReview._id ? editingReview : r
-    // ));
     setEditingReview(null);
   };
 
-  const handleDeleteReview = (reviewId: string) => {
-    // TODO: Implement actual API delete
-    setReviews(reviews.filter(r => r._id !== reviewId));
+  const handleDeleteReview = async (reviewId: string) => {
+    const response = await deleteReview(reviewId);
+    if (response.status) {
+      toast.success('Review deleted successfully.');
+      setReviews(reviews.filter(r => r._id !== reviewId));
+    } else {
+      toast.error('Failed to delete review. Try again after sometime.');
+    }
     setDeleteConfirmation(null);
   };
 

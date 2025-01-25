@@ -3,7 +3,7 @@ import { userAxiosInstance } from '../instance/userInstance';
 import { User } from '@/types/userTypes';
 import { IUser } from '@/types/IUser';
 import { ISlot } from '@/types/ISlots';
-import { ICreateReview } from '@/types';
+import { ICreateReview, IReviewDisplay, IUpdateReview } from '@/types';
 
 export const getUserData = async (id: string) => {
   try {
@@ -261,6 +261,30 @@ export const getReviews = async (doctorId: string) => {
 export const getYourReviews = async () => {
   try {
     const response = await userAxiosInstance.get('users/reviews');
+    if (response) {
+      return response.data;
+    }
+    return null;
+  } catch (error) {
+    apiErrorHandler(error);
+  }
+}
+
+export const updateReview = async (updateReviewDto: IUpdateReview) => {
+  try {
+    const response = await userAxiosInstance.patch(`review/${updateReviewDto._id}`, updateReviewDto);
+    if (response) {
+      return response.data;
+    }
+    return null;    
+  } catch (error) {
+    apiErrorHandler(error);
+  }
+}
+
+export const deleteReview = async ( reviewId: string) => {
+  try {
+    const response = await userAxiosInstance.delete(`review/${reviewId}`);
     if (response) {
       return response.data;
     }

@@ -14,9 +14,22 @@ export interface ICreateReview {
     appointmentId: string;
 }
 
+export interface IUpdateReview {
+    _id: string;
+    for: string;
+    from?: string;
+    rating?: number;
+    message?: string;
+    appointmentId?: string;
+}
+
+
+
+
 export interface IReviewDisplay {
     _id: string;
     for: {
+        _id: string;
         name: string;
         specialisation: string;
         };
