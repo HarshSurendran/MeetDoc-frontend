@@ -18,6 +18,7 @@ import UserChatInterface from '@/Pages/user/UserChatInterface';
 import UserVideoCallPage from '@/Pages/user/UserVideoCallPage';
 import PrescriptionPage from '@/components/users/PrescriptionSection';
 import UserReviewsPage from '@/Pages/user/YourReviewsPage';
+import UserVideoCallTest from '@/Pages/user/UserVideoCallTest';
 
 const UserRouter = () => {
   return (
@@ -37,7 +38,7 @@ const UserRouter = () => {
         <Route path='reviews' element={<UserReviewsPage />}/>
         
       </Route>
-      <Route path='/video-call/:id' element={<PrivateRoute component={UserVideoCallPage} />} />
+      <Route path='/video-call/:id' element={<PrivateRoute component={UserVideoCallTest} />} />
       <Route path='chat' element={<PrivateRoute component={UserChatInterface} />} />
       <Route path='*' element={<UserErrorPage/>} />
     </Routes>

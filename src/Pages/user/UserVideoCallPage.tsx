@@ -26,13 +26,11 @@ const UserVideoCallPage: React.FC = () => {
   const [isMuted, setIsMuted] = useState<boolean>(false);
   const [isVideoOff, setIsVideoOff] = useState<boolean>(false);
   const [doctorId, setDoctorId] = useState<string | null>(null);
-
   const localVideoRef = useRef<HTMLVideoElement>(null);
   const remoteVideoRef = useRef<HTMLVideoElement>(null);
   const localStreamRef = useRef<MediaStream | null>(null);
   const { id: videoId } = useParams<{ id: string }>();
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
-  const navigate = useNavigate();
   const [remoteSocketId, setRemoteSocketId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -41,7 +39,7 @@ const UserVideoCallPage: React.FC = () => {
       dispatch(joinRoom(videoId));
       dispatch(
         onJoinRoom((payload) =>
-          console.log('Recieved reply for join-room ',)
+          console.log('-Recieved reply for join-room-',)
         )
       );
       dispatch(
@@ -55,37 +53,12 @@ const UserVideoCallPage: React.FC = () => {
         console.log('Call ended ');
         endCall();
       }));
-      // dispatch(
-      //   onPatientJoined(async (payload) => {
-      //     console.log('Patient joined ', payload.userSocketId);
-      //     const offer = await peerService.getOffer();
-      //     console.log('Offer created ', offer);
-      //     if (offer) {
-      //       console.log('This is the remote socket id', payload.userSocketId);
-      //       dispatch(sendSDP(payload.userSocketId as string, offer));
-      //       dispatch(onAnswer((payload) => handleOnAnswer(payload)));
-      //     }
-      //     setRemoteSocketId(payload.userSocketId);
-      //     startCall();
-      //   })
-      // );
+      
     }
-
-    return () => {
-      if (localStreamRef.current) {
-        localStreamRef.current.getTracks().forEach((track) => track.stop());
-      }
-      dispatch(disconnectwebrtcSocket({target: remoteSocketId as string}));
+    return () => { 
+      dispatch(disconnectwebrtcSocket({ target: remoteSocketId as string }));
     };
   }, [dispatch, videoId]);
-
-  useEffect(() => {
-    peerService.peer.addEventListener('track', handleRemoteVideoStream);
-
-    return () => {
-      peerService.peer.removeEventListener('track', handleRemoteVideoStream);
-    };
-  }, [] );
 
   const handleRemoteVideoStream = (event: RTCTrackEvent) => {
     console.log('Remote track added from useEffect ecent handler');
@@ -99,19 +72,24 @@ const UserVideoCallPage: React.FC = () => {
     offer: RTCSessionDescriptionInit
   ) => {
     try {
+      console.log('Recieved offer and target', target);
       const stream = await navigator.mediaDevices.getUserMedia({
         video: true,
         audio: true,
       });
       localStreamRef.current = stream;
+      console.log("lovalVideoRef", localVideoRef.current,stream )
 
       if (localVideoRef.current) {
+        console.log('localVideoRef.current', localVideoRef.current, stream);
         localVideoRef.current.srcObject = stream;
       }
 
       stream.getTracks().forEach((track) => {
         peerService.peer.addTrack(track, stream);
       });
+
+      peerService.peer.ontrack = handleRemoteVideoStream;
 
       setIsConnecting(false);
 
@@ -201,7 +179,7 @@ const UserVideoCallPage: React.FC = () => {
     <div className="relative h-screen bg-black flex flex-col">
       <div className="flex-grow relative">
         <video
-          ref={remoteVideoRef}
+          ref={localVideoRef}
           autoPlay
           playsInline
           className="absolute inset-0 w-full h-full object-cover"

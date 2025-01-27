@@ -147,8 +147,7 @@ import { v4 as uuid } from 'uuid';
 
 
 
-const DoctorChatInterface = () => { 
-  
+const DoctorChatInterface = () => {  
   // const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
   const [messageInput, setMessageInput] = useState('');
   // const [messages, setMessages] = useState<Message[]>([]);
@@ -262,8 +261,6 @@ const DoctorChatInterface = () => {
   const filteredPeoples = peoples.filter(patient =>
     patient.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
-
-
 
   const formatTime = (date: Date) => {
     return new Date(date).toLocaleTimeString('en-US', { 

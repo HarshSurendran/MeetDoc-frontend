@@ -539,10 +539,10 @@ const VideoCallPage: React.FC = () => {
       dispatch(
         onPatientJoined(async (payload) => {
           console.log('Patient joined ', payload.userSocketId);
+          //Here the process for webrtc starts. The offer is created here
           const offer = await peerService.getOffer();
           console.log('Offer created ', offer);
           if (offer) {
-            console.log('This is the remote socket id', payload.userSocketId);
             dispatch(sendSDP(payload.userSocketId as string, offer));
             dispatch(onAnswer((payload) => handleOnAnswer(payload)));
           }
@@ -597,7 +597,6 @@ const VideoCallPage: React.FC = () => {
         video: true,
         audio: true,
       });
-      console.log('Stream:', stream);
       localStreamRef.current = stream;
 
       if (localVideoRef.current) {
@@ -607,6 +606,12 @@ const VideoCallPage: React.FC = () => {
       stream.getTracks().forEach((track) => {
         peerService.peer.addTrack(track, stream);
       });
+
+      peerService.peer.ontrack = (event) => {
+        if (remoteVideoRef.current) {
+          remoteVideoRef.current.srcObject = event.streams[0];
+        }
+      }
 
       dispatch(onEndCall(() => {
         console.log('Call ended ');
@@ -630,7 +635,6 @@ const VideoCallPage: React.FC = () => {
       const offer = await peerService.getOffer();
       console.log('Negotiation Offer created ', offer);
       if (offer) {
-        console.log('This is the remote socket id', remoteSocketId);
         dispatch(negotiationNeeded(remoteSocketId as string, offer));
         dispatch(
           onNegotiationAnswer(async ({ target, answer }) => {
@@ -655,9 +659,6 @@ const VideoCallPage: React.FC = () => {
       await peerService.setRemoteDescriptionFn(payload.answer);
       console.log('Call accepted.', payload.answer);
       setIsConnecting(false);
-      // for(const track of localStreamRef.current!.getTracks()) {
-      //   peerService.peer?.addTrack(track, localStreamRef.current!);
-      // }
     } catch (error) {
       console.error('Error handling Answer:', error);
     }
