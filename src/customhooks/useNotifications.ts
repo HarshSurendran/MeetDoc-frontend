@@ -38,14 +38,26 @@ const useNotifications = (userId: string) => {
       const response = await getNotification(userId);
       console.log(response)
       if (response?.status) {
-        setNotifications((prev) => [...prev, ...response.data]);
+        response.data.map((item: INotification) => {
+          if (!item.isRead) {
+            setNotifications((prev) => [...prev, item]);
+          }
+        });        
       }
     } catch (error) {
       errorHandler(error);
     }
   };
 
-  return notifications;
+  const removeNotification = (notificationId: string ) => {
+    setNotifications((prev) => prev.filter((item) => item._id !== notificationId));
+  };
+
+  const removeAllNotifications = () => {
+    setNotifications([]);
+  }
+
+  return { notifications, removeNotification, removeAllNotifications };
 };
 
 export default useNotifications;
