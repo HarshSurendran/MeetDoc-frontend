@@ -9,3 +9,4 @@ export * from './IDoctorProps';
 export * from './IPrescription';
 export * from './userTypes';
 export * from './IReviewProps';
+export * from './INotification';

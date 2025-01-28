@@ -293,3 +293,15 @@ export const deleteReview = async ( reviewId: string) => {
     apiErrorHandler(error);
   }
 }
+
+export const getNotification = async (id: string) => {
+  try {
+    const response = await userAxiosInstance.get(`notifications/${id}`);
+    if (response) {
+      return response.data;
+    }
+    return null;
+  } catch (error) {
+    apiErrorHandler(error);
+  }
+}
