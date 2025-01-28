@@ -32,12 +32,16 @@ import { resetUser } from '@/redux/slices/userSlice';
 import toast from 'react-hot-toast';
 import errorHandler from '@/utils/errorHandler';
 import { RootState } from '@/redux/store/appStore';
+import useNotifications from '@/customhooks/useNotifications';
+import { INotification } from '@/types';
+import { markAllAsRead, markAsRead } from '@/services/user/user';
 
 const UserDashboardLayout = () => {
-    const [currentPath, setCurrentPath] = useState('/dashboard');
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const user = useSelector((state: RootState) => state.user.user);
+  const [currentPath, setCurrentPath] = useState('/dashboard');
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const user = useSelector((state: RootState) => state.user.user);
+  const { notifications, removeNotification, removeAllNotifications } = useNotifications(user._id);
 
   const navigation = [
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
@@ -63,6 +67,24 @@ const handleLogout = async () => {
       errorHandler(error);
     }
   };
+
+  const handleNotificationClick = async (notification: INotification) => {
+    const response = await markAsRead(notification._id);
+    removeNotification(notification._id);
+    if (notification.type === 'appointment') {
+      navigate('/appointments');
+    }
+
+  }
+
+  const handleRemoveAllNotifications = async () => {
+    try {
+      removeAllNotifications();
+      const response = await markAllAsRead(user._id);
+    } catch (error) {
+      errorHandler(error);
+    }
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -100,27 +122,29 @@ const handleLogout = async () => {
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="icon" className="relative">
                   <BellRing className="h-7 w-7" />
-                  <span className="absolute top-0 right-0 h-2 w-2 bg-red-500 rounded-full" />
+                  {notifications.length > 0 && <span className="absolute top-0 right-0 h-2 w-2 bg-red-500 rounded-full" />}
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-80">
                 <div className="flex items-center justify-between px-4 py-2 border-b">
                   <span className="font-semibold">Notifications</span>
-                  <Button variant="ghost" size="sm">Mark all as read</Button>
+                  {notifications.length > 0 && <Button onClick={handleRemoveAllNotifications} variant="ghost" size="sm">Mark all as read</Button>}
                 </div>
-                {/* Sample notifications */}
-                <DropdownMenuItem>
+              {notifications.length > 0 ? notifications.map((notification) => (
+                <DropdownMenuItem key={notification._id} onClick={() => handleNotificationClick(notification)}>
                   <div className="flex flex-col gap-1">
-                    <p className="font-medium">Appointment Reminder</p>
-                    <p className="text-sm text-gray-500">Dr. Smith tomorrow at 10 AM</p>
+                    <p className="font-medium">{notification.title}</p>
+                    <p className="text-sm text-gray-500">{notification.message}</p>
                   </div>
                 </DropdownMenuItem>
+              )) : (
                 <DropdownMenuItem>
                   <div className="flex flex-col gap-1">
-                    <p className="font-medium">New Report Available</p>
-                    <p className="text-sm text-gray-500">Your lab results are ready</p>
+                    <p className="text-gray-500 font-text-sm">No notifications</p>
                   </div>
                 </DropdownMenuItem>
+              )}
+               
               </DropdownMenuContent>
             </DropdownMenu>
 

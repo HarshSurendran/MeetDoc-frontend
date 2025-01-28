@@ -1,9 +1,8 @@
 import apiErrorHandler from '@/utils/apiErrorHandler';
 import { userAxiosInstance } from '../instance/userInstance';
-import { User } from '@/types/userTypes';
 import { IUser } from '@/types/IUser';
 import { ISlot } from '@/types/ISlots';
-import { ICreateReview, IReviewDisplay, IUpdateReview } from '@/types';
+import { ICreateReview,  IUpdateReview } from '@/types';
 
 export const getUserData = async (id: string) => {
   try {
@@ -289,6 +288,41 @@ export const deleteReview = async ( reviewId: string) => {
       return response.data;
     }
     return null;
+  } catch (error) {
+    apiErrorHandler(error);
+  }
+}
+
+export const getNotification = async (id: string) => {
+  try {
+    const response = await userAxiosInstance.get(`notifications/${id}`);
+    if (response) {
+      return response.data;
+    }
+    return null;
+  } catch (error) {
+    apiErrorHandler(error);
+  }
+}
+
+export const markAsRead = async (notificationId: string) => {
+  try {
+    const response = await userAxiosInstance.patch(`notifications/${notificationId}`, { isRead: true });
+    if (response) {
+      return response.data;
+    }
+    return null;
+  } catch (error) {
+    apiErrorHandler(error);
+  }
+}
+
+export const markAllAsRead = async (userId: string) => {
+  try {
+    const response = await userAxiosInstance.patch(`notifications/all/${userId}`, { isRead: true });
+    if (response) {
+      return response.data;
+    }
   } catch (error) {
     apiErrorHandler(error);
   }
