@@ -15,6 +15,7 @@ export type BookingStatus = 'Scheduled' | 'InProgress' | 'Completed' | 'Cancelle
 export interface IBookedAppointmentType {
   _id: string;
   patientName: string;
+  patientId: string;
   doctorName: string;
   bookingTime: string;
   date: string;

@@ -14,13 +14,12 @@ import {
   DialogTitle 
 } from '@/components/ui/dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Video, Calendar, Clock, User, Text } from 'lucide-react';
+import { Video, Calendar, Clock, User, Text, ClipboardPlus } from 'lucide-react';
 import { BookingStatus, IAppointmentListProps, IBookedAppointmentType } from '@/types';
 import { getAppointment, getAppointments, sendMessageApi } from '@/services/doctor/doctor';
 import { getUserAppointments } from '@/services/user/user';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { connectwebrtcSocket, disconnectwebrtcSocket, joinRoom } from '@/redux/actions/webrtcAction';
 import { AppDispatch, RootState } from '@/redux/store/appStore';
 import toast from 'react-hot-toast';
 import { setAppointmentId } from '@/redux/slices/doctorSlice';
@@ -113,6 +112,17 @@ const AppointmentManagement: React.FC<IAppointmentListProps> = ({
     }
     
   }, [navigate, userType]);
+
+  const handleSeeMedicalHistory = useCallback(async (appointmentData: IBookedAppointmentType) => {
+    // if (userType === 'patient') {
+    //   toast.error('Doctor will contact you soon.');
+    //   return
+    // }
+    navigate(`/doctor/medical-history/${appointmentData.patientId}`);
+      
+    
+   
+  }, [navigate]);
 
   return (
     <div className="container mx-auto p-4">
@@ -212,7 +222,13 @@ const AppointmentManagement: React.FC<IAppointmentListProps> = ({
               </div>
               
               {isAppointmentStartingSoon(selectedAppointment) && (
-                <div className="flex justify-end mt-4">
+                <div className="flex justify-around mt-4">
+                  {userType === 'doctor' && <Button
+                    onClick={() => handleSeeMedicalHistory(selectedAppointment)}
+                  >
+                    <ClipboardPlus className="h-4 w-4 mr-2" />
+                    See Medical History
+                  </Button>}
                   <Button 
                     onClick={() => handleJoinCall(selectedAppointment)}
                     className="bg-blue-600 hover:bg-blue-700"

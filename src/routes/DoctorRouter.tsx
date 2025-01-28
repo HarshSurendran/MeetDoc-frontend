@@ -16,6 +16,7 @@ import ChatInterface from '@/Pages/doctor/ChatInterface';
 import VideoCallPage from '@/Pages/doctor/VideoCallPage';
 import DoctorErrorPage from '@/Pages/doctor/DoctorErrorPage';
 import VideoCallTest from '@/Pages/doctor/VideoCallTest';
+import MedicalHistory from '@/Pages/doctor/PatientHistoryPage';
 
 
 
@@ -34,10 +35,10 @@ const DoctorRouter = () => {
         />
         <Route path='bookedappointments' element={<AppointmentManagement userType='doctor' />} />
         <Route path='prescription/:id' element={<PrescriptionForm />} />
+        <Route path='/medical-history/:id' element={<PrivateRoute component={MedicalHistory} />} />
       </Route>
-      <Route path="/videocall/:id" element={<PrivateRoute component={VideoCallTest} />} />
-      
-      <Route path='/chat' element={<ChatInterface />}/>
+      <Route path="/videocall/:id" element={<PrivateRoute component={VideoCallTest} />} />      
+      <Route path='/chat' element={<ChatInterface />} />
 
       <Route
         path="/registration"

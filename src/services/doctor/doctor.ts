@@ -198,3 +198,14 @@ export const getGraphData = async () => {
     apiErrorHandler(error);
   }
 }
+
+export const getMedicalHistory = async(userId: string) => {
+  try {
+    const response = await doctorAxiosInstance.get(`doctors/medicalhistory/${userId}`);
+    if (response) {
+      return response.data;
+    }
+  } catch (error) {
+    apiErrorHandler(error);
+  }
+}

@@ -52,6 +52,7 @@ export interface IFullPrescription {
     followUpDate: Date,
     additionalNotes: string,
     createdAt: Date,
-    updatedAt: Date,
+  updatedAt: Date,
+  prescriptionPdfUrl?: string,
     __v: number
 }
