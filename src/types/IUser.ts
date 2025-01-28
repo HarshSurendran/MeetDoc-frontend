@@ -124,3 +124,20 @@ export interface ISlot {
 export interface ISlotsViewProps {
   doctor: { id: string, name: string, specialisation: string, fee: number};
 }
+
+
+export interface ICreatePatient {
+  name: string;
+  gender: string;
+  dateOfBirth: Date;
+  relation: string;
+}
+
+export interface IPatient {
+  _id: string;
+  name: string;
+  gender: string;
+  dateOfBirth: Date;
+  relation: string;
+}
+

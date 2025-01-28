@@ -51,7 +51,8 @@ const UserDashboardLayout = () => {
     { name: 'Feedback', href: '/feedback', icon: MessageSquare },
     { name: 'Chat', href: '/chat', icon: MessageCircleMore },
     { name: 'Prescriptions', href: '/prescription', icon: ClipboardPlus },
-    { name: 'Your Reviews' , href: '/reviews', icon: BellRing },
+    { name: 'Your Reviews', href: '/reviews', icon: BellRing },
+    {name: "Add Members", href: '/usermanagement', icon: Menu},
     { name: 'Profile', href: '/profile', icon: User },
   ];
     

@@ -1,6 +1,6 @@
 import apiErrorHandler from '@/utils/apiErrorHandler';
 import { userAxiosInstance } from '../instance/userInstance';
-import { IUser } from '@/types/IUser';
+import { ICreatePatient, IUser } from '@/types/IUser';
 import { ISlot } from '@/types/ISlots';
 import { ICreateReview,  IUpdateReview } from '@/types';
 
@@ -320,6 +320,39 @@ export const markAsRead = async (notificationId: string) => {
 export const markAllAsRead = async (userId: string) => {
   try {
     const response = await userAxiosInstance.patch(`notifications/all/${userId}`, { isRead: true });
+    if (response) {
+      return response.data;
+    }
+  } catch (error) {
+    apiErrorHandler(error);
+  }
+}
+
+export const getAllPatients = async () => {
+  try {
+    const response = await userAxiosInstance.get(`users/patients`);
+    if (response) {
+      return response.data;
+    }
+  } catch (error) {
+    apiErrorHandler(error);
+  }
+}
+
+export const addPatient = async (data: ICreatePatient) => {
+  try {
+    const response = await userAxiosInstance.post(`users/patients`, data);
+    if (response) {
+      return response.data;
+    }
+  } catch (error) {
+    apiErrorHandler(error);
+  }
+}
+
+export const deletePatient = async (id: string) => {
+  try {
+    const response = await userAxiosInstance.delete(`users/patients/${id}`);
     if (response) {
       return response.data;
     }
