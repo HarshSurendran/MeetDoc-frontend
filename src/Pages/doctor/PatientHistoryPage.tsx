@@ -20,14 +20,6 @@ import { useParams } from 'react-router-dom';
 import { getMedicalHistory } from '@/services/doctor/doctor';
 import { IFullPrescription } from '@/types';
 
-interface Medication {
-  name: string;
-  dosage: string;
-  frequency: string;
-}
-
-
-
 
 const MedicalHistory: React.FC = () => {
     const [prescriptions, setPrescriptions] = React.useState<IFullPrescription[]>();
