@@ -45,7 +45,9 @@ const AdminDashboard: React.FC = () => {
 
   useEffect(() => {
     if (!graphData) return;
+    console.log(graphDataDto, "This is the graph data dto"); 
     setGraphData(transformData(graphDataDto as IComparisonDataDto, selectedYear));
+    console.log(graphData,"This is the graph data");
   }, [selectedYear]);
 
   const getRequests = async () => {
@@ -92,9 +94,9 @@ const AdminDashboard: React.FC = () => {
     return formattedRevenueData;
   };
 
-  const getTotalRevenuePerYear = (revenueData:IRevenueData[], selectedYear: number) => {
+  const getTotalRevenuePerYear = (revenueData: IRevenueData[], selectedYear: number) => {
     return revenueData.find(item => item.year === selectedYear)?.totalRevenue || 0;
-  }
+  };
 
   const getTotalData = async () => {
     try {
@@ -107,12 +109,7 @@ const AdminDashboard: React.FC = () => {
     } catch (error) {
       errorHandler(error);
     }
-  }
-
-
-
-  
-
+  };
 
   const getRevenueGraphData = async () => {
     try {
@@ -126,7 +123,7 @@ const AdminDashboard: React.FC = () => {
     } catch (error) {
       errorHandler(error);
     }
-  }
+  };
 
   // const getGraphData = async (year: number) => {
   //   try {
@@ -160,7 +157,7 @@ const AdminDashboard: React.FC = () => {
   function handleYearChange(event: React.ChangeEvent<HTMLSelectElement>) {
     const year = parseInt(event.target.value);
     setSelectedYear(year);
-  }
+  };
 
   // function transformData(rawData: IComparisonDataDto, targetYear: number): IComparisonData[] {
   //   console.log("rawData", rawData);
@@ -215,7 +212,7 @@ const AdminDashboard: React.FC = () => {
     return monthNames
       .map((month) => dataMap.get(month) || { name: month, users: 0, doctors: 0, appointments: 0 })
       .filter((item) => item.users || item.doctors || item.appointments);
-  }
+  };
 
   return (
     <>

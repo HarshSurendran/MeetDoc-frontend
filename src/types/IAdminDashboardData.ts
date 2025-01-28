@@ -30,13 +30,11 @@ export interface IComparisonDataDto {
 }
 
 export interface ISingleData {
-   
         _id: {
             year: number,
             month: number
         },
         count: number
- 
 }
 
 

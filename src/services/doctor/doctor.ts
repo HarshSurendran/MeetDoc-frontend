@@ -187,3 +187,14 @@ export const getDashboardData = async () => {
     apiErrorHandler(error);
   }
 }
+
+export const getGraphData = async () => {
+  try {
+    const response = await doctorAxiosInstance.get(`doctors/graph`);
+    if (response) {
+      return response.data;
+    }
+  } catch (error) {
+    apiErrorHandler(error);
+  }
+}

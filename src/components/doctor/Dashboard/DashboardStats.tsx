@@ -4,6 +4,7 @@ import { IStatsCardProps } from '@/types';
 import { getDashboardData } from '@/services/doctor/doctor';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store/appStore';
+import DashboardComparativeAnalysis from './DashboardComparativeAnalysis';
 
 export interface IDashboardStats {
   title: string,
@@ -57,6 +58,7 @@ const DashboardStats: React.FC = () => {
   }
 
   return (
+    <>
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">      
       <StatsCard
         title="Total Income"
@@ -75,7 +77,12 @@ const DashboardStats: React.FC = () => {
         value={doctorRating || 0}
         icon={<Star className="h-6 w-6" />}
       />
-    </div>
+      </div>
+      <div className="mt-8">
+        <DashboardComparativeAnalysis />
+      </div>
+    </>
+
   );
 };
 
