@@ -27,8 +27,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-import { Link } from 'react-router-dom';
+} from "@/components/ui/alert-dialog";
 import { NavLink } from 'react-router-dom';
 
 

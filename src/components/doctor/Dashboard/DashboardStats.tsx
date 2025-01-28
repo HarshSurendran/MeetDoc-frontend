@@ -1,7 +1,19 @@
-import React from 'react';
-import { DollarSign, Users, Star } from 'lucide-react';
+import React, { useEffect } from 'react';
+import { Users, Star, IndianRupee } from 'lucide-react';
 import { IStatsCardProps } from '@/types';
+import { getDashboardData } from '@/services/doctor/doctor';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/redux/store/appStore';
 
+export interface IDashboardStats {
+  title: string,
+  value: number,
+  icon: React.ReactNode,
+  trend?: {
+    isPositive: boolean,
+    value: number
+  }
+}
 
 
 const StatsCard: React.FC<IStatsCardProps> = ({ title, value, icon, trend }) => (
@@ -27,23 +39,40 @@ const StatsCard: React.FC<IStatsCardProps> = ({ title, value, icon, trend }) => 
 );
 
 const DashboardStats: React.FC = () => {
+  const [appointmentCount, setAppointmentCount] = React.useState(0);
+  const [totalIncome, setTotalIncome] = React.useState(0);
+  const doctorRating = useSelector((state: RootState) => state.doctor.doctor.rating);
+  
+  useEffect(() => {
+    getAllData()
+  }, []);
+
+  const getAllData = async () => {
+    const response = await getDashboardData();
+    if (response.status) {
+      console.log(response.data);
+      setAppointmentCount(response.data.appointmentCount);
+      setTotalIncome(response.data.revenue);
+    }
+  }
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">      
       <StatsCard
         title="Total Income"
-        value="₹23,900"
-        icon={<DollarSign className="h-6 w-6" />}
+        value={`₹${totalIncome}`}
+        icon={<IndianRupee className="h-6 w-6" />}
         trend={{ value: 12, isPositive: true }}
       />
       <StatsCard
         title="Appointments"
-        value="12"
+        value={appointmentCount}
         icon={<Users className="h-6 w-6" />}
         trend={{ value: 8, isPositive: true }}
       />
       <StatsCard
         title="Rating"
-        value="4.5"
+        value={doctorRating || 0}
         icon={<Star className="h-6 w-6" />}
       />
     </div>

@@ -3,6 +3,7 @@ import { doctorAxiosInstance } from '../instance/doctorInstance';
 import { IDoctorProfile } from '@/types/IDoctor';
 import { ISlotGeneratorForm } from '@/types/ISlots';
 import { ICreatePrescriptionDto } from '@/types';
+
 export const sendFile = async (file: File) => {
   try {
     const formData = new FormData();
@@ -169,6 +170,17 @@ export const toggleIsRead = async (senderId: string, receiverId: string) => {
   try {
     const response = await doctorAxiosInstance.post(`chat/toggleisread`, { senderId, receiverId });
     if(response) {
+      return response.data;
+    }
+  } catch (error) {
+    apiErrorHandler(error);
+  }
+}
+
+export const getDashboardData = async () => {
+  try {
+    const response = await doctorAxiosInstance.get(`doctors/dashboard`);
+    if (response) {
       return response.data;
     }
   } catch (error) {
