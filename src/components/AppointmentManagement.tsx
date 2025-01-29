@@ -150,7 +150,7 @@ const AppointmentManagement: React.FC<IAppointmentListProps> = ({
                         <div className="flex items-center gap-2">
                           <User className="h-5 w-5 text-blue-600" />
                           <span className="font-semibold">
-                            {userType === 'doctor' ? `${appointment.patientName} for ${appointment.appointmentForName || "Self" }`  : appointment.doctorName}
+                            {userType === 'doctor' ? `${appointment.patientName} for ${appointment.appointmentForName || "Self" }`  : `Dr. ${appointment.doctorName} booked for ${appointment.appointmentForName || "Self" } `}
                           </span>
                         </div>
                         <div className="flex items-center gap-2 mt-2">
