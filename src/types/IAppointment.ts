@@ -24,4 +24,6 @@ export interface IBookedAppointmentType {
   bookingStatus: BookingStatus;
   reason: string;
   meetingLink?: string;
+  appointmentFor: string;
+  appointmentForName: string;
 }

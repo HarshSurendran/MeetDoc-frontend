@@ -38,6 +38,7 @@ const SlotsView: React.FC<ISlotsViewProps> = ({doctor}) => {
     const [selectedSlot, setSelectedSlot] = useState<ISlot | null>(null);
     const [reason, setReason] = useState<string>('');
     const [appointmentFor, setAppointmentFor] = useState<string>('Self');
+    const [appointmentForName, setAppointmentForName] = useState<string>('');
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -97,7 +98,7 @@ const SlotsView: React.FC<ISlotsViewProps> = ({doctor}) => {
         return;
     };
 
-    const handleConfirmBooking = async () => {        
+    const handleConfirmBooking = async () => {  
         const paymentDetails = {
             slotId: selectedSlot?._id,
             userId,
@@ -109,7 +110,8 @@ const SlotsView: React.FC<ISlotsViewProps> = ({doctor}) => {
                 name: doctor.name,
                 specialisation: doctor.specialisation,
             },
-            appointmentFor: appointmentFor, 
+            appointmentFor: appointmentFor,
+            appointmentForName: appointmentForName,
             reason: reason
         }
         dispatch(addPayment(paymentDetails));        
@@ -254,6 +256,7 @@ const SlotsView: React.FC<ISlotsViewProps> = ({doctor}) => {
                 reason={reason}
                 setReason={setReason}
                 setAppointmentFor={setAppointmentFor}
+                setAppointmentForName = {setAppointmentForName}
                 appointmentFor={appointmentFor}
                 doctorDetails={{
                     name: doctor.name,

@@ -7,6 +7,7 @@ const paymentSlice = createSlice({
             slotId: "",
             userId: "",
             appointmentFor: "",
+            appointmentForName: "",
             doctorId: "",
             fee: 0,
             startTime: "",
@@ -29,6 +30,7 @@ const paymentSlice = createSlice({
             state.payment.doctorId = '';
             state.payment.fee = 0;
             state.payment.appointmentFor = "";
+            state.payment.appointmentForName = "";
             state.payment.startTime = "",
             state.payment.endTime = "",
             state.payment.doctor = {

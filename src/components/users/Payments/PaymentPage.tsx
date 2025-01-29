@@ -32,6 +32,7 @@ export interface PaymentPageProps {
 const PaymentPage: React.FC = () => {
     const [clientSecret, setClientSecret] = useState("");
     const paymentDetails = useSelector((state: RootState) => state.payment.payment);
+    console.log(paymentDetails)
     const navigate = useNavigate();
     const dispatch = useDispatch();
     
@@ -59,7 +60,7 @@ const PaymentPage: React.FC = () => {
 
     const getClientSecret = async () => {
         try {
-            const response = await createPaymentIntent(paymentDetails.slotId, paymentDetails.userId, paymentDetails.doctorId, paymentDetails.fee, paymentDetails.reason, paymentDetails.appointmentFor,  new Date());
+            const response = await createPaymentIntent(paymentDetails.slotId, paymentDetails.userId, paymentDetails.doctorId, paymentDetails.fee, paymentDetails.reason, paymentDetails.appointmentFor, paymentDetails.appointmentForName, new Date());
             console.log("Recieved Clietn secret", response);
             if (response.data) {
                 setClientSecret(response.data.clientSecret);

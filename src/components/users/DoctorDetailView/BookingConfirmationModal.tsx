@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { format, set } from 'date-fns';
+import { format} from 'date-fns';
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -11,8 +11,6 @@ import {
 } from "@/components/ui/dialog";
 import { CalendarClock, CreditCard, User, Stethoscope, AlertCircle } from "lucide-react";
 import { IBookingModalProps, IPatient } from '@/types';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/redux/store/appStore';
 import { getAllPatients } from '@/services/user/user';
 import errorHandler from '@/utils/errorHandler';
 
@@ -22,6 +20,7 @@ const BookingConfirmationModal: React.FC<IBookingModalProps> = ({
   setReason,
   onConfirm,
   setAppointmentFor,
+  setAppointmentForName,
   appointmentFor,
   reason,
   doctorDetails,
@@ -33,6 +32,7 @@ const BookingConfirmationModal: React.FC<IBookingModalProps> = ({
   useEffect(() => {
     fetchPatients();
   }, []);
+
   
   const fetchPatients = async () => {
     try {
@@ -44,6 +44,16 @@ const BookingConfirmationModal: React.FC<IBookingModalProps> = ({
       } catch (error) {
           errorHandler(error);
       }
+  }
+
+  const handleSelectedRealtive = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setAppointmentFor(e.target.value);
+    const selectedRelative = relatives.filter((relative) => relative._id === e.target.value);
+
+    if (selectedRelative.length > 0) {
+      setAppointmentForName(selectedRelative[0].name);
+    }
+    
   }
 
   const handleConfirm = () => {
@@ -112,7 +122,7 @@ const BookingConfirmationModal: React.FC<IBookingModalProps> = ({
             <select
               className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
               value={appointmentFor}
-              onChange={(e) => setAppointmentFor(e.target.value)}
+              onChange={(e) => handleSelectedRealtive(e)}
             >
               <option value="self">Self</option>
               {relatives.map((relative) => (

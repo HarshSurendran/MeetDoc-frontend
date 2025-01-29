@@ -97,6 +97,7 @@ export const getSlots = async (doctorId: string) => {
 export const getAppointments = async () => {
   try {
     const response = await doctorAxiosInstance.get(`doctors/appointments`);
+    
     if (response) {
       return response.data;
     }

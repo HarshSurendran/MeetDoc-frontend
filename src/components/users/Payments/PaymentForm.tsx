@@ -28,7 +28,8 @@ const PaymentForm: React.FC<{
         endTime: paymentDetails.endTime,
         fee: paymentDetails.fee,
        reason: paymentDetails.reason,
-        appointmentFor: paymentDetails.appointmentFor
+       appointmentFor: paymentDetails.appointmentFor,
+        appointmentForName: paymentDetails.appointmentForName
       };
   
     const handleSubmit = async (e: React.FormEvent) => {

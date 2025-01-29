@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { 
   Card, 
   CardContent, 
@@ -150,7 +150,7 @@ const AppointmentManagement: React.FC<IAppointmentListProps> = ({
                         <div className="flex items-center gap-2">
                           <User className="h-5 w-5 text-blue-600" />
                           <span className="font-semibold">
-                            {userType === 'doctor' ? appointment.patientName : appointment.doctorName}
+                            {userType === 'doctor' ? `${appointment.patientName} for ${appointment.appointmentForName || "Self" }`  : appointment.doctorName}
                           </span>
                         </div>
                         <div className="flex items-center gap-2 mt-2">
@@ -215,9 +215,13 @@ const AppointmentManagement: React.FC<IAppointmentListProps> = ({
                   <label className="text-sm text-gray-500">Duration/ Booked on</label>
                   <p className="font-semibold">{selectedAppointment.duration} minutes/ {selectedAppointment.bookingTime}</p>
                 </div>
-                <div className="md:col-span-2">
-                  <label className="text-sm text-gray-500">Reason for Visit</label>
+                <div>
+                  <label className="text-sm text-gray-500">Reason for appointment</label>
                   <p className="font-semibold">{selectedAppointment.reason}</p>
+                </div>
+                <div>
+                  <label className="text-sm text-gray-500">Appointment for</label>
+                  <p className="font-semibold">{selectedAppointment.appointmentForName || "Self"}</p>
                 </div>
               </div>
               

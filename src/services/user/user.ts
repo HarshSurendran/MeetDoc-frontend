@@ -111,6 +111,7 @@ export const createPaymentIntent = async (
   fee: number,
   reason: string,
   appointmentFor: string,
+  appointmentForName: string,
   date: Date
 ) => {
   try {
@@ -121,6 +122,7 @@ export const createPaymentIntent = async (
       fee,
       reason,
       appointmentFor,
+      appointmentForName,
       date,
     });
     if (response) {

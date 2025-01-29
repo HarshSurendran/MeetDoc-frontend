@@ -98,6 +98,7 @@ export interface IBookingModalProps {
   onConfirm: () => void;
   setReason: (reason: string) => void;
   setAppointmentFor: (appointmentFor: string) => void;
+  setAppointmentForName: (appointmentForName: string) => void;
   appointmentFor: string;
   reason: string;
   doctorDetails: {
