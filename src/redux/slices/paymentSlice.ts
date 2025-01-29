@@ -24,6 +24,9 @@ const paymentSlice = createSlice({
         addPayment: (state, action) => {
             state.payment = action.payload;
         },
+        updateAmount: (state, action) => {
+            state.payment.fee = action.payload;
+        },
         resetPayment: (state) => {
             state.payment.slotId = '';
             state.payment.userId = '';
@@ -42,5 +45,5 @@ const paymentSlice = createSlice({
     },
 });
 
-export const { addPayment, resetPayment } = paymentSlice.actions;
+export const { addPayment, updateAmount, resetPayment } = paymentSlice.actions;
 export default paymentSlice.reducer;

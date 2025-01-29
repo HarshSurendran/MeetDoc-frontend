@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios';
 import { userAxiosInstance } from '../instance/userInstance';
-import { Ilogin, IloginResponse, IUserSignUp } from '../../types/';
+import { Ilogin, IloginResponse, IUserloginResponse, IUserSignUp } from '../../types/';
 import apiErrorHandler from '../../utils/apiErrorHandler';
 
 // export const login = async (credentials: ILoginCredential) => {
@@ -18,7 +18,7 @@ import apiErrorHandler from '../../utils/apiErrorHandler';
 
 export const login = async (
   userCredentials: Ilogin
-): Promise<AxiosResponse<Partial<IloginResponse>> | undefined> => {
+): Promise<AxiosResponse<Partial<IUserloginResponse>> | undefined> => {
   try {
     const response = await userAxiosInstance.post(
       '/auth/login',

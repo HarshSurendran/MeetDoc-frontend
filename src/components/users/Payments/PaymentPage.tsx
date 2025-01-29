@@ -9,24 +9,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/redux/store/appStore';
 import errorHandler from '@/utils/errorHandler';
 import { useNavigate } from 'react-router-dom';
-import { resetPayment } from '@/redux/slices/paymentSlice';
+import { resetPayment} from '@/redux/slices/paymentSlice';
 
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PKEY);
-
-
-// export interface PaymentPageProps {
-//   clientSecret: string;
-//   appointmentDetails: {
-//     doctorName: string;
-//     specialisation: string;
-//     appointmentDate: Date;
-//     startTime: Date;
-//     endTime: Date;
-//     fee: number;
-//   };
-//   onBack: () => void;
-// }
 
 
 const PaymentPage: React.FC = () => {

@@ -20,6 +20,8 @@ const userSlice = createSlice({
       },
       rating: 0,    
       photo: '',
+      isSubscribed: false,
+      subscriptionId: '',
     },
     isAuthenticated: false,
   },
@@ -35,6 +37,8 @@ const userSlice = createSlice({
       state.user.address = action.payload.address;
       state.user.rating = action.payload.rating;
       state.user.photo = action.payload.photo;
+      state.user.isSubscribed = action.payload.isSubscribed;
+      state.user.subscriptionId = action.payload.subscriptionId;
     },
     toggleAuthentication: (state, action) => {
       state.isAuthenticated = action.payload;
@@ -60,6 +64,8 @@ const userSlice = createSlice({
         },
         rating: 0,    
         photo: '',
+        isSubscribed: false,
+        subscriptionId: ''
       };
       state.isAuthenticated = false;
     },

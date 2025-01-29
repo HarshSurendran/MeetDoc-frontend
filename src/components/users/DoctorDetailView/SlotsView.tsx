@@ -19,7 +19,7 @@ import { CalendarIcon, Clock, AlertCircle } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/redux/store/appStore';
 import errorHandler from '@/utils/errorHandler';
-import { getSlotsForDoctor } from '@/services/user/user';
+import { getSlotsForDoctor, getSubscriptionDetails } from '@/services/user/user';
 import toast from 'react-hot-toast';
 import BookingConfirmationModal from './BookingConfirmationModal';
 import { useNavigate } from 'react-router-dom';
@@ -33,7 +33,7 @@ const SlotsView: React.FC<ISlotsViewProps> = ({doctor}) => {
         { _id: "", doctorId: "", StartTime: new Date("2025-01-14T09:00:00"), EndTime: new Date("2025-01-14T09:30:00"), status: "Available", pendingBookingExpiry: null },
       
     ]);
-    const userId = useSelector((state: RootState) => state.user.user._id);
+    const user = useSelector((state: RootState) => state.user.user);
     const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
     const [selectedSlot, setSelectedSlot] = useState<ISlot | null>(null);
     const [reason, setReason] = useState<string>('');
@@ -84,9 +84,7 @@ const SlotsView: React.FC<ISlotsViewProps> = ({doctor}) => {
         return <AlertCircle className="h-4 w-4" />;
         }
         return <Clock className="h-4 w-4" />;
-        };
-    
-
+    };
 
     const handleSlotClick = (slot: ISlot) => {
     if (slot.status === 'Available') {
@@ -98,12 +96,20 @@ const SlotsView: React.FC<ISlotsViewProps> = ({doctor}) => {
         return;
     };
 
-    const handleConfirmBooking = async () => {  
+    const handleConfirmBooking = async () => { 
+        let fees = doctor.fee;
+        if (user.isSubscribed) {
+            const response = await getSubscriptionDetails(user.subscriptionId);
+            if (response.status) {
+                const subscription = response.data.scheme;                
+                fees = doctor.fee * subscription.discount / 100;
+            }
+        }
         const paymentDetails = {
             slotId: selectedSlot?._id,
-            userId,
+            userId: user._id,
             doctorId: doctor.id,
-            fee: doctor.fee,
+            fee: fees,
             startTime: selectedSlot?.StartTime,
             endTime: selectedSlot?.EndTime,
             doctor: {
@@ -119,8 +125,6 @@ const SlotsView: React.FC<ISlotsViewProps> = ({doctor}) => {
         setIsPaymentModalOpen(false);
         return
     };
-
-    
 
     return (
         <div className="min-h- bg-gray-50 p-0 ">
