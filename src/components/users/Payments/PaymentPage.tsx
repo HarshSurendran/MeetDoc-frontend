@@ -59,7 +59,7 @@ const PaymentPage: React.FC = () => {
 
     const getClientSecret = async () => {
         try {
-            const response = await createPaymentIntent(paymentDetails.slotId, paymentDetails.userId, paymentDetails.doctorId, paymentDetails.fee, paymentDetails.reason, new Date());
+            const response = await createPaymentIntent(paymentDetails.slotId, paymentDetails.userId, paymentDetails.doctorId, paymentDetails.fee, paymentDetails.reason, paymentDetails.appointmentFor,  new Date());
             console.log("Recieved Clietn secret", response);
             if (response.data) {
                 setClientSecret(response.data.clientSecret);

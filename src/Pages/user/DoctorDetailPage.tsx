@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Star, MapPin, Globe, GraduationCap, Languages } from 'lucide-react';
 import { fetchSingleDoctor, getProfilePhoto } from '@/services/user/user';

@@ -97,6 +97,8 @@ export interface IBookingModalProps {
   onClose: () => void;
   onConfirm: () => void;
   setReason: (reason: string) => void;
+  setAppointmentFor: (appointmentFor: string) => void;
+  appointmentFor: string;
   reason: string;
   doctorDetails: {
     name: string;

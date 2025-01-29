@@ -26,8 +26,9 @@ const PaymentForm: React.FC<{
         appointmentDate: paymentDetails.startTime,
         startTime: paymentDetails.startTime,
         endTime: paymentDetails.endTime,
-       fee: paymentDetails.fee,
-        reason: paymentDetails.reason
+        fee: paymentDetails.fee,
+       reason: paymentDetails.reason,
+        appointmentFor: paymentDetails.appointmentFor
       };
   
     const handleSubmit = async (e: React.FormEvent) => {
@@ -128,6 +129,8 @@ const PaymentForm: React.FC<{
                     <p className="text-sm text-gray-600">Dr. {appointmentDetails.doctorName}</p>
                     <p className="text-sm text-gray-500">{appointmentDetails.specialisation}</p>
                   </div>
+
+                  
   
                   <div>
                     <h4 className="font-medium text-gray-700">Date & Time</h4>

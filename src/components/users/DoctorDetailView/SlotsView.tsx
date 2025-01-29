@@ -37,6 +37,7 @@ const SlotsView: React.FC<ISlotsViewProps> = ({doctor}) => {
     const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
     const [selectedSlot, setSelectedSlot] = useState<ISlot | null>(null);
     const [reason, setReason] = useState<string>('');
+    const [appointmentFor, setAppointmentFor] = useState<string>('Self');
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -108,6 +109,7 @@ const SlotsView: React.FC<ISlotsViewProps> = ({doctor}) => {
                 name: doctor.name,
                 specialisation: doctor.specialisation,
             },
+            appointmentFor: appointmentFor, 
             reason: reason
         }
         dispatch(addPayment(paymentDetails));        
@@ -251,6 +253,8 @@ const SlotsView: React.FC<ISlotsViewProps> = ({doctor}) => {
                 onConfirm={handleConfirmBooking}
                 reason={reason}
                 setReason={setReason}
+                setAppointmentFor={setAppointmentFor}
+                appointmentFor={appointmentFor}
                 doctorDetails={{
                     name: doctor.name,
                     specialisation: doctor.specialisation,
@@ -261,9 +265,7 @@ const SlotsView: React.FC<ISlotsViewProps> = ({doctor}) => {
                     EndTime: new Date(),
                 }}
             >
-                
             </BookingConfirmationModal>
-
         </div>
     );
 };

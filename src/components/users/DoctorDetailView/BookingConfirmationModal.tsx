@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { format } from 'date-fns';
+import React, { useEffect, useState } from 'react';
+import { format, set } from 'date-fns';
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -10,18 +10,41 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { CalendarClock, CreditCard, User, Stethoscope, AlertCircle } from "lucide-react";
-import { IBookingModalProps } from '@/types';
+import { IBookingModalProps, IPatient } from '@/types';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/redux/store/appStore';
+import { getAllPatients } from '@/services/user/user';
+import errorHandler from '@/utils/errorHandler';
 
 const BookingConfirmationModal: React.FC<IBookingModalProps> = ({
   isOpen,
   onClose,
   setReason,
   onConfirm,
+  setAppointmentFor,
+  appointmentFor,
   reason,
   doctorDetails,
   slotDetails,
 }) => {
   const [error, setError] = useState('');
+  const [relatives, setRelatives] = useState<IPatient[]>([]);
+  // const [selectedPatient, setSelectedPatient] = useState("Self");
+  useEffect(() => {
+    fetchPatients();
+  }, []);
+  
+  const fetchPatients = async () => {
+    try {
+      const response = await getAllPatients();
+      if (response?.status) {
+          console.log("Other patients", response.data.patients);
+          setRelatives(response.data.patients);
+      }
+      } catch (error) {
+          errorHandler(error);
+      }
+  }
 
   const handleConfirm = () => {
     if (!reason.trim()) {
@@ -81,6 +104,25 @@ const BookingConfirmationModal: React.FC<IBookingModalProps> = ({
               </p>
             </div>
           </div>
+
+          {/* Select Patient */}
+          <div className="space-y-6 py-4">
+          <div>
+            <label className="block text-gray-700 font-semibold mb-1">Who is this appointment for?</label>
+            <select
+              className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+              value={appointmentFor}
+              onChange={(e) => setAppointmentFor(e.target.value)}
+            >
+              <option value="self">Self</option>
+              {relatives.map((relative) => (
+                <option key={relative._id} value={relative._id}>
+                  {relative.name} ({relative.relation})
+                </option>
+              ))}
+            </select>
+            </div>
+            </div>
 
           {/* Reason for Appointment Input */}
           <div>

@@ -4,8 +4,9 @@ const paymentSlice = createSlice({
     name: 'payment',
     initialState: {
         payment: {
-            slotId: '',
-            userId: '',
+            slotId: "",
+            userId: "",
+            appointmentFor: "",
             doctorId: "",
             fee: 0,
             startTime: "",
@@ -27,6 +28,7 @@ const paymentSlice = createSlice({
             state.payment.userId = '';
             state.payment.doctorId = '';
             state.payment.fee = 0;
+            state.payment.appointmentFor = "";
             state.payment.startTime = "",
             state.payment.endTime = "",
             state.payment.doctor = {
@@ -37,5 +39,6 @@ const paymentSlice = createSlice({
         },
     },
 });
+
 export const { addPayment, resetPayment } = paymentSlice.actions;
 export default paymentSlice.reducer;
