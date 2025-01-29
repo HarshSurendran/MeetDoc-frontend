@@ -1,37 +1,20 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import { ArrowLeft, Clock, CreditCard, Shield, CheckCircle } from "lucide-react";
-import { format } from 'date-fns';
+import { ArrowLeft, Clock, CreditCard, Shield} from "lucide-react";
 import { PaymentElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { useState } from "react";
-import { useSelector } from "react-redux";
-import { RootState } from "@/redux/store/appStore";
 
 
 
-const PaymentForm: React.FC<{    
+const SubscriptionPaymentForm: React.FC<{    
     onBack: () => void;
   }> = ({ onBack }) => {
     const stripe = useStripe();
     const elements = useElements();
     const [isLoading, setIsLoading] = useState(false);
     const [paymentError, setPaymentError] = useState<string | null>(null);
-    const paymentDetails = useSelector((state: RootState) => state.payment.payment);
 
-      
-     const appointmentDetails = {
-        doctorName: paymentDetails.doctor.name,
-        specialisation: paymentDetails.doctor.specialisation,
-        appointmentDate: paymentDetails.startTime,
-        startTime: paymentDetails.startTime,
-        endTime: paymentDetails.endTime,
-        fee: paymentDetails.fee,
-        reason: paymentDetails.reason,
-        appointmentFor: paymentDetails.appointmentFor,
-        appointmentForName: paymentDetails.appointmentForName
-      };
-  
+    
     const handleSubmit = async (e: React.FormEvent) => {
       e.preventDefault();
       
@@ -45,7 +28,7 @@ const PaymentForm: React.FC<{
       const { error } = await stripe.confirmPayment({
         elements,
         confirmParams: {
-          return_url: `${window.location.origin}/payment-success`,
+          return_url: `${window.location.origin}/dashboard`,
         },
       });
   
@@ -104,7 +87,7 @@ const PaymentForm: React.FC<{
                       ) : (
                         <span className="flex items-center">
                           <CreditCard className="mr-2 h-4 w-4" />
-                          Pay ₹ {appointmentDetails.fee}
+                          Pay ₹ 1000
                         </span>
                       )}
                     </Button>
@@ -120,7 +103,7 @@ const PaymentForm: React.FC<{
   
             {/* Order Summary Section */}
             <div className="md:col-span-1">
-              <Card>
+              {/* <Card>
                 <CardHeader>
                   <CardTitle>Appointment Summary</CardTitle>
                 </CardHeader>
@@ -152,7 +135,7 @@ const PaymentForm: React.FC<{
                     </div>
                   </div>
   
-                  {/* Benefits Section */}
+                 
                   <div className="mt-6 bg-blue-50 p-4 rounded-lg">
                     <h4 className="font-medium text-blue-800 mb-2">What's Included</h4>
                     <ul className="space-y-2">
@@ -170,7 +153,7 @@ const PaymentForm: React.FC<{
                     </ul>
                   </div>
                 </CardContent>
-              </Card>
+              </Card> */}
             </div>
           </div>
         </div>
@@ -178,5 +161,5 @@ const PaymentForm: React.FC<{
     );
     };
   
-export default PaymentForm;
+export default SubscriptionPaymentForm;
   

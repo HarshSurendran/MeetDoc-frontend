@@ -170,7 +170,6 @@ export const getUserAppointments = async () => {
   }
 }
 
-
 export const getDoctorsForChat = async() => {
   try {
     const response = await userAxiosInstance.get(`chat/patient/recent`);
@@ -362,5 +361,38 @@ export const deletePatient = async (id: string) => {
     }
   } catch (error) {
     apiErrorHandler(error);
+  }
+}
+
+export const createSubscriptionPaymentIntent = async ( data : {subId: string, userId: string, fee: number, duration: number, date: Date} ) => {
+  try {
+    const response = await userAxiosInstance.post(`/payments/subscriptionpaymentintent`, data);
+    if (response) {
+      return response.data;
+    }
+  } catch (error) {
+    apiErrorHandler(error); 
+  }
+}
+
+export const getSubscriptionDetails = async (sub: string) => {
+  try {
+    const response = await userAxiosInstance.get(`/subscription/${sub}`);
+    if (response) {
+      return response.data;
+    }
+  } catch (error) {
+    apiErrorHandler(error); 
+  }
+}
+
+export const getAllSubscriptions = async () => {
+  try {
+    const response = await userAxiosInstance.get(`/subscription`);
+    if (response) {
+      return response.data;
+    }
+  } catch (error) {
+    apiErrorHandler(error); 
   }
 }

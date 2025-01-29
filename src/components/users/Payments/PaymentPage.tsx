@@ -15,18 +15,18 @@ import { resetPayment } from '@/redux/slices/paymentSlice';
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PKEY);
 
 
-export interface PaymentPageProps {
-  clientSecret: string;
-  appointmentDetails: {
-    doctorName: string;
-    specialisation: string;
-    appointmentDate: Date;
-    startTime: Date;
-    endTime: Date;
-    fee: number;
-  };
-  onBack: () => void;
-}
+// export interface PaymentPageProps {
+//   clientSecret: string;
+//   appointmentDetails: {
+//     doctorName: string;
+//     specialisation: string;
+//     appointmentDate: Date;
+//     startTime: Date;
+//     endTime: Date;
+//     fee: number;
+//   };
+//   onBack: () => void;
+// }
 
 
 const PaymentPage: React.FC = () => {

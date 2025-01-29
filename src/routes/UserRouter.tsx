@@ -15,11 +15,11 @@ import PaymentRoute from '@/hocs/users/PaymentRoute';
 import PaymentSuccessPage from '@/Pages/user/PaymentSuccessPage';
 import AppointmentManagement from '@/components/AppointmentManagement';
 import UserChatInterface from '@/Pages/user/UserChatInterface';
-import UserVideoCallPage from '@/Pages/user/UserVideoCallPage';
 import PrescriptionPage from '@/components/users/PrescriptionSection';
 import UserReviewsPage from '@/Pages/user/YourReviewsPage';
 import UserVideoCallTest from '@/Pages/user/UserVideoCallTest';
 import PatientManagementPage from '@/Pages/user/PatientManagementPage';
+import SubscriptionPaymentPage from '@/components/users/Payments/SubscriptionPaymentPage';
 
 const UserRouter = () => {
   return (
@@ -31,6 +31,7 @@ const UserRouter = () => {
       <Route path="/doctordetail/:id" element={<PrivateRoute component={DoctorDetailPage} />} />
       <Route path="users/payment" element={<PaymentRoute component={PaymentPage} />} />
       <Route path="/payment-success" element={<PaymentSuccessPage/>}/>
+      <Route path='subscriptionpayment/:subId' element={ <SubscriptionPaymentPage />} />
       <Route element={<PrivateRoute component={UserDashboardLayout} />}>
         <Route path="/dashboard"  element={<Dashboard />} />
         <Route path="profile" element={<UserProfilePage />} />
