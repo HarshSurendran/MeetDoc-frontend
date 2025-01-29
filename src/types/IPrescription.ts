@@ -16,13 +16,15 @@ export interface IPrescription {
 }
 
 export interface ICreatePrescriptionDto {
-    patientId: string;
-    doctorId: string;  
-    diagnosis: string;
-    medications: IMedication[]; 
-    dosageInstructions?: string;
-    followUpDate: Date; 
-    additionalNotes?: string;
+  patientId: string;
+  prescriptionFor: string;
+  prescriptionForId: string;
+  doctorId: string;  
+  diagnosis: string;
+  medications: IMedication[]; 
+  dosageInstructions?: string;
+  followUpDate: Date; 
+  additionalNotes?: string;
 }
 
 

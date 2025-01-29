@@ -57,6 +57,16 @@ const PrescriptionForm: React.FC = () => {
         toast.error("Failed to fetch appointment details");
       }
       const appointment = appointmentResponse.data.appointment;
+    
+      let prescriptionFor = "";
+      let prescriptionForId = "";
+      if (appointment.appointmentFor != "Self") {
+        prescriptionForId = appointment.appointmentFor;
+        prescriptionFor = appointment.appointmentForName;
+      } else {
+        prescriptionForId = appointment.patientId;
+        prescriptionFor = appointment.patientName;
+      }
 
 
      const createPrescriptionData: ICreatePrescriptionDto = {
@@ -65,19 +75,22 @@ const PrescriptionForm: React.FC = () => {
        dosageInstructions: data.dosageInstructions,
        additionalNotes: data.additionalNotes,
        followUpDate: data.followUpDate,
-       patientId: appointment.patientId, 
+       patientId: appointment.patientId,
+       prescriptionForId,
+       prescriptionFor,
        doctorId: doctor._id
-     }
-     const response = await createPrescription(createPrescriptionData);
-     if (response.status) {
-       toast.success("Prescription created successfully");
-       //todo: redirect to bussiness page(payment details page)
-       navigate(`/doctor/dashboard`)
-     }
-     
+
+      }
+      console.log(createPrescriptionData);
+      const response = await createPrescription(createPrescriptionData);
+      if (response.status) {
+        toast.success("Prescription created successfully");
+        //todo: redirect to bussiness page(payment details page)
+        navigate(`/doctor/dashboard`)
+      }
     } catch (error) {
      errorHandler(error);    
-   }
+    }
   }
 
   const onSubmit = (data: IPrescription) => {
