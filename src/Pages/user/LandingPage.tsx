@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store/appStore";
 import HeaderPreLogin from "@/components/users/HeaderPreLogin";
 import HeaderPostLogin from "@/components/users/HeaderPostLogin";
+import PremiumSubscription from '@/components/users/PremiumSubscription';
 
 const LandingPage = () => {
   const user = useSelector((state: RootState) => state.user);
@@ -25,6 +26,7 @@ const LandingPage = () => {
         <SpecialtiesSection />
         <DoctorsSection />
         <StatsSection />
+        <PremiumSubscription/>
         <BenefitsSection />
         <FAQSection />
       </main>

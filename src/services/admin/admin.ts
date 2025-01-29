@@ -1,6 +1,7 @@
 import { IUser } from '@/types/IUser';
 import apiErrorHandler from '../../utils/apiErrorHandler';
 import { adminAxiosInstance } from '../instance/adminInstance';
+import { ICreateSubscriptionScheme } from '@/types';
 
 export const getUsers = async () => {
   try {
@@ -135,3 +136,40 @@ export const totalData = async () => {
     return Promise.reject();
   }
 };
+
+export const addSubscriptionScheme = async (schema:ICreateSubscriptionScheme) => {
+  try {
+    const response = await adminAxiosInstance.post(
+      '/admin/subscription', schema
+    )
+    if (response) {
+      return response.data;
+    }
+  } catch (error) {
+    apiErrorHandler(error);
+  }
+}
+
+export const deleteSubscriptionScheme = async (id: string) => {
+  try {
+    const response = await adminAxiosInstance.delete(
+      `/admin/subscription/${id}`
+    )
+    if (response) {
+      return response.data;
+    }
+  } catch (error) {
+    apiErrorHandler(error);
+  }
+}
+
+export const getSubscriptions = async () => {
+  try {
+    const respone = await adminAxiosInstance.get('/admin/subscription');
+    if (respone) {
+      return respone.data;
+    }
+  } catch (error) {
+    apiErrorHandler(error);
+  }
+}

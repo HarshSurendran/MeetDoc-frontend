@@ -9,6 +9,7 @@ import UserDetailView from "@/components/admin/UserDetailView";
 import DoctorVerificationPage from "@/Pages/admin/DoctorVerificationPage";
 import Verification from "@/components/admin/Verification";
 import AdminErrorPage from "@/Pages/admin/AdminErrorPage";
+import SubscriptionManagement from "@/components/admin/SubscriptionManagement";
 
 const AdminRouter = () => {
   return (
@@ -21,6 +22,7 @@ const AdminRouter = () => {
         <Route path="doctorDetails/:id" element={<DoctorVerificationPage/>} />
         <Route path="users" element={<UserManagementTable />} />
         <Route path="users/:id" element={<UserDetailView />} />
+        <Route path="subscription" element={<SubscriptionManagement/>} />
       </Route>
       <Route path='*' element={<AdminErrorPage/>} />
     </Routes>
