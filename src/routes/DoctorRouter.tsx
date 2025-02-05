@@ -37,7 +37,7 @@ const DoctorRouter = () => {
         <Route path='prescription/:id' element={<PrescriptionForm />} />
         <Route path='/medical-history/:id' element={<PrivateRoute component={MedicalHistory} />} />
       </Route>
-      <Route path="/videocall/:id" element={<PrivateRoute component={VideoCallTest} />} />      
+      <Route path="/videocall/:id" element={<PrivateRoute component={VideoCallPage} />} />      
       <Route path='/chat' element={<ChatInterface />} />
 
       <Route

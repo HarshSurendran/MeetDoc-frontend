@@ -15,6 +15,7 @@ import PaymentRoute from '@/hocs/users/PaymentRoute';
 import PaymentSuccessPage from '@/Pages/user/PaymentSuccessPage';
 import AppointmentManagement from '@/components/AppointmentManagement';
 import UserChatInterface from '@/Pages/user/UserChatInterface';
+import UserVideoCallPage from '@/Pages/user/UserVideoCallPage';
 import PrescriptionPage from '@/components/users/PrescriptionSection';
 import UserReviewsPage from '@/Pages/user/YourReviewsPage';
 import UserVideoCallTest from '@/Pages/user/UserVideoCallTest';
@@ -40,7 +41,7 @@ const UserRouter = () => {
         <Route path='usermanagement' element={<PatientManagementPage />} />
         <Route path='reviews' element={<UserReviewsPage />}/>        
       </Route>
-      <Route path='/video-call/:id' element={<PrivateRoute component={UserVideoCallTest} />} />
+      <Route path='/video-call/:id' element={<PrivateRoute component={UserVideoCallPage} />} />
       <Route path='chat' element={<PrivateRoute component={UserChatInterface} />} />
       <Route path='*' element={<UserErrorPage/>} />
     </Routes>

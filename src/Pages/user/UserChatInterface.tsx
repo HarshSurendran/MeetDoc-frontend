@@ -320,15 +320,15 @@ const UserChatInterface = () => {
   
 
   useEffect(() => {
-    const token = localStorage.getItem('accessToken');
-    if (token) {      
+    const token = localStorage.getItem('userAccessToken');    
+    if (token && user) {      
       chatSocketService.connect(token, user._id);
       fetchPeople();
     };    
     return () => {
       chatSocketService.disconnect();
     };
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     if (selectedUser) {
