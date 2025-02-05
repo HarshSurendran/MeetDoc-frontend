@@ -18,15 +18,18 @@ import UserChatInterface from '@/Pages/user/UserChatInterface';
 import UserVideoCallPage from '@/Pages/user/UserVideoCallPage';
 import PrescriptionPage from '@/components/users/PrescriptionSection';
 import UserReviewsPage from '@/Pages/user/YourReviewsPage';
-import UserVideoCallTest from '@/Pages/user/UserVideoCallTest';
 import PatientManagementPage from '@/Pages/user/PatientManagementPage';
 import SubscriptionPaymentPage from '@/components/users/Payments/SubscriptionPaymentPage';
+import ForgotPasswordPage from '@/Pages/user/forgotPasswordPage';
+import ResetPasswordPage from '@/Pages/user/ResetPasswordPage';
 
 const UserRouter = () => {
   return (
     <Routes>
       <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<PublicRoute component={LoginPage} />} />
+      <Route path='/forgot-password' element={<PublicRoute component={ForgotPasswordPage} />} />
+      <Route path='/reset-password/:token' element={<PublicRoute component={ResetPasswordPage} />} />
       <Route path="/signup" element={<PublicRoute component={SignupPage} />} />
       <Route path="/otp" element={<PublicRoute component={OtpPage} />} />
       <Route path="/doctordetail/:id" element={<PrivateRoute component={DoctorDetailPage} />} />

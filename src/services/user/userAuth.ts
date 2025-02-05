@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios';
 import { userAxiosInstance } from '../instance/userInstance';
-import { Ilogin, IloginResponse, IUserloginResponse, IUserSignUp } from '../../types/';
+import { Ilogin, IUserloginResponse, IUserSignUp } from '../../types/';
 import apiErrorHandler from '../../utils/apiErrorHandler';
 
 // export const login = async (credentials: ILoginCredential) => {
@@ -94,3 +94,34 @@ export const sendGoogleToken = async (
     return Promise.reject();
   }
 };
+
+export const forgotPassword = async (email: string) => {
+  try {
+    const response = await userAxiosInstance.post(
+      '/auth/forgot-password', {
+      email
+    }
+    )
+    if(response){
+      return response.data;
+    }
+  } catch (error) {
+    apiErrorHandler(error);
+  }
+}
+
+export const resetPassword = async (token: string, newPassword: string) => {
+  try {
+    const response = await userAxiosInstance.post(
+      '/auth/reset-password', {
+      resetToken: token,
+      password: newPassword
+    }
+    )
+    if (response) {
+      return response.data;
+    }
+  } catch (error) {
+    apiErrorHandler(error);
+  }
+}
