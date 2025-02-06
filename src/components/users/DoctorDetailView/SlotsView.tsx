@@ -117,7 +117,7 @@ const SlotsView: React.FC<ISlotsViewProps> = ({doctor}) => {
                 specialisation: doctor.specialisation,
             },
             appointmentFor: appointmentFor,
-            appointmentForName: appointmentForName,
+            appointmentForName: appointmentForName || user.name,
             reason: reason
         }
         dispatch(addPayment(paymentDetails));        

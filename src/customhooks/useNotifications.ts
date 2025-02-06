@@ -32,15 +32,17 @@ const useNotifications = (userId: string) => {
     };
   }, [userId]);
 
+  const uniqueNotificationIds = new Set(notifications.map(notification => notification._id));
+
   const getNoti = async () => {
     try {
       if(userId === null) return
       const response = await getNotification(userId);
-      console.log(response)
       if (response?.status) {
         response.data.map((item: INotification) => {
-          if (!item.isRead) {
+          if (!item.isRead && !uniqueNotificationIds.has(item._id)) {
             setNotifications((prev) => [...prev, item]);
+            uniqueNotificationIds.add(item._id);
           }
         });        
       }

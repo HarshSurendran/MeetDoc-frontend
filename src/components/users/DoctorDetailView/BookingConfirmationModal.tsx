@@ -52,6 +52,8 @@ const BookingConfirmationModal: React.FC<IBookingModalProps> = ({
 
     if (selectedRelative.length > 0) {
       setAppointmentForName(selectedRelative[0].name);
+    } else {
+      setAppointmentForName("");
     }
     
   }

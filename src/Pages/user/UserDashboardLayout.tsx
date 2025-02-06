@@ -36,6 +36,19 @@ import useNotifications from '@/customhooks/useNotifications';
 import { INotification } from '@/types';
 import { markAllAsRead, markAsRead } from '@/services/user/user';
 
+const navigation = [
+  { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
+  { name: 'Appointments', href: '/appointments', icon: Calendar },
+  { name: 'Reports', href: '/reports', icon: FileText },
+  { name: 'Payments', href: '/payments', icon: CreditCard },
+  { name: 'Feedback', href: '/feedback', icon: MessageSquare },
+  { name: 'Chat', href: '/chat', icon: MessageCircleMore },
+  { name: 'Prescriptions', href: '/prescription', icon: ClipboardPlus },
+  { name: 'Your Reviews', href: '/reviews', icon: BellRing },
+  {name: "Add Members", href: '/usermanagement', icon: Menu},
+  { name: 'Profile', href: '/profile', icon: User },
+];
+
 const UserDashboardLayout = () => {
   const [currentPath, setCurrentPath] = useState('/dashboard');
   const dispatch = useDispatch();
@@ -43,20 +56,8 @@ const UserDashboardLayout = () => {
   const user = useSelector((state: RootState) => state.user.user);
   const { notifications, removeNotification, removeAllNotifications } = useNotifications(user._id);
 
-  const navigation = [
-    { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-    { name: 'Appointments', href: '/appointments', icon: Calendar },
-    { name: 'Reports', href: '/reports', icon: FileText },
-    { name: 'Payments', href: '/payments', icon: CreditCard },
-    { name: 'Feedback', href: '/feedback', icon: MessageSquare },
-    { name: 'Chat', href: '/chat', icon: MessageCircleMore },
-    { name: 'Prescriptions', href: '/prescription', icon: ClipboardPlus },
-    { name: 'Your Reviews', href: '/reviews', icon: BellRing },
-    {name: "Add Members", href: '/usermanagement', icon: Menu},
-    { name: 'Profile', href: '/profile', icon: User },
-  ];
     
-const handleLogout = async () => {
+  const handleLogout = async () => {
     try {
       const response = await logout(user._id);
       console.log(response, 'Response from axios.');
@@ -70,7 +71,7 @@ const handleLogout = async () => {
   };
 
   const handleNotificationClick = async (notification: INotification) => {
-    const response = await markAsRead(notification._id);
+    await markAsRead(notification._id);
     removeNotification(notification._id);
     if (notification.type === 'appointment') {
       navigate('/appointments');
@@ -81,7 +82,7 @@ const handleLogout = async () => {
   const handleRemoveAllNotifications = async () => {
     try {
       removeAllNotifications();
-      const response = await markAllAsRead(user._id);
+      await markAllAsRead(user._id);
     } catch (error) {
       errorHandler(error);
     }
