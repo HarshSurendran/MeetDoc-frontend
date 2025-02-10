@@ -396,3 +396,36 @@ export const getAllSubscriptions = async () => {
     apiErrorHandler(error); 
   }
 }
+
+export const getLastPayment = async() => {
+  try {
+    const response = await userAxiosInstance.get('users/lastpayment');
+    if (response) {
+      return response.data;
+    }    
+  } catch (error) {
+    apiErrorHandler(error);
+  }
+}
+
+export const getUpcomingAppointments = async() => {
+  try {
+    const response = await userAxiosInstance.get('users/upcomingappointments');
+    if (response) {
+      return response.data;
+    }
+  } catch (error) {
+    apiErrorHandler(error);
+  }
+}
+
+export const getPaymentHistory = async() => {
+  try {
+    const response = await userAxiosInstance.get('users/paymenthistory');
+    if (response) {
+      return response.data;
+    }
+  } catch (error) {
+    apiErrorHandler(error);
+  }
+}

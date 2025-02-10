@@ -22,6 +22,7 @@ import PatientManagementPage from '@/Pages/user/PatientManagementPage';
 import SubscriptionPaymentPage from '@/components/users/Payments/SubscriptionPaymentPage';
 import ForgotPasswordPage from '@/Pages/user/forgotPasswordPage';
 import ResetPasswordPage from '@/Pages/user/ResetPasswordPage';
+import PaymentHistory from '@/components/users/PaymentHistory';
 
 const UserRouter = () => {
   return (
@@ -42,7 +43,8 @@ const UserRouter = () => {
         <Route path="appointments" element={<AppointmentManagement userType='patient' />} />
         <Route path='prescription' element={<PrescriptionPage />} />
         <Route path='usermanagement' element={<PatientManagementPage />} />
-        <Route path='reviews' element={<UserReviewsPage />}/>        
+        <Route path='reviews' element={<UserReviewsPage />} />
+        <Route path='payments' element={<PaymentHistory />} />
       </Route>
       <Route path='/video-call/:id' element={<PrivateRoute component={UserVideoCallPage} />} />
       <Route path='chat' element={<PrivateRoute component={UserChatInterface} />} />

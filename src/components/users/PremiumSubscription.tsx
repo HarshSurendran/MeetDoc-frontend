@@ -33,10 +33,10 @@ const PremiumSubscription = () => {
   }
 
   return (
-    <>
+    <div className='flex justify-around flex-wrap'>
       {
         subscription && subscription.length > 0 ? subscription.map((scheme) => (
-          <div className="w-full max-w-md mx-auto p-4 mt-4 ">
+          <div key={scheme._id} className="w-full max-w-md mx-auto p-4 mt-4 ">
             <Card className="relative overflow-hidden bg-white shadow-xl transition-all hover:shadow-2xl">
               {/* Premium Badge */}
               <div className="absolute -right-12 top-6 rotate-45">
@@ -94,7 +94,7 @@ const PremiumSubscription = () => {
           </div >))
           : null
       }
-    </>
+    </div>
 
   );
 };

@@ -11,3 +11,5 @@ export * from './userTypes';
 export * from './IReviewProps';
 export * from './INotification';
 export * from './ISubscription';
+export * from './IPaymentHistory';
+export * from './IUserDashboard';

@@ -39,13 +39,11 @@ import { markAllAsRead, markAsRead } from '@/services/user/user';
 const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
   { name: 'Appointments', href: '/appointments', icon: Calendar },
-  { name: 'Reports', href: '/reports', icon: FileText },
   { name: 'Payments', href: '/payments', icon: CreditCard },
-  { name: 'Feedback', href: '/feedback', icon: MessageSquare },
   { name: 'Chat', href: '/chat', icon: MessageCircleMore },
   { name: 'Prescriptions', href: '/prescription', icon: ClipboardPlus },
   { name: 'Your Reviews', href: '/reviews', icon: BellRing },
-  {name: "Add Members", href: '/usermanagement', icon: Menu},
+  { name: "Add Members", href: '/usermanagement', icon: Menu},
   { name: 'Profile', href: '/profile', icon: User },
 ];
 

@@ -53,12 +53,29 @@ const AppointmentManagement: React.FC<IAppointmentListProps> = ({
   //     }
   //   }
   // }, [dispatch]);
+  const convertDateTime = (date: string, time: string): number => {
+    const [day, month, year] = date.split("-").map(Number);
+    let [timePart, period] = time.split(" ");
+    let [hours, minutes] = timePart.split(":").map(Number);
+
+    if (period === "PM" && hours !== 12) hours += 12;
+    if (period === "AM" && hours === 12) hours = 0;
+
+    return new Date(year, month - 1, day, hours, minutes).getTime();
+  };
 
   const fetchAppointments = async () => {
     if (userType === 'patient') {
       const response = await getUserAppointments();
       if (response.status) {
-        setAppointments(response.data.appointments);
+        const sortedAppointments = response.data.appointments.sort((a:IBookedAppointmentType, b:IBookedAppointmentType) => {
+                
+          const dateTimeA = convertDateTime(a.date, a.time);
+          const dateTimeB = convertDateTime(b.date, b.time);
+          return dateTimeB - dateTimeA;
+        });
+        console.log(sortedAppointments, 'Sorted Appointments');
+        setAppointments(sortedAppointments);
       }
       return;
     }
@@ -84,12 +101,11 @@ const AppointmentManagement: React.FC<IAppointmentListProps> = ({
   };
 
   const isAppointmentStartingSoon = (appointment: IBookedAppointmentType) => {
-    const appointmentTime = new Date(`${appointment.date} ${appointment.time}`);
+    const appointmentTime = convertDateTime(appointment.date, appointment.time);
     const now = new Date();
-    const diffInMinutes = (appointmentTime.getTime() - now.getTime()) / (1000 * 60);
-    // console.log(diffInMinutes,"This is the diff in minutes")
-    // return diffInMinutes <= 15 && diffInMinutes >= -appointment.duration;
-    return true
+    const diffInMinutes = (appointmentTime- now.getTime()) / (1000 * 60);
+    return diffInMinutes <= 15 && diffInMinutes >= -appointment.duration;
+    // return true
   };
 
   const handleJoinCall = useCallback(async (appointmentData: IBookedAppointmentType) => {

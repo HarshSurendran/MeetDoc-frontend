@@ -382,7 +382,7 @@ const UserChatInterface = () => {
 
   const handleSendMessage = async () => {
     if (messageInput.trim() && selectedUser) {
-      const response = await  sendMessageApi(user._id, "patient", selectedUser.id, messageInput);
+      const response = await sendMessageApi(user._id, "patient", selectedUser.id, messageInput);
       console.log("message sent", response);
       if (response?.status) {
         dispatch(setMessages([...messages,response.data]));
