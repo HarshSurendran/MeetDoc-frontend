@@ -173,3 +173,14 @@ export const getSubscriptions = async () => {
     apiErrorHandler(error);
   }
 }
+
+export const getDisabledSubscriptions = async () => {
+  try {
+    const response = await adminAxiosInstance.get('/admin/subscription/disabled');
+    if (response) {
+      return response.data;
+    }
+  } catch (error) {
+    apiErrorHandler(error);
+  }
+}

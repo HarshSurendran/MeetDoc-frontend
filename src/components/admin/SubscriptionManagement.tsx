@@ -27,8 +27,9 @@ import { Label } from "@/components/ui/label";
 import { Plus, Trash2, Edit } from 'lucide-react';
 import toast from 'react-hot-toast';
 import errorHandler from '@/utils/errorHandler';
-import { addSubscriptionScheme, deleteSubscriptionScheme, getSubscriptions } from '@/services/admin/admin';
+import { addSubscriptionScheme, deleteSubscriptionScheme, getDisabledSubscriptions, getSubscriptions } from '@/services/admin/admin';
 import { ICreateSubscriptionScheme, ISubscriptionScheme } from '@/types';
+import { Tab } from '@mui/material';
 
 
 const SubscriptionManagement = () => {
@@ -39,7 +40,8 @@ const SubscriptionManagement = () => {
             duration: 6,
             price: 1000,
             discount: 50,
-            activeUsers: 156
+            activeUsers: 156,
+            isDisabled: false
         },
         {
             _id: "2",
@@ -47,9 +49,11 @@ const SubscriptionManagement = () => {
             duration: 3,
             price: 600,
             discount: 30,
-            activeUsers: 89
+            activeUsers: 89,
+            isDisabled: false
         }
     ]);
+    const [disabledSchemes, setDisabledSchemes] = useState<ISubscriptionScheme[]>([]);
     const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
     const [newScheme, setNewScheme] = useState({
         name: '',
@@ -60,6 +64,7 @@ const SubscriptionManagement = () => {
     
     useEffect(() => {
         fetchSubscriptions();
+        fetchDisabledSubscriptions();
     }, []);
 
     const fetchSubscriptions = async () => {
@@ -70,6 +75,17 @@ const SubscriptionManagement = () => {
                 setSchemes(response.data.schemes);
             } else {
                 toast.error('Error fetching subscriptions.');
+            }
+        } catch (error) {
+            errorHandler(error);
+        }
+    }
+
+    const fetchDisabledSubscriptions = async () => {
+        try {
+            const response = await getDisabledSubscriptions();
+            if (response.status) {
+                setDisabledSchemes(response.data.schemes);               
             }
         } catch (error) {
             errorHandler(error);
@@ -110,6 +126,10 @@ const SubscriptionManagement = () => {
             const response = await deleteSubscriptionScheme(id);
             if (response.status) {
                 toast.success('Subscription scheme deleted successfully.');
+                const schemeToDisable = schemes.find(scheme => scheme._id === id);
+                if (schemeToDisable) {
+                    setDisabledSchemes([...disabledSchemes, schemeToDisable]);
+                }
                 setSchemes(schemes.filter(scheme => scheme._id !== id));
             } else {
                 toast.error('Error deleting subscription scheme.');
@@ -245,6 +265,7 @@ const SubscriptionManagement = () => {
                                     <TableHead>Price</TableHead>
                                     <TableHead>Discount</TableHead>
                                     <TableHead>Active Users</TableHead>
+                                    <TableHead>Status</TableHead>
                                     <TableHead className="text-right">Actions</TableHead>
                                 </TableRow>
                             </TableHeader>
@@ -256,6 +277,7 @@ const SubscriptionManagement = () => {
                                         <TableCell>₹{scheme.price}</TableCell>
                                         <TableCell>{scheme.discount}%</TableCell>
                                         <TableCell>{scheme.activeUsers}</TableCell>
+                                        <TableCell>{scheme.isDisabled ? 'Disabled' : 'Active'}</TableCell>
                                         <TableCell className="text-right">
                                             <div className="flex justify-end gap-2">
                                                 <Button
@@ -282,6 +304,61 @@ const SubscriptionManagement = () => {
                     </div>
                 </CardContent>
             </Card>
+
+
+            {disabledSchemes.length > 0 && <Card className="mt-6">
+                <CardHeader>
+                    <CardTitle>Disabled Subscription Schemes</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <div className="overflow-x-auto">
+                        <Table>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead>Name</TableHead>
+                                    <TableHead>Duration</TableHead>
+                                    <TableHead>Price</TableHead>
+                                    <TableHead>Discount</TableHead>
+                                    <TableHead>Active Users</TableHead>
+                                    <TableHead>Status</TableHead>
+                                    <TableHead className="text-right">Actions</TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {disabledSchemes.map((scheme) => (
+                                    <TableRow key={scheme._id}>
+                                        <TableCell className="font-medium">{scheme.name}</TableCell>
+                                        <TableCell>{scheme.duration} months</TableCell>
+                                        <TableCell>₹{scheme.price}</TableCell>
+                                        <TableCell>{scheme.discount}%</TableCell>
+                                        <TableCell>{scheme.activeUsers}</TableCell>
+                                        <TableCell>{scheme.isDisabled ? 'Disabled' : 'Active'}</TableCell>
+                                        <TableCell className="text-right">
+                                            <div className="flex justify-end gap-2">
+                                                <Button
+                                                    variant="ghost"
+                                                    size="icon"
+                                                    className="h-8 w-8 text-blue-600 hover:text-blue-700"
+                                                >
+                                                    <Edit className="h-4 w-4" />
+                                                </Button>
+                                                {/* <Button
+                                                    variant="ghost"
+                                                    size="icon"
+                                                    className="h-8 w-8 text-red-600 hover:text-red-700"
+                                                    onClick={() => handleDeleteScheme(scheme._id)}
+                                                >
+                                                    <Trash2 className="h-4 w-4" />
+                                                </Button> */}
+                                            </div>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </div>
+                </CardContent>
+            </Card>}
         </div>
     );
 };

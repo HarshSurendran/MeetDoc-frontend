@@ -1,5 +1,5 @@
 
-import { Calendar, DollarSign, LogOut, Users } from 'lucide-react'
+import { Calendar, GraduationCap, IndianRupee, LayoutDashboard, LogOut, Sparkles, Users } from 'lucide-react'
 import { NavLink, useNavigate } from 'react-router-dom';
 import {
     AlertDialog,
@@ -21,12 +21,12 @@ import toast from 'react-hot-toast';
 
 const SideBar = () => {
     const sideMenu = [
-        { name: 'Dashboard', icon: <Users className="h-5 w-5" />, pathName: "/admin/dashboard", },
+        { name: 'Dashboard', icon: <LayoutDashboard className="h-5 w-5" />, pathName: "/admin/dashboard", },
         { name: 'Users', icon: <Users className="h-5 w-5" />, pathName: "/admin/users", },
-        { name: 'Doctors', icon: <Users className="h-5 w-5" />, pathName: "/admin/doctors", },
+        { name: 'Doctors', icon: <GraduationCap className="h-5 w-5" />, pathName: "/admin/verification", },
         { name: 'Appointments', icon: <Calendar className="h-5 w-5" />, pathName: "/admin/appointments", },
-        { name: 'Revenue', icon: <DollarSign className="h-5 w-5" />, pathName: "revenue", },
-        { name: 'Verification', icon: <Users className="h-5 w-5" />, pathName: "verification", }
+        { name: 'Revenue', icon: <IndianRupee className="h-5 w-5" />, pathName: "/admin/revenue", },
+        { name: 'Subscription', icon: <Sparkles className="h-5 w-5" />, pathName: "/admin/subscription", },
     ]
 
     const admin = useSelector((state: RootState) => state.admin.admin);

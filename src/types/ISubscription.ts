@@ -5,6 +5,7 @@ export interface ISubscriptionScheme {
     price: number;
     discount: number;
     activeUsers: number;
+    isDisabled: boolean;
 }
 
 export interface ICreateSubscriptionScheme {

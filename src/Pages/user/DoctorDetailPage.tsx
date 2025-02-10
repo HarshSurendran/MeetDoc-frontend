@@ -56,7 +56,7 @@ const DoctorDetailPage = () => {
               <h1 className="text-4xl font-bold">Dr {doctor.name}</h1>
               <div className="flex items-center gap-2">
                 <GraduationCap className="w-5 h-5" />
-                <span>{doctor.qualification}</span>
+                <span>{doctor.occupation}</span>
               </div>
               <div className="flex items-center gap-2">
                 <Star className="w-5 h-5 text-yellow-400" />
