@@ -210,3 +210,25 @@ export const getMedicalHistory = async(userId: string) => {
     apiErrorHandler(error);
   }
 }
+
+export const forgotPasswordReq = async (email: string) => {
+  try {
+    const response = await doctorAxiosInstance.post(`auth/doctor/forgot-password`, { email });
+    if (response) {
+      return response.data;
+    }
+  } catch (error) {
+    apiErrorHandler(error);
+  }
+}
+
+export const resetPasswordDoc = async (token: string, password: string) => {
+  try {
+    const response = await doctorAxiosInstance.post(`auth/doctor/reset-password`, { token, password });
+    if (response) {
+      return response.data;
+    }
+  } catch (error) {
+    apiErrorHandler(error);
+  }
+}

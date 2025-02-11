@@ -11,7 +11,8 @@ import { useDispatch } from 'react-redux';
 import { addDoctor } from '../../redux/slices/doctorSlice';
 import { Link } from 'react-router-dom';
 import { getPhotoUrl } from '@/services/doctor/doctor';
-import { Ilogin } from '@/types/IUserLogin';
+import { Ilogin } from '@/types';
+import { Button } from '@/components/ui/button';
 
 
 const LoginPage = () => {
@@ -157,7 +158,19 @@ const LoginPage = () => {
                   <p className="mt-1 text-sm text-red-600">{passError}</p>
                 )}
               </div>
+            
+                <Button
+                  type="button"
+                  variant="link"
+                  className="px-0 text-sm text-gray-500"
+                  onClick={() => navigate('/doctor/forgot-password')}
+                >
+                  Forgot password?
+                </Button>
             </div>
+
+           
+              
 
             {/* Submit Button */}
             <div>

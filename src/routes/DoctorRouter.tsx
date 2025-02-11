@@ -17,6 +17,8 @@ import VideoCallPage from '@/Pages/doctor/VideoCallPage';
 import DoctorErrorPage from '@/Pages/doctor/DoctorErrorPage';
 import VideoCallTest from '@/Pages/doctor/VideoCallTest';
 import MedicalHistory from '@/Pages/doctor/PatientHistoryPage';
+import DocForgotPasswordPage from '@/Pages/doctor/DocForgotPasswordPage';
+import DocResetPasswordPage from '@/Pages/doctor/DocResetPasswordPage';
 
 
 
@@ -47,6 +49,8 @@ const DoctorRouter = () => {
       <Route path="/login" element={<PublicRoute component={LoginPage} />} />
       <Route path="/signup" element={<PublicRoute component={SignupPage} />} />
       <Route path="/otp" element={<PublicRoute component={OtpPage} />} />
+      <Route path='/forgot-password' element={<PublicRoute component={DocForgotPasswordPage} />} />
+      <Route path='/reset-password/:token' element={<PublicRoute component={DocResetPasswordPage} />} />
       <Route path='*' element={<DoctorErrorPage/>} />
     </Routes>
   );
