@@ -7,6 +7,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { validatePassword } from '@/utils/userValidator/uservalidator';
 import { resetPasswordDoc } from '@/services/doctor/doctor';
+import { Link } from 'react-router-dom';
 
 const DocResetPasswordPage = () => {
   const { token } = useParams();
@@ -140,12 +141,12 @@ const DocResetPasswordPage = () => {
           </form>
         </CardContent>
         <CardFooter className="flex justify-center">
-          <a
-            href="/login"
+          <Link
+            to="/doctor/login"
             className="text-sm text-blue-600 hover:text-blue-800 transition-colors"
           >
             Back to Login
-          </a>
+          </Link>
         </CardFooter>
       </Card>
     </div>

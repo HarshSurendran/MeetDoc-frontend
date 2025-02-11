@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { forgotPasswordReq } from '@/services/doctor/doctor';
+import { Link } from 'react-router-dom';
 
 const DocForgotPasswordPage = () => {
   const [email, setEmail] = useState('');
@@ -85,12 +86,12 @@ const DocForgotPasswordPage = () => {
           </form>
         </CardContent>
         <CardFooter className="flex justify-center">
-          <a
-            href="/login"
+          <Link
+            to="/doctor/login"
             className="text-sm text-blue-600 hover:text-blue-800 transition-colors"
           >
             Back to Login
-          </a>
+          </Link>
         </CardFooter>
       </Card>
     </div>
