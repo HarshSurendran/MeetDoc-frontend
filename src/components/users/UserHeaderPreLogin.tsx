@@ -20,7 +20,6 @@ import errorHandler from '../../utils/errorHandler';
 import toast from 'react-hot-toast';
 
 const pages = ['Home', 'Pricing', 'Blog'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function UserHeaderPreLogin() {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(

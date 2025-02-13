@@ -5,7 +5,7 @@ import { User } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const HeaderPostLogin = () => {
-    const { isAuthenticated, user } = useSelector((state: RootState) => state.user);
+    const { user } = useSelector((state: RootState) => state.user);
     const navigate = useNavigate();
     const handleProfileClick = () => {
         navigate('/dashboard');

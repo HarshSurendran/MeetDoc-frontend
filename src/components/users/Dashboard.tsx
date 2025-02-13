@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 import { Calendar, CreditCard, FileText } from 'lucide-react'
 import errorHandler from '@/utils/errorHandler';
 import { getLastPayment, getSubscriptionDetails, getUpcomingAppointments } from '@/services/user/user';
-import { format, parseISO, set } from 'date-fns';
+import { format, parseISO} from 'date-fns';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store/appStore';
 import PremiumSubscription from './PremiumSubscription';

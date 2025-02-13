@@ -1,4 +1,4 @@
-import axios, { Axios, AxiosError, AxiosInstance, AxiosResponse } from 'axios';
+import {  AxiosResponse } from 'axios';
 import { IloginResponse } from '../../types/IAdmin';
 import { Ilogin } from '../../types/';
 import { adminAxiosInstance } from '../instance/adminInstance';

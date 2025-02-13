@@ -1,6 +1,6 @@
-import React from 'react';
+
 import { format } from 'date-fns';
-import { Calendar, Clock, DollarSign, User, UserRound, Stethoscope, IndianRupee } from 'lucide-react';
+import { Calendar, Clock, User, UserRound, Stethoscope, IndianRupee } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store/appStore';
 import { Navigate } from 'react-router-dom';

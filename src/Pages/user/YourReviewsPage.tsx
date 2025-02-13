@@ -17,8 +17,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { format } from 'date-fns';
 import { IReviewDisplay, IUpdateReview } from '@/types';
 import errorHandler from '@/utils/errorHandler';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/redux/store/appStore';
 import { deleteReview, getYourReviews, updateReview } from '@/services/user/user';
 import toast from 'react-hot-toast';
 

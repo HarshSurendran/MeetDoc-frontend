@@ -16,7 +16,7 @@ import {
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Video, Calendar, Clock, User, Text, ClipboardPlus } from 'lucide-react';
 import { BookingStatus, IAppointmentListProps, IBookedAppointmentType } from '@/types';
-import { getAppointment, getAppointments, getUpcomingAppointments, sendMessageApi } from '@/services/doctor/doctor';
+import { getAppointment, getUpcomingAppointments, sendMessageApi } from '@/services/doctor/doctor';
 import { getUserAppointments } from '@/services/user/user';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -92,8 +92,7 @@ const AppointmentManagement: React.FC<IAppointmentListProps> = ({
     const appointmentTime = convertDateTime(appointment.date, appointment.time);
     const now = new Date();
     const diffInMinutes = (appointmentTime- now.getTime()) / (1000 * 60);
-    // return diffInMinutes <= 15 && diffInMinutes >= -appointment.duration;
-    return true
+    return diffInMinutes <= 15 && diffInMinutes >= -appointment.duration;
   };
 
   const handleJoinCall = useCallback(async (appointmentData: IBookedAppointmentType) => {

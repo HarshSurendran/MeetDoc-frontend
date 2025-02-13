@@ -7,10 +7,8 @@ import {
 } from "@/components/ui/sheet";
 import { 
   Calendar,
-  LayoutDashboard, 
-  FileText, 
-  CreditCard, 
-  MessageSquare, 
+  LayoutDashboard,
+  CreditCard,
   User,
   Menu,
   BellRing,

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Stethoscope } from 'lucide-react';
 
 const LoadingAnimation = () => {

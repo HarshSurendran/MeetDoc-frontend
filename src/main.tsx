@@ -1,9 +1,8 @@
-import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 
 import './index.css';
 import { ThemeProvider } from '@emotion/react';
-import { lightTheme, darkTheme } from './theme.ts';
+import { lightTheme } from './theme.ts';
 import App from './App.tsx';
 import { Provider } from 'react-redux';
 import appStore, { persistor } from './redux/store/appStore.ts';

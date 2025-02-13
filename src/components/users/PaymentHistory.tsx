@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { ScrollArea } from '../ui/scroll-area';
-import { BadgeInfo, Calendar, Clock, User } from 'lucide-react';
+import { BadgeInfo, Calendar, User } from 'lucide-react';
 import errorHandler from '@/utils/errorHandler';
 import { getPaymentHistory } from '@/services/user/user';
 import { Badge } from '../ui/badge';

@@ -1,122 +1,3 @@
-// import React, { useCallback, useEffect, useRef, useState } from 'react';
-// import { SearchIcon, Send, Video, Phone, MoreVertical } from 'lucide-react';
-// import {
-//   Card,
-//   CardContent,
-// } from "@/components/ui/card";
-// import {
-//   DropdownMenu,
-//   DropdownMenuContent,
-//   DropdownMenuItem,
-//   DropdownMenuTrigger,
-// } from "@/components/ui/dropdown-menu";
-// import { Input } from "@/components/ui/input";
-// import { Button } from "@/components/ui/button";
-// import { ScrollArea } from "@/components/ui/scroll-area";
-// import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-// import { getMessages, getPatientsForChat } from '@/services/doctor/doctor';
-// import { useSelector } from 'react-redux';
-// import { RootState } from '@/redux/store/appStore';
-// import { Socket } from 'socket.io-client';
-
-// interface Message {
-//   _id?: string,
-//   content: string;
-//   senderId: string,
-//   senderType: 'doctor' | 'patient',
-//   receiverId: string,
-//   receiverType: 'doctor' | 'patient',
-//   timestamp: Date;
-//   isRead?: Boolean,
-// }
-
-// interface Patient {
-//   id: string;
-//   name: string;
-//   avatar?: string;
-//   lastMessage?: string;
-//   lastSeen: Date;
-//   unreadCount?: number;
-//   status: 'online' | 'offline';
-// }
-
-// const ChatInterface: React.FC = () => {
-//   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
-//   const [messageInput, setMessageInput] = useState('');
-//   const [messages, setMessages] = useState<Message[]>([]);
-//   const [searchQuery, setSearchQuery] = useState('');
-//   const [patients, setPatients] = useState<Patient[]>([]);
-//   const lastMessageRef = useRef<HTMLDivElement>(null);
-//   const doctor = useSelector((state: RootState) => state.doctor.doctor);
-
-//   useEffect(() => {
-//     fetchPatients();
-//   }, []);
-
-//   useEffect(() => {
-//     if (lastMessageRef.current) {
-//       lastMessageRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
-//     }
-//   }, [messages]);
-
-//   useEffect(() => {
-//     if (selectedPatient) {
-//       fetchMessages(selectedPatient.id);
-//     }
-//   }, [selectedPatient]);
-
-//   const fetchMessages = useCallback(async (patientId: string) => {
-//     const response = await getMessages(patientId);
-//     if (response.status) {
-//       setMessages(response.data.messages)
-//     }
-//   }, [selectedPatient])
-
-//   const fetchPatients = useCallback(async () => {
-//     const response = await getPatientsForChat();
-//     if (response.status) {
-//       console.log("This are the patients", response.data)
-//       const transformedData = response.data.messages.map(({ _id, user, lastMessage, unreadCount }: { _id: string, user: any, lastMessage: any, unreadCount: number }) => ({
-//         id: _id.toString(),  // Convert ObjectId to string
-//         name: user.name,
-//         avatar: user.photo || null,  // Use `photo` as avatar, fallback to null if not available
-//         lastMessage: lastMessage?.content || null, // Extract last message content
-//         lastSeen: lastMessage?.timestamp || new Date(), // Use timestamp, fallback to current date
-//         unreadCount: unreadCount || 0, // Default unread count to 0 if not present
-//         status: 'offline', // You need to determine the online status dynamically
-//       }));
-//       console.log(transformedData,"transformed data")
-//       setPatients(transformedData)
-//     }
-//   }, [])
-  
-//   const filteredPeoples = patients?.filter(patient =>
-//     patient.name.toLowerCase().includes(searchQuery.toLowerCase())
-//   );
-
-//   const handleSendMessage = () => {
-//     if (messageInput.trim() && selectedPatient) {
-//       const newMessage: Message = {
-//         senderId: doctor._id,
-//          senderType: 'doctor',
-//          receiverId: selectedPatient.id,//check whther its id of user
-//          receiverType: 'patient',
-//          content: messageInput,
-//          timestamp: new Date(),
-//       };
-//       setMessages([...messages, newMessage]);
-//       setMessageInput('');
-//     }
-//   };
-
-//   const formatTime = (lastseen: Date) => {
-//     const date = new Date(lastseen)
-//     return date.toLocaleTimeString('en-US', {
-//       hour: '2-digit',
-//       minute: '2-digit'
-//     });
-//   };
-
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { SearchIcon, Send, Video,  MoreVertical } from 'lucide-react';
@@ -143,7 +24,6 @@ import errorHandler from '@/utils/errorHandler';
 import { User } from '@/types/chatTypes';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import { v4 as uuid } from 'uuid';
 
 
 
@@ -155,7 +35,7 @@ const DoctorChatInterface = () => {
   // const [patients, setPatients] = useState<Patient[]>([]);
   // const [typingUsers, setTypingUsers] = useState("");
   const lastMessageRef = useRef<HTMLDivElement>(null);
-  const { selectedUser, messages, peoples, isMessagesLoading, isPeopleLoading, onlineUsers, incomingVideoCall } = useSelector((state: RootState) => state.chat);
+  const { selectedUser, messages, peoples, isMessagesLoading, isPeopleLoading, onlineUsers,} = useSelector((state: RootState) => state.chat);
   const {doctor, appointmentId} = useSelector((state: RootState) => state.doctor);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -238,7 +118,7 @@ const DoctorChatInterface = () => {
   const handleSelectUser = async (selectedUserData: User) => {
     dispatch(setSelectedUser(selectedUserData));
     console.log("selected user", selectedUserData)
-    const response = await toggleIsRead(doctor._id, selectedUserData.id);
+    await toggleIsRead(doctor._id, selectedUserData.id);
   }
 
   const HandleVideoCall = async (selectedUser: User) => {

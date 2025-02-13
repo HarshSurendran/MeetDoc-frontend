@@ -29,7 +29,6 @@ import toast from 'react-hot-toast';
 import errorHandler from '@/utils/errorHandler';
 import { addSubscriptionScheme, deleteSubscriptionScheme, getDisabledSubscriptions, getSubscriptions } from '@/services/admin/admin';
 import { ICreateSubscriptionScheme, ISubscriptionScheme } from '@/types';
-import { Tab } from '@mui/material';
 
 
 const SubscriptionManagement = () => {

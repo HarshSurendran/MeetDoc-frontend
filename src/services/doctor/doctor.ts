@@ -2,7 +2,7 @@ import apiErrorHandler from '@/utils/apiErrorHandler';
 import { doctorAxiosInstance } from '../instance/doctorInstance';
 import { IDoctorProfile } from '@/types/IDoctor';
 import { ISlotGeneratorForm } from '@/types/ISlots';
-import { ICreatePrescriptionDto, IFullPrescription, IUpdatePrescriptionDto } from '@/types';
+import { ICreatePrescriptionDto, IUpdatePrescriptionDto } from '@/types';
 
 export const sendFile = async (file: File) => {
   try {

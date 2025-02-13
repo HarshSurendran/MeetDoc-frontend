@@ -93,7 +93,7 @@ const AddUserModal: React.FC<IAddUserModalProps> = ({
       }
 
       if (formData.address?.pincode || formData.address?.pincode === '0') {
-        const valPincode = validatePincode(Number(formData.address.pincode));
+        const valPincode = validatePincode(String(formData.address.pincode));
         if (valPincode) {
           toast.error('Please enter a valid Pincode.');
           throw new Error();

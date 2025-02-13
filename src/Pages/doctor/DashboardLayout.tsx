@@ -4,7 +4,6 @@ import {
   X,
   Home,
   Calendar,
-  IndianRupee ,
   BetweenHorizontalStart ,
   User,
   Settings,

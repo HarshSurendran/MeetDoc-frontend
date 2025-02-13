@@ -47,10 +47,10 @@ const phone = joi
     'string.empty': 'Phone number is required.',
   });
 
-const dateOfBirth = joi.date().messages({
-  'date.base': 'Date of birth must be a valid date.',
-  'date.empty': 'Date of birth is required.',
-});
+// const dateOfBirth = joi.date().messages({
+//   'date.base': 'Date of birth must be a valid date.',
+//   'date.empty': 'Date of birth is required.',
+// });
 
 
 
@@ -68,10 +68,10 @@ const pinCode = joi.string()
 //     "string.empty": "City is required.",
 //   })
 
-const gender = joi.string().valid('Male', 'Female', 'Others').messages({
-  'string.invalid': 'Gender must be one of the following: male, female, others',
-  'string.empty': 'Gender is required.',
-});
+// const gender = joi.string().valid('Male', 'Female', 'Others').messages({
+//   'string.invalid': 'Gender must be one of the following: male, female, others',
+//   'string.empty': 'Gender is required.',
+// });
 
 export const validateEmail = (email: string) => {
   const { error } = userEmailSchema.validate(email);
