@@ -162,9 +162,8 @@ import { Download, Eye } from 'lucide-react';
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 import errorHandler from '@/utils/errorHandler';
 import { fetchPrescriptions } from '@/services/user/user';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/redux/store/appStore';
-import { IFullPrescription, IPrescription } from '@/types';
+import { IFullPrescription } from '@/types';
+import { format } from 'date-fns';
 
 
 const PrescriptionPage: React.FC = () => {
@@ -273,6 +272,9 @@ const PrescriptionPage: React.FC = () => {
                 <CardTitle className="text-blue-700">Prescription for {prescription.diagnosis}</CardTitle>
               </CardHeader>
               <CardContent>
+                <p className="text-sm text-gray-600">Patient: {prescription.prescriptionFor || prescription.patientId.name}</p>
+                <p className="text-sm text-gray-600"> Dr. {prescription.doctorId.name}</p>
+                <p className="text-sm text-gray-600">Date: {format(new Date(prescription.followUpDate), 'MMM dd, yyyy')}</p>
                 <p className="text-sm text-gray-600">
                   Medications: {prescription.medications.map(m => m.medicationName).join(', ')}
                 </p>
@@ -292,7 +294,7 @@ const PrescriptionPage: React.FC = () => {
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
                     <p className="font-semibold text-blue-700">Patient </p>
-                    <p>{selectedPrescription.patientId.name}</p>
+                    <p>{selectedPrescription?.prescriptionFor || selectedPrescription.patientId.name}</p>
                   </div>
                   <div>
                     <p className="font-semibold text-blue-700">Doctor </p>
@@ -306,7 +308,7 @@ const PrescriptionPage: React.FC = () => {
                 </div>
                 <div>
                   <p className="font-semibold text-blue-700">Date</p>
-                  <p>{selectedPrescription.createdAt}</p>
+                  <p>{format(new Date(selectedPrescription.followUpDate), 'MMM dd, yyyy')}</p>
                   </div>
                   </div>
 
@@ -315,7 +317,7 @@ const PrescriptionPage: React.FC = () => {
                 <div>
                   <p className="font-semibold text-blue-700 mb-2">Medications</p>
                   {selectedPrescription.medications.map((medication, index) => (
-                    <Card key={medication._id} className="mb-2 bg-blue-50/50">
+                    <Card key={index} className="mb-2 bg-blue-50/50">
                       <CardContent className="p-4">
                         <div className="flex justify-between items-center">
                           <div>
@@ -332,10 +334,14 @@ const PrescriptionPage: React.FC = () => {
                     </Card>
                   ))}
                 </div>
+                <div>
+                  <p className="font-semibold text-blue-700">Additional Notes</p>
+                  <p>{selectedPrescription.additionalNotes}</p>
+                </div>
 
                 <div>
                   <p className="font-semibold text-blue-700">Follow-up Date</p>
-                  <p>{new Date(selectedPrescription.followUpDate).toLocaleDateString()}</p>
+                  <p>{format(new Date(selectedPrescription.followUpDate), 'MMM dd, yyyy')}</p>
                 </div>
 
                 <div className="flex space-x-4 mt-4">

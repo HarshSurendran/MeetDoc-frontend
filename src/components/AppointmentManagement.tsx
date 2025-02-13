@@ -41,18 +41,6 @@ const AppointmentManagement: React.FC<IAppointmentListProps> = ({
     fetchAppointments();
   }, []);
 
-  // useEffect(() => {
-  //   if (!webrtcConnected.current) {
-  //     dispatch(connectwebrtcSocket());
-  //     webrtcConnected.current = true;
-  //   } 
-  //   return () => {
-  //     if(webrtcConnected.current){        
-  //       dispatch(disconnectwebrtcSocket());
-  //       webrtcConnected.current = false;
-  //     }
-  //   }
-  // }, [dispatch]);
   const convertDateTime = (date: string, time: string): number => {
     const [day, month, year] = date.split("-").map(Number);
     let [timePart, period] = time.split(" ");
@@ -152,7 +140,7 @@ const AppointmentManagement: React.FC<IAppointmentListProps> = ({
           <ScrollArea className="h-[600px] pr-4">
             <div className="space-y-4">
               {appointments.map((appointment) => (
-                <Card 
+                <Card
                   key={appointment._id}
                   className="hover:shadow-lg transition-shadow cursor-pointer"
                   onClick={() => {
@@ -166,7 +154,7 @@ const AppointmentManagement: React.FC<IAppointmentListProps> = ({
                         <div className="flex items-center gap-2">
                           <User className="h-5 w-5 text-blue-600" />
                           <span className="font-semibold">
-                            {userType === 'doctor' ? `${appointment.patientName} for ${appointment.appointmentForName || "Self" }`  : `Dr. ${appointment.doctorName} booked for ${appointment.appointmentForName || "Self" } `}
+                            {userType === 'doctor' ? `${appointment.patientName} for ${appointment.appointmentForName || "Self"}` : `Dr. ${appointment.doctorName} booked for ${appointment.appointmentForName || "Self"} `}
                           </span>
                         </div>
                         <div className="flex items-center gap-2 mt-2">
@@ -182,7 +170,7 @@ const AppointmentManagement: React.FC<IAppointmentListProps> = ({
                           {appointment.bookingStatus}
                         </Badge>
                         {isAppointmentStartingSoon(appointment) && (
-                          <Button 
+                          <Button
                             onClick={(e) => {
                               e.stopPropagation();
                               handleJoinCall(appointment);
@@ -224,7 +212,7 @@ const AppointmentManagement: React.FC<IAppointmentListProps> = ({
                 <div>
                   <label className="text-sm text-gray-500">Date & Time </label>
                   <p className="font-semibold">
-                    {selectedAppointment.date} at {selectedAppointment.time} 
+                    {selectedAppointment.date} at {selectedAppointment.time}
                   </p>
                 </div>
                 <div>
@@ -249,7 +237,7 @@ const AppointmentManagement: React.FC<IAppointmentListProps> = ({
                     <ClipboardPlus className="h-4 w-4 mr-2" />
                     See Medical History
                   </Button>}
-                  <Button 
+                  <Button
                     onClick={() => handleJoinCall(selectedAppointment)}
                     className="bg-blue-600 hover:bg-blue-700"
                   >

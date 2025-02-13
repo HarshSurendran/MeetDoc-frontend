@@ -18,6 +18,7 @@ import MedicalHistory from '@/Pages/doctor/PatientHistoryPage';
 import DocForgotPasswordPage from '@/Pages/doctor/DocForgotPasswordPage';
 import DocResetPasswordPage from '@/Pages/doctor/DocResetPasswordPage';
 import VideoCallPage from '@/Pages/VideoCallPage';
+import PrescriptionList from '@/components/doctor/Dashboard/PrescriptionList';
 
 const DoctorRouter = () => {
   return (
@@ -29,6 +30,7 @@ const DoctorRouter = () => {
         <Route path="profile" element={<DoctorProfile />} />
         <Route path="settings" element={<div>Settings Page</div>} />
         <Route path="bookedappointments" element={<AppointmentManagement userType="doctor" />} />
+        <Route path="prescriptions" element={<PrescriptionList />} />
         <Route path="prescription/:id" element={<PrescriptionForm />} />
         <Route path="/medical-history/:id" element={<PrivateRoute component={MedicalHistory} />} />
       </Route>

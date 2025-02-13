@@ -2,7 +2,7 @@ import apiErrorHandler from '@/utils/apiErrorHandler';
 import { doctorAxiosInstance } from '../instance/doctorInstance';
 import { IDoctorProfile } from '@/types/IDoctor';
 import { ISlotGeneratorForm } from '@/types/ISlots';
-import { ICreatePrescriptionDto } from '@/types';
+import { ICreatePrescriptionDto, IFullPrescription, IUpdatePrescriptionDto } from '@/types';
 
 export const sendFile = async (file: File) => {
   try {
@@ -225,6 +225,28 @@ export const forgotPasswordReq = async (email: string) => {
 export const resetPasswordDoc = async (token: string, password: string) => {
   try {
     const response = await doctorAxiosInstance.post(`auth/doctor/reset-password`, { token, password });
+    if (response) {
+      return response.data;
+    }
+  } catch (error) {
+    apiErrorHandler(error);
+  }
+}
+
+export const getPrescriptions = async () => {
+  try {
+    const response = await doctorAxiosInstance.get(`doctors/prescriptions`);
+    if (response) {
+      return response.data;
+    }
+  } catch (error) {
+    apiErrorHandler(error);
+  }
+}
+
+export const editPrescription = async(updateDto: IUpdatePrescriptionDto) => {
+  try {
+    const response = await doctorAxiosInstance.patch(`doctors/prescription`, updateDto);
     if (response) {
       return response.data;
     }
