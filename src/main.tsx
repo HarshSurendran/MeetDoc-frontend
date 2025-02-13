@@ -12,7 +12,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
+  // <StrictMode>
     <Provider store={appStore}>
       <PersistGate persistor={persistor}>
         <ThemeProvider theme={lightTheme}>         
@@ -20,5 +20,5 @@ createRoot(document.getElementById('root')!).render(
         </ThemeProvider>
       </PersistGate>
     </Provider>
-  </StrictMode>
+  // </StrictMode>
 );

@@ -77,6 +77,19 @@ const chatSlice = createSlice({
     toggleRedicrectToChat: (state, action) => {
       state.redirectToChat = action.payload;
     },
+    changeLastMessage: (state, action: PayloadAction<{ userId: string; message: string }>) => {
+      const user = state.peoples.find(p => p.id === action.payload.userId);
+      console.log(user, "From chat slice, user");
+      if (user) {
+        user.lastMessage = action.payload.message;
+      }
+    },
+    updateUnreadCount: (state, action: PayloadAction<{ userId: string;}>) => {
+      const user = state.peoples.find(p => p.id === action.payload.userId);
+      if (user) {
+        user.unreadCount = user.unreadCount + 1;
+      }
+    }
   },
 });
 
@@ -94,6 +107,8 @@ export const {
   incomingVideoCall,
   resetVideoCall,
   toggleRedicrectToChat,
+  changeLastMessage,
+  updateUnreadCount
 } = chatSlice.actions;
 
 export default chatSlice.reducer;

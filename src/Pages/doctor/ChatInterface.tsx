@@ -138,7 +138,7 @@ import { RootState } from '../../redux/store/appStore';
 
 import { getMessages, getPatientsForChat, sendMessageApi, toggleIsRead } from '@/services/doctor/doctor';
 
-import { setIsMessagesLoading, setIsPeopleLoading, setMessages, setPeoples, setSelectedUser } from '@/redux/slices/chatSlice';
+import { changeLastMessage, setIsMessagesLoading, setIsPeopleLoading, setMessages, setPeoples, setSelectedUser } from '@/redux/slices/chatSlice';
 import errorHandler from '@/utils/errorHandler';
 import { User } from '@/types/chatTypes';
 import { useNavigate } from 'react-router-dom';
@@ -227,7 +227,8 @@ const DoctorChatInterface = () => {
       const response = await  sendMessageApi(doctor._id, "doctor", selectedUser.id, messageInput);
       console.log("message sent", response);
       if (response?.status) {
-        dispatch(setMessages([...messages,response.data]));
+        dispatch(setMessages([...messages, response.data]));
+        dispatch(changeLastMessage({ userId: selectedUser.id, message: messageInput }));
       }
       chatSocketService.sendMessage(doctor._id, "doctor", selectedUser.id, messageInput);      
       setMessageInput('');
@@ -245,6 +246,7 @@ const DoctorChatInterface = () => {
       //todo: check whether appointment id matches the selected user
       const videoCallId = appointmentId;
       chatSocketService.sendVideoCallId(doctor._id, selectedUser.id, videoCallId);
+
       navigate(`/doctor/videocall/${videoCallId}`);
     } else {
       toast.error("Please select an appointment and start the call.");
@@ -286,6 +288,7 @@ const DoctorChatInterface = () => {
             </div>
           </div>
           {isPeopleLoading ? (
+            //todo: change loading to shimmer 
             "Loading..."
           ) : (
           <ScrollArea className="h-[calc(100vh-10rem)]">
@@ -308,7 +311,7 @@ const DoctorChatInterface = () => {
                       {formatTime(patient.lastSeen)}
                     </span>
                   </div>
-                  {/* <p className="text-sm text-gray-500 truncate">{patient.lastMessage}</p> */}
+                  <p className="text-sm text-gray-500 truncate">{patient.lastMessage}</p>
                   <div className="flex items-center gap-2 mt-1">
                     <span className={`h-2 w-2 rounded-full ${
                       onlineUsers.includes(patient.id) ? 'bg-green-500' : 'bg-gray-400'
@@ -397,7 +400,7 @@ const DoctorChatInterface = () => {
                               {formatTime(message.timestamp)}
                             </span>
                             <span className="ml-2">
-                              {message.isRead ? '✓✓' : '✓'}
+                              {message.senderType == 'doctor' ?  message.isRead ? '✓✓' : '✓' : ""}
                             </span>
                           </div>
                         </div>

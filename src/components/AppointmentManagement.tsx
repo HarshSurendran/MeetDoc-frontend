@@ -104,8 +104,8 @@ const AppointmentManagement: React.FC<IAppointmentListProps> = ({
     const appointmentTime = convertDateTime(appointment.date, appointment.time);
     const now = new Date();
     const diffInMinutes = (appointmentTime- now.getTime()) / (1000 * 60);
-    return diffInMinutes <= 15 && diffInMinutes >= -appointment.duration;
-    // return true
+    // return diffInMinutes <= 15 && diffInMinutes >= -appointment.duration;
+    return true
   };
 
   const handleJoinCall = useCallback(async (appointmentData: IBookedAppointmentType) => {

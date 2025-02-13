@@ -23,6 +23,8 @@ import SubscriptionPaymentPage from '@/components/users/Payments/SubscriptionPay
 import ForgotPasswordPage from '@/Pages/user/forgotPasswordPage';
 import ResetPasswordPage from '@/Pages/user/ResetPasswordPage';
 import PaymentHistory from '@/components/users/PaymentHistory';
+import VideoCallPage from '@/Pages/VideoCallPage';
+import MyVideoCallPage from '@/Pages/MyVideoCallPage';
 
 const UserRouter = () => {
   return (
@@ -46,7 +48,7 @@ const UserRouter = () => {
         <Route path='reviews' element={<UserReviewsPage />} />
         <Route path='payments' element={<PaymentHistory />} />
       </Route>
-      <Route path='/video-call/:id' element={<PrivateRoute component={UserVideoCallPage} />} />
+      <Route path='/video-call/:id' element={<PrivateRoute component={MyVideoCallPage} />} />
       <Route path='chat' element={<PrivateRoute component={UserChatInterface} />} />
       <Route path='*' element={<UserErrorPage/>} />
     </Routes>

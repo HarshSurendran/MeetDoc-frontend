@@ -132,7 +132,7 @@
 
 import { io, Socket } from 'socket.io-client';
 import appStore from '../../redux/store/appStore';
-import { addMessage, incomingVideoCall, resetVideoCall, setTypingStatus, toggleRedicrectToChat, updateOnlineUsers } from '../../redux/slices/chatSlice';
+import { addMessage, changeLastMessage, incomingVideoCall, resetVideoCall, setTypingStatus, toggleRedicrectToChat, updateOnlineUsers, updateUnreadCount } from '../../redux/slices/chatSlice';
 const SOCKET_SERVER_URL = import.meta.env.VITE_CHAT_SOCKET_URL;
 
 class ChatSocketService {
@@ -145,7 +145,6 @@ class ChatSocketService {
       auth: {
         token,
         userId: id,
-        
       },
       withCredentials: true,
       transports: ['websocket'],
@@ -163,14 +162,19 @@ class ChatSocketService {
     this.socket.on('newMessage', (message) => {
       const state = appStore.getState();
       const selectedUser = state.chat.selectedUser;
-      console.log('Received new message:', message,"selected user is", selectedUser);
+      console.log('Received new message:', message, "selected user is", selectedUser?.name);
+      console.log('message sender Id ', message.senderId)
       if (selectedUser?.id !== message.receiverId) {
         //todo: Handle this situation when message recived is not from the selected user
+        appStore.dispatch(changeLastMessage({ userId: message.receiverId, message: message.content }));
+        appStore.dispatch(updateUnreadCount({ userId: message.receiverId }));
+
         console.log('Received new but not from selected user', message);
         return;
       }
 
       appStore.dispatch(addMessage(message));
+      appStore.dispatch(changeLastMessage({ userId: message.receiverId, message: message.content }));
       //todo: Handle is read change situtation
       // const result = toggleIsRead(message.senderId, message.receiverId);
     });

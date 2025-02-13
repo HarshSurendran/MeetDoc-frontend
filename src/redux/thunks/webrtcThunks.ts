@@ -37,6 +37,7 @@ class WebrtcSocketService {
 
     sendOffer(payload :{ target: string, offer: RTCSessionDescriptionInit }) {
         if (this.socket) {
+            console.log("sending offer")
             this.socket.emit('offer', payload);
         }
     }
@@ -87,6 +88,18 @@ class WebrtcSocketService {
     onNegotiationAnswer(callback: (payload: { target: string, answer: RTCSessionDescriptionInit }) => void) {
         if (this.socket) {
             this.socket.on('negotiation-answer', callback);
+        }
+    }
+
+    sendIceCandidate(payload: { target: string, candidate: RTCIceCandidateInit }) {
+        if (this.socket) {
+            this.socket.emit('ice-candidate', payload);
+        }
+    }
+
+    onIceCandidate(callback: (payload: any) => void) {
+        if (this.socket) {
+            this.socket.on('ice-candidate', callback);
         }
     }
 

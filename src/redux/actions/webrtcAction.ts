@@ -6,7 +6,7 @@ import { socketConnected, socketDisconnected, offerCreated } from '../reducers/w
 export const connectwebrtcSocket = () => {
   return (dispatch: Dispatch) => {
     webrtcSocketService.connectWebrtcSocket();
-      dispatch(socketConnected())
+    dispatch(socketConnected())
   };
 };
 
@@ -17,6 +17,7 @@ return () => {
 };
 
 export const sendSDP = ( target: string, sdp: RTCSessionDescriptionInit ) => {
+  console.log('sendSDP', target, sdp);
   return (dispatch: Dispatch) => {
       webrtcSocketService.sendOffer({ target, offer: sdp });
       dispatch(offerCreated(sdp))
@@ -81,6 +82,18 @@ export const sendNegotiationAnswer = (target: string, answer: RTCSessionDescript
 export const onNegotiationAnswer = (callback: (payload: { target: string, answer: RTCSessionDescriptionInit }) => void) => {
   return () => {
     webrtcSocketService.onNegotiationAnswer(callback);
+  };
+}
+
+export const sendIceCandidate = (target: string, candidate: RTCIceCandidateInit) => {
+  return () => {
+    webrtcSocketService.sendIceCandidate({ target, candidate });
+  };
+}
+
+export const onIceCandidate = (callback: (payload: RTCIceCandidateInit) => void) => {
+  return () => {
+    webrtcSocketService.onIceCandidate(callback);
   };
 }
 

@@ -283,7 +283,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { SearchIcon, Send, Video, Phone, MoreVertical } from 'lucide-react';
+import { SearchIcon, Send, MoreVertical } from 'lucide-react';
 import { 
   Card,
 } from "@/components/ui/card";
@@ -394,7 +394,7 @@ const UserChatInterface = () => {
 
   const handleSelectUser = async (selectedUserData: User) => {
     dispatch(setSelectedUser(selectedUserData));
-    const response = await toggleIsRead(user._id, selectedUserData.id);
+    await toggleIsRead(user._id, selectedUserData.id);
   }
 
   // const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -454,7 +454,7 @@ const UserChatInterface = () => {
                       {formatTime(patient.lastSeen)}
                     </span>
                   </div>
-                  {/* <p className="text-sm text-gray-500 truncate">{patient.lastMessage}</p> */}
+                  <p className="text-sm text-gray-500 truncate">{patient.lastMessage}</p>
                   <div className="flex items-center gap-2 mt-1">
                     <span className={`h-2 w-2 rounded-full ${
                       onlineUsers.includes(patient.id) ? 'bg-green-500' : 'bg-gray-400'
@@ -544,7 +544,7 @@ const UserChatInterface = () => {
                               {formatTime(message.timestamp)}
                             </span>
                             <span className="ml-2">
-                              {message.isRead ? '✓✓' : '✓'}
+                            {message.senderType == 'patient' ?  message.isRead ? '✓✓' : '✓' : ""}
                             </span>
                           </div>
                         </div>
