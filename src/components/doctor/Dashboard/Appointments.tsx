@@ -15,23 +15,17 @@ import {
 } from '@/components/ui/dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Video, Calendar, Clock, User, Text, ClipboardPlus } from 'lucide-react';
-import { BookingStatus, IAppointmentListProps, IBookedAppointmentType } from '@/types';
-import { getAppointment, getAppointments, getUpcomingAppointments, sendMessageApi } from '@/services/doctor/doctor';
-import { getUserAppointments } from '@/services/user/user';
+import { BookingStatus, IBookedAppointmentType } from '@/types';
+import { getAppointment, getAppointments, sendMessageApi } from '@/services/doctor/doctor';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/redux/store/appStore';
 import toast from 'react-hot-toast';
 import { setAppointmentId } from '@/redux/slices/doctorSlice';
 
-
-
-const AppointmentManagement: React.FC<IAppointmentListProps> = ({
-  userType 
-}) => {
+const Appointments: React.FC = () => {
   const [appointments, setAppointments] = useState<IBookedAppointmentType[]>([]);
   const [selectedAppointment, setSelectedAppointment] = useState<IBookedAppointmentType | null>(null);
-
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const doctor = useSelector((state: RootState) => state.doctor.doctor);
   const navigate = useNavigate();
@@ -52,22 +46,8 @@ const AppointmentManagement: React.FC<IAppointmentListProps> = ({
     return new Date(year, month - 1, day, hours, minutes).getTime();
   };
 
-  const fetchAppointments = async () => {
-    if (userType === 'patient') {
-      const response = await getUserAppointments();
-      if (response.status) {
-        const sortedAppointments = response.data.appointments.sort((a:IBookedAppointmentType, b:IBookedAppointmentType) => {
-                
-          const dateTimeA = convertDateTime(a.date, a.time);
-          const dateTimeB = convertDateTime(b.date, b.time);
-          return dateTimeB - dateTimeA;
-        });
-        console.log(sortedAppointments, 'Sorted Appointments');
-        setAppointments(sortedAppointments);
-      }
-      return;
-    }
-    const response = await getUpcomingAppointments();    
+  const fetchAppointments = async () => {   
+    const response = await getAppointments();    
     if (response.status) {
       setAppointments(response.data.appointments);
     }
@@ -97,35 +77,21 @@ const AppointmentManagement: React.FC<IAppointmentListProps> = ({
   };
 
   const handleJoinCall = useCallback(async (appointmentData: IBookedAppointmentType) => {
-    if (userType === 'patient') {
-      toast.error('Doctor will contact you soon.');
-      return
-    }
     const response = await getAppointment(appointmentData._id);
     if(!response.status){
       toast.error('Something went wrong. Please try again.');
       return
     }    
-    const appointment = response.data.appointment;    
-    if (userType === 'doctor') {
-      const response = await sendMessageApi(doctor._id, "doctor", appointment.patientId, `Hey ${appointmentData.patientName}, I am Dr.${doctor.name}, are you ready for the video call?`);
-      if (response.status) {
+    const appointment = response.data.appointment;   
+    const response1 = await sendMessageApi(doctor._id, "doctor", appointment.patientId, `Hey ${appointmentData.patientName}, I am Dr.${doctor.name}, are you ready for the video call?`);
+    if (response1.status) {
         dispatch(setAppointmentId(appointment._id));
         navigate(`/doctor/chat`)
-      }
     }
-    
-  }, [navigate, userType]);
+  }, [navigate]);
 
   const handleSeeMedicalHistory = useCallback(async (appointmentData: IBookedAppointmentType) => {
-    // if (userType === 'patient') {
-    //   toast.error('Doctor will contact you soon.');
-    //   return
-    // }
     navigate(`/doctor/medical-history/${appointmentData.patientId}`);
-      
-    
-   
   }, [navigate]);
 
   return (
@@ -133,7 +99,7 @@ const AppointmentManagement: React.FC<IAppointmentListProps> = ({
       <Card className="w-full">
         <CardHeader>
           <CardTitle className="text-2xl font-bold text-blue-800">
-            {userType === 'doctor' ? 'My Patient Appointments' : 'My Appointments'}
+            My Patient Appointments
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -154,7 +120,7 @@ const AppointmentManagement: React.FC<IAppointmentListProps> = ({
                         <div className="flex items-center gap-2">
                           <User className="h-5 w-5 text-blue-600" />
                           <span className="font-semibold">
-                            {userType === 'doctor' ? `${appointment.patientName} for ${appointment.appointmentForName || "Self"}` : `Dr. ${appointment.doctorName} booked for ${appointment.appointmentForName || "Self"} `}
+                            {`${appointment.patientName} for ${appointment.appointmentForName || "Self"}`} 
                           </span>
                         </div>
                         <div className="flex items-center gap-2 mt-2">
@@ -178,7 +144,7 @@ const AppointmentManagement: React.FC<IAppointmentListProps> = ({
                             className="bg-blue-600 hover:bg-blue-700"
                           >
                             <Text className="h-4 w-4 mr-2" />
-                            {userType === 'doctor' ? 'Start Chat' : 'Join Chat'}
+                           Start Chat
                           </Button>
                         )}
                       </div>
@@ -231,18 +197,18 @@ const AppointmentManagement: React.FC<IAppointmentListProps> = ({
               
               {isAppointmentStartingSoon(selectedAppointment) && (
                 <div className="flex justify-around mt-4">
-                  {userType === 'doctor' && <Button
+                  <Button
                     onClick={() => handleSeeMedicalHistory(selectedAppointment)}
                   >
                     <ClipboardPlus className="h-4 w-4 mr-2" />
                     See Medical History
-                  </Button>}
+                  </Button>
                   <Button
                     onClick={() => handleJoinCall(selectedAppointment)}
                     className="bg-blue-600 hover:bg-blue-700"
                   >
                     <Video className="h-4 w-4 mr-2" />
-                    {userType === 'doctor' ? 'Start Chat' : 'Join Chat'}
+                    Start Chat
                   </Button>
                 </div>
               )}
@@ -254,4 +220,4 @@ const AppointmentManagement: React.FC<IAppointmentListProps> = ({
   );
 };
 
-export default AppointmentManagement;
+export default Appointments;

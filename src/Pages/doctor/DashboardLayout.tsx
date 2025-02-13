@@ -10,7 +10,8 @@ import {
   Settings,
   LogOut,
   MessageSquare,
-  BellRing
+  BellRing,
+  BookA
 } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/store/appStore';
@@ -43,9 +44,10 @@ import { INotification } from '@/types';
 
 const sideLinks = [
   { name: 'Dashboard', icon: <Home className="h-5 w-5 mr-3" />, pathName: "/doctor/dashboard", },
-  { name: 'Appointments', icon: <Calendar className="h-5 w-5 mr-3" />, pathName: "/doctor/appointments", },
+  { name: 'Appointments', icon: <BookA className='h-5 w-5 mr-3'/>, pathName: "/doctor/appointments"},
+  { name: 'Daily Slots', icon: <Calendar className="h-5 w-5 mr-3" />, pathName: "/doctor/slotsview", },
   { name: 'Generate Slots', icon: <BetweenHorizontalStart className="h-5 w-5 mr-3" />, pathName: "/doctor/slots", },
-  { name: 'Revenue', icon: <IndianRupee  className="h-5 w-5 mr-3" />, pathName: "/doctor/revenue", },
+  // { name: 'Revenue', icon: <IndianRupee  className="h-5 w-5 mr-3" />, pathName: "/doctor/revenue", },
   
   { name: 'Profile', icon: <User className="h-5 w-5 mr-3" />, pathName: "/doctor/profile", },
   { name: 'Chat', icon: <MessageSquare className="h-5 w-5 mr-3"/>, pathName: "/doctor/chat"},

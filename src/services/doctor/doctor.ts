@@ -94,14 +94,25 @@ export const getSlots = async (doctorId: string) => {
   }
 };
 
-export const getAppointments = async () => {
+export const getUpcomingAppointments = async () => {
   try {
-    const response = await doctorAxiosInstance.get(`doctors/appointments`);
+    const response = await doctorAxiosInstance.get(`doctors/upcomingappointments`);
     
     if (response) {
       return response.data;
     }
     return null;
+  } catch (error) {
+    apiErrorHandler(error);
+  }
+}
+
+export const getAppointments = async () => {
+  try {
+    const response = await doctorAxiosInstance.get(`doctors/appointments`);
+    if (response) {
+      return response.data;
+    }
   } catch (error) {
     apiErrorHandler(error);
   }

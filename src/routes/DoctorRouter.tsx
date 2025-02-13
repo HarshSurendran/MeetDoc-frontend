@@ -19,19 +19,21 @@ import DocForgotPasswordPage from '@/Pages/doctor/DocForgotPasswordPage';
 import DocResetPasswordPage from '@/Pages/doctor/DocResetPasswordPage';
 import VideoCallPage from '@/Pages/VideoCallPage';
 import PrescriptionList from '@/components/doctor/Dashboard/PrescriptionList';
+import Appointments from '@/components/doctor/Dashboard/Appointments';
 
 const DoctorRouter = () => {
   return (
     <Routes>
       <Route path="/" element={<PrivateRoute component={DashboardLayout} />}>
         <Route path="dashboard" element={<DashboardStats />} />
-        <Route path="appointments" element={<DailySlotView />} />
+        <Route path="slotsview" element={<DailySlotView />} />
         <Route path="slots" element={<SlotGeneration />} />
         <Route path="profile" element={<DoctorProfile />} />
         <Route path="settings" element={<div>Settings Page</div>} />
         <Route path="bookedappointments" element={<AppointmentManagement userType="doctor" />} />
         <Route path="prescriptions" element={<PrescriptionList />} />
         <Route path="prescription/:id" element={<PrescriptionForm />} />
+        <Route path='appointments' element={<Appointments />}/>
         <Route path="/medical-history/:id" element={<PrivateRoute component={MedicalHistory} />} />
       </Route>
       <Route path="/videocall/:id" element={<PrivateRoute component={VideoCallPage} />} />
