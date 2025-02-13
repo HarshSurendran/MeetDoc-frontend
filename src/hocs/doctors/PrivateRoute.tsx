@@ -2,7 +2,9 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store/appStore';
 import { Navigate } from 'react-router-dom';
-import DoctorRegistration from '../../Pages/doctor/DoctorVerificaiton';
+import { lazy } from 'react';
+
+const DoctorVerificaiton = lazy(() => import('@/Pages/doctor/DoctorVerificaiton'));
 
 interface PrivateRoute {
   component: React.ComponentType;
@@ -16,7 +18,7 @@ const PrivateRoute: React.FC<PrivateRoute> = ({ component: Component }) => {
     isVerified ? (
       <Component />
     ) : (
-        <DoctorRegistration />
+        <DoctorVerificaiton />
     )
   ) : (
     <Navigate to={'/doctor/login'} />
