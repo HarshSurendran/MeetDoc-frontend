@@ -15,7 +15,6 @@ import PaymentRoute from '@/hocs/users/PaymentRoute';
 import PaymentSuccessPage from '@/Pages/user/PaymentSuccessPage';
 import AppointmentManagement from '@/components/AppointmentManagement';
 import UserChatInterface from '@/Pages/user/UserChatInterface';
-import UserVideoCallPage from '@/Pages/user/UserVideoCallPage';
 import PrescriptionPage from '@/components/users/PrescriptionSection';
 import UserReviewsPage from '@/Pages/user/YourReviewsPage';
 import PatientManagementPage from '@/Pages/user/PatientManagementPage';
@@ -24,33 +23,56 @@ import ForgotPasswordPage from '@/Pages/user/forgotPasswordPage';
 import ResetPasswordPage from '@/Pages/user/ResetPasswordPage';
 import PaymentHistory from '@/components/users/PaymentHistory';
 import VideoCallPage from '@/Pages/VideoCallPage';
-import MyVideoCallPage from '@/Pages/MyVideoCallPage';
 
 const UserRouter = () => {
   return (
     <Routes>
       <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<PublicRoute component={LoginPage} />} />
-      <Route path='/forgot-password' element={<PublicRoute component={ForgotPasswordPage} />} />
-      <Route path='/reset-password/:token' element={<PublicRoute component={ResetPasswordPage} />} />
+      <Route
+        path="/forgot-password"
+        element={<PublicRoute component={ForgotPasswordPage} />}
+      />
+      <Route
+        path="/reset-password/:token"
+        element={<PublicRoute component={ResetPasswordPage} />}
+      />
       <Route path="/signup" element={<PublicRoute component={SignupPage} />} />
       <Route path="/otp" element={<PublicRoute component={OtpPage} />} />
-      <Route path="/doctordetail/:id" element={<PrivateRoute component={DoctorDetailPage} />} />
-      <Route path="users/payment" element={<PaymentRoute component={PaymentPage} />} />
-      <Route path="/payment-success" element={<PaymentSuccessPage/>}/>
-      <Route path='subscriptionpayment/:subId' element={ <SubscriptionPaymentPage />} />
+      <Route
+        path="/doctordetail/:id"
+        element={<PrivateRoute component={DoctorDetailPage} />}
+      />
+      <Route
+        path="users/payment"
+        element={<PaymentRoute component={PaymentPage} />}
+      />
+      <Route path="/payment-success" element={<PaymentSuccessPage />} />
+      <Route
+        path="subscriptionpayment/:subId"
+        element={<SubscriptionPaymentPage />}
+      />
       <Route element={<PrivateRoute component={UserDashboardLayout} />}>
-        <Route path="/dashboard"  element={<Dashboard />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="profile" element={<UserProfilePage />} />
-        <Route path="appointments" element={<AppointmentManagement userType='patient' />} />
-        <Route path='prescription' element={<PrescriptionPage />} />
-        <Route path='usermanagement' element={<PatientManagementPage />} />
-        <Route path='reviews' element={<UserReviewsPage />} />
-        <Route path='payments' element={<PaymentHistory />} />
+        <Route
+          path="appointments"
+          element={<AppointmentManagement userType="patient" />}
+        />
+        <Route path="prescription" element={<PrescriptionPage />} />
+        <Route path="usermanagement" element={<PatientManagementPage />} />
+        <Route path="reviews" element={<UserReviewsPage />} />
+        <Route path="payments" element={<PaymentHistory />} />
       </Route>
-      <Route path='/video-call/:id' element={<PrivateRoute component={MyVideoCallPage} />} />
-      <Route path='chat' element={<PrivateRoute component={UserChatInterface} />} />
-      <Route path='*' element={<UserErrorPage/>} />
+      <Route
+        path="/video-call/:id"
+        element={<PrivateRoute component={VideoCallPage} />}
+      />
+      <Route
+        path="chat"
+        element={<PrivateRoute component={UserChatInterface} />}
+      />
+      <Route path="*" element={<UserErrorPage />} />
     </Routes>
   );
 };
