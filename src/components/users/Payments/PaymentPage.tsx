@@ -10,6 +10,7 @@ import { RootState } from '@/redux/store/appStore';
 import errorHandler from '@/utils/errorHandler';
 import { useNavigate } from 'react-router-dom';
 import { resetPayment} from '@/redux/slices/paymentSlice';
+import LoadingAnimation from '@/Pages/LoadingAnimation';
 
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PKEY);
@@ -79,7 +80,7 @@ const PaymentPage: React.FC = () => {
 
     return (
         <>
-            {clientSecret.length == 0 ? <p>Loading</p> : <Elements stripe={stripePromise} options={options}>
+            {clientSecret.length == 0 ? <LoadingAnimation /> : <Elements stripe={stripePromise} options={options}>
                 <PaymentForm
                     onBack={onBack}
                 />
