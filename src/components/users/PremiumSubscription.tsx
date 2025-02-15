@@ -7,10 +7,13 @@ import { useNavigate } from 'react-router-dom';
 import { ISubscriptionScheme } from '@/types';
 import errorHandler from '@/utils/errorHandler';
 import { getAllSubscriptions } from '@/services/user/user';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/redux/store/appStore';
 
 
 const PremiumSubscription = () => {
   const [subscription, setSubscription] = useState<ISubscriptionScheme[]>();
+  const userId = useSelector((state: RootState) => state.user.user._id)
 
   useEffect(() => {
     fetchSubcriptions();
@@ -28,8 +31,12 @@ const PremiumSubscription = () => {
   }
 
   const navigate = useNavigate();
-  const handleSubscribe = (scheme: ISubscriptionScheme) => {      
+  const handleSubscribe = (scheme: ISubscriptionScheme) => {     
+    if (userId) {
       navigate(`subscriptionpayment/${scheme._id}`)
+    } else {
+      navigate('/login')
+    }
   }
 
   return (

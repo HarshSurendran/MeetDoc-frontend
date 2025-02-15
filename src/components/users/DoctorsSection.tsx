@@ -30,9 +30,7 @@ const DoctorsSection = () => {
           return { ...doctor, photo: photoResponse || doctor.photo };
         })
       );
-      console.log(updatedDoctors, "Updated Doctors");
       setDoctors(updatedDoctors);
-      console.log(doctorArray)
     }
   }
   

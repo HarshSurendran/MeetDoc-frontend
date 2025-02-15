@@ -31,7 +31,6 @@ import {
 import { IUser } from '@/types/IUser';
 import { getUser } from '@/services/admin/admin';
 import errorHandler from '@/utils/errorHandler';
-import demoProfile from '../../assets/heroimage.jpg';
 import { IConsultation } from '@/types';
 
 
@@ -41,7 +40,7 @@ const UserDetailView = () => {
   const { id } = useParams();
   const [imageError, setImageError] = useState<string | null>(null);
 
-  // Sample appointment data - replace with actual data
+  
   const appointmentData = [
     { month: 'Jan', appointments: 2 },
     { month: 'Feb', appointments: 3 },
@@ -50,7 +49,7 @@ const UserDetailView = () => {
     { month: 'May', appointments: 2 },
     { month: 'Jun', appointments: 3 },
   ];
-  // Sample consultation history - replace with actual data
+  
   const consultationHistory: IConsultation[] = [
     {
       date: '2024-01-15',
@@ -66,7 +65,6 @@ const UserDetailView = () => {
       status: 'completed',
       amount: 120,
     },
-    // Add more consultation records as needed
   ];
 
   useEffect(() => {
@@ -79,7 +77,6 @@ const UserDetailView = () => {
     try {
       const response = await getUser(id);
       if (response) {
-        console.log(response, 'Response from get uiser');
         setUser(response.data);
       }
     } catch (error) {
@@ -106,7 +103,7 @@ const UserDetailView = () => {
     }
 
     setImageError(null);
-    // Handle the image upload to backend here
+    
   };
 
   const getStatusColor = (status: IConsultation['status']) => {
@@ -130,7 +127,7 @@ const UserDetailView = () => {
             <div className="relative">
               <div className="w-48 h-48 rounded-full overflow-hidden bg-gray-100">
                 <img
-                  src={user?.photo || demoProfile}
+                  src={user?.photo || "heroimage.jpg"}
                   alt="Profile"
                   className="w-full h-full object-cover"
                 />
