@@ -9,28 +9,30 @@ import { IDoctorDetails } from "@/types";
 
 const DoctorsSection = () => {
   const [doctors, setDoctors] = useState<IDoctorDetails[]>([
-    { _id: "1", name: "Afsal Madathingal", specialisation: "General Medicine", consultation: 783, photo: "src/assets/heroimage2.avif" },
-    { _id: "2", name: "Afsal Madathingal", specialisation: "General Medicine", consultation: 783, photo: "src/assets/heroimage2.avif" },
-    { _id: "3", name: "Afsal Madathingal", specialisation: "General Medicine", consultation: 783, photo: "src/assets/heroimage2.avif" },
-    { _id: "4", name: "Afsal Madathingal", specialisation: "General Medicine", consultation: 783, photo: "src/assets/heroimage2.avif" },
+    { _id: "1", name: "Afsal Madathingal", specialisation: "General Medicine", consultation: 783, photo: "heroimage.jpg" },
+    { _id: "2", name: "Afsal Madathingal", specialisation: "General Medicine", consultation: 783, photo: "heroimage.jpg" },
+    { _id: "3", name: "Afsal Madathingal", specialisation: "General Medicine", consultation: 783, photo: "heroimage.jpg" },
+    { _id: "4", name: "Afsal Madathingal", specialisation: "General Medicine", consultation: 783, photo: "heroimage.jpg" },
   ]);
   const navigate = useNavigate();
     
   useEffect(() => {
-    fetchDoctors();    
+    fetchDoctors();
   }, [])
 
   const fetchDoctors = async () => {
     const response = await getDoctorsForLandingPage();
     if (response.status) {
       let doctorArray = response.data.doctors;
-      doctorArray.forEach(async (doctor: IDoctorDetails) => {
-        const response = await getProfilePhoto(doctor.photo);
-        if (response.status) {
-          doctor.photo = response.data.url;
-        }
-      })
-      setDoctors(response.data.doctors);
+      const updatedDoctors = await Promise.all(
+        doctorArray.map(async (doctor: IDoctorDetails) => {
+          const photoResponse = await getProfilePhoto(doctor.photo);
+          return { ...doctor, photo: photoResponse || doctor.photo };
+        })
+      );
+      console.log(updatedDoctors, "Updated Doctors");
+      setDoctors(updatedDoctors);
+      console.log(doctorArray)
     }
   }
   

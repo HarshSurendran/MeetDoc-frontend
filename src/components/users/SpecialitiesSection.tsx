@@ -3,11 +3,11 @@ import { Button } from "../ui/button";
 
 const SpecialtiesSection = () => {
   const specialties = [
-    { name: "General Medicine", image: "src/assets/heroimage2.avif" },
-    { name: "Gynecology", image: "src/assets/heroimage2.avif" },
-    { name: "Dermatology", image: "src/assets/heroimage2.avif" },
-    { name: "Psychiatry", image: "src/assets/heroimage2.avif" },
-    { name: "Psychiatry", image: "src/assets/heroimage2.avif" },
+    { name: "General Medicine", image: "heroimage2.avif" },
+    { name: "Gynecology", image: "heroimage2.avif" },
+    { name: "Dermatology", image: "heroimage2.avif" },
+    { name: "Psychiatry", image: "heroimage2.avif" },
+    { name: "Psychiatry", image: "heroimage2.avif" },
   ];
 
   return (
