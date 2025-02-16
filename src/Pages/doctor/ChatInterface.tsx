@@ -21,9 +21,10 @@ import { getMessages, getPatientsForChat, sendMessageApi, toggleIsRead } from '@
 
 import { changeLastMessage, setIsMessagesLoading, setIsPeopleLoading, setMessages, setPeoples, setSelectedUser } from '@/redux/slices/chatSlice';
 import errorHandler from '@/utils/errorHandler';
-import { User } from '@/types/chatTypes';
+import { Message, User } from '@/types/chatTypes';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import { IUser } from '@/types';
 
 
 
@@ -69,7 +70,7 @@ const DoctorChatInterface = () => {
     try {
       const response = await getPatientsForChat();
       if (response.status) {
-        const transformedData = response.data.messages.map(({ _id, user, lastMessage, unreadCount }: { _id: string, user: any, lastMessage: any, unreadCount: number }) => ({
+        const transformedData = response.data.messages.map(({ _id, user, lastMessage, unreadCount }: { _id: string, user: IUser, lastMessage: Message, unreadCount: number }) => ({
           id: _id.toString(),  
           name: user.name,
           avatar: user.photo || null, 

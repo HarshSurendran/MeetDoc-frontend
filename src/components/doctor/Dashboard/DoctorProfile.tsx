@@ -74,7 +74,7 @@ const DoctorProfilePage = () => {
     }
   };
 
-  const onCropComplete = (_: any, croppedAreaPixels: any) => {
+  const onCropComplete = (_: Area, croppedAreaPixels: Area) => {
     setCroppedAreaPixels(croppedAreaPixels);
   };
 

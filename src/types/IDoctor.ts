@@ -22,6 +22,7 @@ export interface IDoctorProfile {
   fee: number;
   rating: number;
   photo?: string;
+  status?: string;
 }
 
 export interface IDoctorSignup {

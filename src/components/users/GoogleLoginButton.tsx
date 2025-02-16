@@ -1,4 +1,4 @@
-import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
+import { CredentialResponse, GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
 import { sendGoogleToken } from '@/services/user/userAuth';
 import errorHandler from '@/utils/errorHandler';
 import { useDispatch } from 'react-redux';
@@ -11,7 +11,7 @@ const GoogleLoginButton = () => {
     const navigate = useNavigate();
     const cId = import.meta.env.VITE_GOOGLE_CLIENTID;
 
-    const handleSuccess = async (credentialResponse: any) => {
+    const handleSuccess = async (credentialResponse: CredentialResponse) => {
         try {
             const response = await sendGoogleToken(credentialResponse);
             

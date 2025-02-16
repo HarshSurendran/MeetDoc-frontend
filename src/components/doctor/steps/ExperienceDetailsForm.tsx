@@ -72,10 +72,14 @@ const ExperienceDetailsForm: React.FC<IExperienceDetailsFormProps> = ({
   const handleExperienceChange = (
     index: number,
     field: keyof ExperienceDetails,
-    value: any
+    value: string | Date
   ) => {
     const updatedExperiences = [...experiences];
-    updatedExperiences[index][field] = value;
+    if (field === 'from' || field === 'to') {
+      updatedExperiences[index][field] = value as Date;
+    } else {
+      updatedExperiences[index][field] = value as string;
+    }
     setExperiences(updatedExperiences);
 
     if (field === 'from' || field === 'to') {

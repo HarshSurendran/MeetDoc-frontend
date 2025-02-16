@@ -60,7 +60,7 @@ const UserProfile: React.FC = () => {
     }
   };
 
-  const handleDateSelect = (newDate: any) => {
+  const handleDateSelect = (newDate: Date) => {
     if (isEditing) {
       setUserData((prevUserData) => ({
         ...prevUserData,
@@ -119,7 +119,7 @@ const UserProfile: React.FC = () => {
     }
   };
 
-  const onCropComplete = async (_: any, croppedAreaPixels: any) => {
+  const onCropComplete = async (_: Area, croppedAreaPixels: Area) => {
     setCroppedAreaPixels(croppedAreaPixels);
   };
 
@@ -289,7 +289,7 @@ const UserProfile: React.FC = () => {
                   <Calendar
                     mode="single"
                     selected={userData.date_of_birth}
-                    onSelect={handleDateSelect}
+                    onSelect={(day) => day && handleDateSelect(day)}
                     initialFocus
                   />
                 </PopoverContent>

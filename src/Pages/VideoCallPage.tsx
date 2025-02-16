@@ -225,7 +225,6 @@ const VideoCallPage: React.FC = () => {
       }
       
       peerRef.current.onnegotiationneeded = async () => {
-        console.log('Negotiation needed event listener of peerRef.current connection called. 123123123');
         sendNegotiationOffer(remoteSocketId as string);
       };
 

@@ -29,7 +29,10 @@ class WebrtcSocketService {
         }
     }
 
-    onJoinRoom(callback: (payload: any) => void) {
+    onJoinRoom(callback: (payload: {
+        success: Boolean,
+        yourId: string
+      }) => void) {
         if (this.socket) {
             this.socket.on('join-room', callback);
         }
@@ -61,7 +64,7 @@ class WebrtcSocketService {
     }
    
 
-    onPatientJoined(callback: (payload: any) => void) {
+    onPatientJoined(callback: (payload: { userSocketId: string }) => void) {
         if (this.socket) {
             this.socket.on('NewUserJoined', callback);
         }
@@ -97,13 +100,13 @@ class WebrtcSocketService {
         }
     }
 
-    onIceCandidate(callback: (payload: any) => void) {
+    onIceCandidate(callback: (payload: RTCIceCandidateInit) => void) {
         if (this.socket) {
             this.socket.on('ice-candidate', callback);
         }
     }
 
-    onEndCall(callback: (payload: any) => void) {
+    onEndCall(callback: (payload: { target: string }) => void) {
         if (this.socket) {
             this.socket.on('end-call', callback);
         }

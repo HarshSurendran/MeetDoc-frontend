@@ -36,13 +36,16 @@ export const sendAnswer = ( target: string, sdp: RTCSessionDescriptionInit ) => 
   };
 }
 
-export const onJoinRoom = (callback: (payload: any) => void) => {
+export const onJoinRoom = (callback: (payload: {
+  success: Boolean,
+  yourId: string
+}) => void) => {
     return () => {
       webrtcSocketService.onJoinRoom(callback);
   };
 };
 
-export const onPatientJoined = (callback: (payload: any) => void) => {
+export const onPatientJoined = (callback: (payload: { userSocketId: string }) => void) => {
     return () => {
         webrtcSocketService.onPatientJoined(callback);
     };

@@ -1,3 +1,4 @@
+import { LucideProps } from "lucide-react";
 import { ReactNode } from "react";
 
 export interface IUser {
@@ -19,8 +20,13 @@ export interface IUser {
   rating?: number;
   photo: string;
   password: string;
-
-  [key: string]: any;
+  lastSeen?: Date;
+  status?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+  patients: IPatient[];
+  isSubscribed: boolean;
+  
 }
 
 
@@ -85,7 +91,7 @@ export interface INavigationLinkProps {
     item: {
         name: string;
         href: string;
-        icon: any;
+        icon: React.ForwardRefExoticComponent<Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>>;
     };
     currentPath: string;
     setCurrentPath: (path: string) => void;

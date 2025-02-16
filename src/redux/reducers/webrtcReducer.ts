@@ -1,33 +1,3 @@
-// import {
-//     SOCKET_CONNECT,
-//     SOCKET_DISCONNECT,
-//     SOCKET_MESSAGE_RECEIVED,
-//   } from '../actions/webrtcAction';
-  
-//   const initialState = {
-//     connected: false,
-//     messages: [],
-//   };
-  
-//   const socketReducer = (state = initialState, action: any) => {
-//     switch (action.type) {
-//       case SOCKET_CONNECT:
-//         return { ...state, connected: true };
-  
-//       case SOCKET_DISCONNECT:
-//         return { ...state, connected: false };
-  
-//       case SOCKET_MESSAGE_RECEIVED:
-//         return { ...state, messages: [...state.messages, action.payload] };
-  
-//       default:
-//         return state;
-//     }
-//   };
-  
-//   export default socketReducer;
-  
-
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface SocketState {

@@ -56,10 +56,10 @@ const AppointmentManagement: React.FC<IAppointmentListProps> = ({
     if (userType === 'patient') {
       const response = await getUserAppointments();
       if (response.status) {
-        const sortedAppointments = response.data.appointments.sort((a:IBookedAppointmentType, b:IBookedAppointmentType) => {
+        const sortedAppointments = response.data.appointments.sort((appointment1:IBookedAppointmentType, appointment2:IBookedAppointmentType) => {
                 
-          const dateTimeA = convertDateTime(a.date, a.time);
-          const dateTimeB = convertDateTime(b.date, b.time);
+          const dateTimeA = convertDateTime(appointment1.date, appointment1.time);
+          const dateTimeB = convertDateTime(appointment2.date, appointment2.time);
           return dateTimeB - dateTimeA;
         });
         console.log(sortedAppointments, 'Sorted Appointments');

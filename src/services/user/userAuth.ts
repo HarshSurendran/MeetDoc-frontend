@@ -2,6 +2,7 @@ import { AxiosResponse } from 'axios';
 import { userAxiosInstance } from '../instance/userInstance';
 import { Ilogin, IUserloginResponse, IUserSignUp } from '../../types/';
 import apiErrorHandler from '../../utils/apiErrorHandler';
+import { CredentialResponse } from '@react-oauth/google';
 
 // export const login = async (credentials: ILoginCredential) => {
 //     try {
@@ -80,7 +81,7 @@ export const verifyOtp = async (
 };
 
 export const sendGoogleToken = async (
-  token: string
+  token: CredentialResponse
 ): Promise<AxiosResponse | undefined> => {
   try {
     const response = await userAxiosInstance.post('/auth/google/callback', {

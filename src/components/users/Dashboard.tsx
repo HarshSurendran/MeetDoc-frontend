@@ -47,7 +47,7 @@ const Dashboard = () => {
           .filter((doc: { startTime: string }) => {
             return new Date(doc.startTime) > currentTime
           })
-        .sort((a:any, b:any) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime());
+        .sort((appointment1:DashboardAppointmentData, appointment2:DashboardAppointmentData) => new Date(appointment1.startTime).getTime() - new Date(appointment2.startTime).getTime());
         console.log("appointments", appointments)
         setDetailedAppointments(appointments);
         if (appointments.length > 0) {
