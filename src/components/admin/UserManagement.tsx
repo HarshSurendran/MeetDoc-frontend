@@ -75,7 +75,6 @@ const UserManagementTable: React.FC = () => {
   const handlePageSizeChange = (newPageSize: string) => {
     setPageSize(newPageSize);
     setCurrentPage(1);
-    console.log("current page size change", pageSize);
   };
 
   const handleBlock = async (_id: string, event: React.MouseEvent) => {

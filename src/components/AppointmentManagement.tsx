@@ -23,6 +23,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/redux/store/appStore';
 import toast from 'react-hot-toast';
 import { setAppointmentId } from '@/redux/slices/doctorSlice';
+import Pagination from './Pagination';
 
 
 
@@ -31,6 +32,9 @@ const AppointmentManagement: React.FC<IAppointmentListProps> = ({
 }) => {
   const [appointments, setAppointments] = useState<IBookedAppointmentType[]>([]);
   const [selectedAppointment, setSelectedAppointment] = useState<IBookedAppointmentType | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState('10'); 
+  const [totalDocs, setTotalDocs] = useState(0);
 
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const doctor = useSelector((state: RootState) => state.doctor.doctor);
@@ -38,8 +42,8 @@ const AppointmentManagement: React.FC<IAppointmentListProps> = ({
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    fetchAppointments();
-  }, []);
+    fetchAppointments(currentPage, Number(pageSize));
+  }, [currentPage, pageSize]);
 
   const convertDateTime = (date: string, time: string): number => {
     const [day, month, year] = date.split("-").map(Number);
@@ -52,12 +56,12 @@ const AppointmentManagement: React.FC<IAppointmentListProps> = ({
     return new Date(year, month - 1, day, hours, minutes).getTime();
   };
 
-  const fetchAppointments = async () => {
+  const fetchAppointments = async (page: number, limit: number) => {
     if (userType === 'patient') {
-      const response = await getUserAppointments();
+      const response = await getUserAppointments(page, limit);
       if (response.status) {
+        setTotalDocs(response.data.totalDocs);
         const sortedAppointments = response.data.appointments.sort((appointment1:IBookedAppointmentType, appointment2:IBookedAppointmentType) => {
-                
           const dateTimeA = convertDateTime(appointment1.date, appointment1.time);
           const dateTimeB = convertDateTime(appointment2.date, appointment2.time);
           return dateTimeB - dateTimeA;
@@ -67,9 +71,10 @@ const AppointmentManagement: React.FC<IAppointmentListProps> = ({
       }
       return;
     }
-    const response = await getUpcomingAppointments();    
+    const response = await getUpcomingAppointments(page, limit);    
     if (response.status) {
       setAppointments(response.data.appointments);
+      setTotalDocs(response.data.totalDocs);
     }
   }
 
@@ -119,15 +124,19 @@ const AppointmentManagement: React.FC<IAppointmentListProps> = ({
   }, [navigate, userType]);
 
   const handleSeeMedicalHistory = useCallback(async (appointmentData: IBookedAppointmentType) => {
-    // if (userType === 'patient') {
-    //   toast.error('Doctor will contact you soon.');
-    //   return
-    // }
-    navigate(`/doctor/medical-history/${appointmentData.patientId}`);
-      
-    
-   
+    if (userType === 'doctor') {
+      navigate(`/doctor/medical-history/${appointmentData.patientId}`);
+    }
   }, [navigate]);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  const handlePageSizeChange = (newPageSize: string) => {
+    setPageSize(newPageSize);
+    setCurrentPage(1);
+  };
 
   return (
     <div className="container mx-auto p-4">
@@ -251,6 +260,14 @@ const AppointmentManagement: React.FC<IAppointmentListProps> = ({
           </DialogContent>
         )}
       </Dialog>
+
+      <Pagination
+        currentPage={currentPage}
+        pageSize={Number(pageSize)}
+        totalItems={totalDocs}
+        onPageChange={handlePageChange}
+        onPageSizeChange={handlePageSizeChange}
+      />
     </div>
   );
 };

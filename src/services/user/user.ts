@@ -158,9 +158,9 @@ export const getDoctorsForLandingPage = async () => {
   }
 };
 
-export const getUserAppointments = async () => {
+export const getUserAppointments = async ( page:number, limit: number ) => {
   try {
-    const response = await userAxiosInstance.get(`users/appointments`);
+    const response = await userAxiosInstance.get(`users/appointments?page=${page}&limit=${limit}`);
     if (response) {
       return response.data;
     }

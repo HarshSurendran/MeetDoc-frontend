@@ -94,10 +94,9 @@ export const getSlots = async (doctorId: string) => {
   }
 };
 
-export const getUpcomingAppointments = async () => {
+export const getUpcomingAppointments = async (page: number, limit: number) => {
   try {
-    const response = await doctorAxiosInstance.get(`doctors/upcomingappointments`);
-    
+    const response = await doctorAxiosInstance.get(`doctors/upcomingappointments?page=${page}&limit=${limit}`);    
     if (response) {
       return response.data;
     }
@@ -107,9 +106,9 @@ export const getUpcomingAppointments = async () => {
   }
 }
 
-export const getAppointments = async () => {
+export const getAppointments = async (page:number, limit:number) => {
   try {
-    const response = await doctorAxiosInstance.get(`doctors/appointments`);
+    const response = await doctorAxiosInstance.get(`doctors/appointments?page=${page}&limit=${limit}`);
     if (response) {
       return response.data;
     }
