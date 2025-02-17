@@ -419,9 +419,9 @@ export const getUpcomingAppointments = async() => {
   }
 }
 
-export const getPaymentHistory = async() => {
+export const getPaymentHistory = async(page: number, limit: number) => {
   try {
-    const response = await userAxiosInstance.get('users/paymenthistory');
+    const response = await userAxiosInstance.get(`users/paymenthistory?page=${page}&limit=${limit}`);
     if (response) {
       return response.data;
     }

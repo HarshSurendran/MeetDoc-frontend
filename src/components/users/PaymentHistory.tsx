@@ -5,28 +5,42 @@ import { BadgeInfo, Calendar, User } from 'lucide-react';
 import errorHandler from '@/utils/errorHandler';
 import { getPaymentHistory } from '@/services/user/user';
 import { Badge } from '../ui/badge';
-import { format, parseISO } from 'date-fns';
+import { format, parseISO, set } from 'date-fns';
 import { IPaymentHistory } from '@/types';
+import Pagination from '../Pagination';
 
 
 const PaymentHistory = () => {
-    const [payments, setPayments] = useState<IPaymentHistory[]>([]);
+  const [payments, setPayments] = useState<IPaymentHistory[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState('10'); 
+  const [totalDocs, setTotalDocs] = useState(0);
 
-    useEffect(() => {
-      fetchPayments();
-    }, []);
+  useEffect(() => {
+    fetchPayments(currentPage, Number(pageSize));
+  }, [currentPage, pageSize]);
 
-    const fetchPayments = async () => {
-      try {
-        const response = await getPaymentHistory();
-          if (response.status) {
-            const sortedPayment = response.data.payments.sort((a: IPaymentHistory, b: IPaymentHistory) => new Date(b.bookingTime).getTime() - new Date(a.bookingTime).getTime());
-            setPayments(sortedPayment);
-        }
-      } catch (error) {
-        errorHandler(error);
+  const fetchPayments = async (page: number, limit: number) => {
+    try {
+      const response = await getPaymentHistory(page, limit);
+      if (response.status) {
+          setTotalDocs(response.data.totalDocs);
+          const sortedPayment = response.data.payments.sort((a: IPaymentHistory, b: IPaymentHistory) => new Date(b.bookingTime).getTime() - new Date(a.bookingTime).getTime());
+          setPayments(sortedPayment);
       }
-    };
+    } catch (error) {
+      errorHandler(error);
+    }
+  };
+  
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  const handlePageSizeChange = (newPageSize: string) => {
+    setPageSize(newPageSize);
+    setCurrentPage(1);
+  };
 
   return (
    <div className="container mx-auto p-4">
@@ -78,6 +92,13 @@ const PaymentHistory = () => {
             </div>
           </ScrollArea>
         </CardContent>
+        <Pagination
+      currentPage={currentPage}
+      pageSize={Number(pageSize)}
+      totalItems={totalDocs}
+      onPageChange={handlePageChange}
+      onPageSizeChange={handlePageSizeChange}
+    />
       </Card>
     </div>
   )
