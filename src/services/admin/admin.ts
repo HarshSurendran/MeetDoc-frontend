@@ -3,10 +3,10 @@ import apiErrorHandler from '../../utils/apiErrorHandler';
 import { adminAxiosInstance } from '../instance/adminInstance';
 import { ICreateSubscriptionScheme } from '@/types';
 
-export const getUsers = async () => {
+export const getUsers = async (currentPage:number, limit:number) => {
   try {
-    const response = await adminAxiosInstance.get('/admin/users');
-    return response.data.data;
+    const response = await adminAxiosInstance.get(`/admin/users?page=${currentPage}&limit=${limit}`);
+    return response.data;
   } catch (error) {
     apiErrorHandler(error);
     return Promise.reject();
@@ -56,17 +56,30 @@ export const addUser = async (data: IUser) => {
   }
 };
 
-export const getVerificationRequests = async () => {
+export const getVerificationRequests = async (page: number , limit: number) => {
   try {
     const response = await adminAxiosInstance.get(
-      '/admin/verification-requests'
+      `/admin/verification-requests?page=${page}&limit=${limit}`
     );
-    return response.data;
+    if (response) {
+      return response.data;
+    }
   } catch (error) {
     apiErrorHandler(error);
     return Promise.reject();
   }
 };
+
+export const getVerifiedDoctors = async (page:number, limit:number) => {
+  try {
+    const response = await adminAxiosInstance.get(`/admin/verified-doctors?page=${page}&limit=${limit}`);
+    if (response) {
+      return response.data;
+    }
+  } catch (error) {
+    apiErrorHandler(error);
+  }
+}
 
 export const verifyDoctor = async (
   id: string,

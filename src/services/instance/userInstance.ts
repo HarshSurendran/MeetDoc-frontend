@@ -39,7 +39,7 @@ userAxiosInstance.interceptors.response.use(
           originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
           return userAxiosInstance(originalRequest);
         } catch (err) {
-          toast.error('Session expired');
+          // toast.error('Session expired');
           appStore.dispatch(resetUser());
           return Promise.reject(err);
         }

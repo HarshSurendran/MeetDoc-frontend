@@ -10,7 +10,6 @@ const Header = () => {
     useEffect(() => {
         const name = admin.name.split(" ");
         setLetter(name.map((word) => word[0]).join())
-        console.log(letter);
     })
 
   return (
@@ -39,7 +38,7 @@ const Header = () => {
         </div>
         <button className="relative p-2">
           <Bell className="h-6 w-6 text-gray-600" />
-          <span className="absolute top-0 right-0 h-2 w-2 bg-red-500 rounded-full"></span>
+          {/* <span className="absolute top-0 right-0 h-2 w-2 bg-red-500 rounded-full"></span> */}
         </button>
         <div className="flex items-center space-x-2">
           <div className="h-8 w-8 bg-blue-100 rounded-full flex items-center justify-center">

@@ -27,7 +27,6 @@ adminAxiosInstance.interceptors.response.use((response) => {
   
     if (error.response) {
       if (error.response.status === 401 && !originalRequest._retry) {
-        console.log("Entered 401 unauthorised response middleware, trying to create new token for admin-------------@@@@@@@@@@@@@@@@@@@@!!!!!!!!!!!!!!!!")
         originalRequest._retry = true;
         try {
           const newAccessToken = await getNewAccessToken();
@@ -51,7 +50,6 @@ adminAxiosInstance.interceptors.response.use((response) => {
       }
   
       if (error.response.status >= 400 && error.response.status < 500 && error.response.status !== 401) {
-        console.log("reached admin axios interceptor toast statement for user errors")
         toast.error(`${error.response.data.message || 'An error occurred'}`);
       }
     } else if (error.request) {
@@ -65,6 +63,5 @@ adminAxiosInstance.interceptors.response.use((response) => {
     const response = await axios.get(`${BASE_URL}/auth/admin/refreshtoken`, {
       withCredentials: true,
     });
-    console.log("THis is response from refreshtoken endpoint", response.data);
     return response.data.data.adminAccessToken;
   }

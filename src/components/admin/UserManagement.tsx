@@ -21,6 +21,7 @@ import EditUserModal from './EditUserModal';
 import toast from 'react-hot-toast';
 import { Button } from '../ui/button';
 import AddUserModal from './AddUserModal';
+import Pagination from '../Pagination';
 
 const UserManagementTable: React.FC = () => {
   const navigate = useNavigate();
@@ -33,13 +34,15 @@ const UserManagementTable: React.FC = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<IUser | null>(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState('10'); 
+  const [totalDocs, setTotalDocs] = useState(0);
 
   useEffect(() => {
-    fetchUser();
-  }, []);
+    fetchUser(currentPage, Number(pageSize));
+  }, [currentPage, pageSize]);
 
   useEffect(() => {
-    // Close dropdown when clicking outside
     const handleClickOutside = (event: MouseEvent) => {
       if (
         activeDropdown &&
@@ -53,15 +56,26 @@ const UserManagementTable: React.FC = () => {
     return () => document.removeEventListener('click', handleClickOutside);
   }, [activeDropdown]);
 
-  const fetchUser = async () => {
+  const fetchUser = async (page: number, limit: number) => {
     try {
-      const response: IUser[] = await getUsers();
-      if (response) {
-        setUsers(response);
+      const response = await getUsers(page, limit);
+      if (response.status) {
+        setUsers(response.data.users);
+        setTotalDocs(response.data.totalUsers);
       }
     } catch (error) {
       errorHandler(error);
     }
+  };
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  const handlePageSizeChange = (newPageSize: string) => {
+    setPageSize(newPageSize);
+    setCurrentPage(1);
+    console.log("current page size change", pageSize);
   };
 
   const handleBlock = async (_id: string, event: React.MouseEvent) => {
@@ -137,21 +151,21 @@ const UserManagementTable: React.FC = () => {
   };
 
   const toggleDropdown = (userId: string, event: React.MouseEvent) => {
-    event.stopPropagation(); // Prevent row click
+    event.stopPropagation();
     setActiveDropdown(activeDropdown === userId ? null : userId);
   };
 
-  const filteredUsers = users.filter(
+  const filteredUsers = users ?  users.filter(
     (user) =>
       user.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       user.email?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  ) : [];
 
   const sortedUsers = [...filteredUsers].sort((a, b) => {
     if (sortDirection === 'asc') {
-      return a[sortField] > b[sortField] ? 1 : -1;
+      return a[sortField]?.toString().localeCompare(b[sortField]?.toString() || '') || 0;
     }
-    return a[sortField] < b[sortField] ? 1 : -1;
+    return b[sortField]?.toString().localeCompare(a[sortField]?.toString() || '') || 0;
   });
 
   const SortIcon: React.FC<{ field: keyof IUser }> = ({ field }) => {
@@ -322,6 +336,14 @@ const UserManagementTable: React.FC = () => {
           onSave={handleAddUser}
         />
       )}
+
+      <Pagination
+      currentPage={currentPage}
+      pageSize={Number(pageSize)}
+      totalItems={totalDocs}
+      onPageChange={handlePageChange}
+      onPageSizeChange={handlePageSizeChange}
+    />
     </div>
   );
 };

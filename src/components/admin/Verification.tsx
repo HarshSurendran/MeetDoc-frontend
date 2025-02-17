@@ -1,35 +1,71 @@
 import { Card } from '@mui/material';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FormData } from '../../types/doctorTypes';
-import { getVerificationRequests } from '@/services/admin/admin';
+import { getVerificationRequests, getVerifiedDoctors } from '@/services/admin/admin';
 import errorHandler from '@/utils/errorHandler';
 import { useNavigate } from 'react-router-dom';
+import Pagination from '../Pagination';
 
 const Verification = () => {
   const [pendingRequests, setpendingRequests] = React.useState<FormData[]>([]);
-  const [approvedRequests, setapprovedRequests] = React.useState<FormData[]>(
-    []
-  );
+  const [approvedRequests, setapprovedRequests] = React.useState<FormData[]>([]);
+  const [currentPageOfVerifiedDoctors, setCurrentPageOfVerifiedDoctors] = useState(1);
+  const [pageSizeOfVerifiedDoctors, setPageSizeOfVerifiedDoctors] = useState('10'); 
+  const [totalDocsOfVerifiedDoctors, setTotalDocsOfVerifiedDoctors] = useState(0);
+  const [currentPageOfDocs, setCurrentPageOfDocs] = useState(1);
+  const [pageSizeOfDocs, setPageSizeOfDocs] = useState('10'); 
+  const [totalDocsOfDocs, setTotalDocsOfDocs] = useState(0);
+  
   const navigate = useNavigate();
 
-  React.useEffect(() => {
+  useEffect(() => {
     getRequests();
   }, []);
 
+  useEffect(() => {
+    getVerifiedDocs(currentPageOfVerifiedDoctors, Number(pageSizeOfVerifiedDoctors));
+  }, [currentPageOfVerifiedDoctors, pageSizeOfVerifiedDoctors]);
+
   const getRequests = async () => {
     try {
-      const res = await getVerificationRequests();
-      const pendingData = res.data.filter(
-        (doc: FormData) => doc.isVerified === false
-      );
-      setpendingRequests(pendingData);
-      const approvedData = res.data.filter(
-        (doc: FormData) => doc.isVerified === true
-      );
-      setapprovedRequests(approvedData);
+      const response = await getVerificationRequests(currentPageOfDocs, Number(pageSizeOfDocs));
+      if (response.status) {
+        setpendingRequests(response.data.requests);
+        setTotalDocsOfDocs(response.data.totalDocs);
+      }
     } catch (error) {
       errorHandler(error);
     }
+  };
+
+  const getVerifiedDocs = async (page: number, limit: number) => {
+    try {
+      const response = await getVerifiedDoctors(page, limit);
+      if (response.status) {
+        setTotalDocsOfVerifiedDoctors(response.data.totalDocs);
+        setapprovedRequests(response.data.doctors);
+      }
+    } catch (error) {
+      errorHandler(error);
+    }
+  };
+
+  const handlePageChangeForVerifiedDoctors = (page: number) => {
+    setCurrentPageOfVerifiedDoctors(page);
+  };
+
+  const handlePageSizeChangeForVerifiedDoctors = (newPageSize: string) => {
+    setPageSizeOfVerifiedDoctors(newPageSize);
+    setCurrentPageOfVerifiedDoctors(1);
+  };
+
+  const handlePageChange = (page: number) => {
+    setCurrentPageOfDocs(page);
+  };
+
+  const handlePageSizeChange = (newPageSize: string) => {
+    setPageSizeOfDocs(newPageSize);
+    setCurrentPageOfDocs(1);
   };
 
   return (
@@ -89,6 +125,13 @@ const Verification = () => {
             </tbody>
           </table>
         </div>
+        <Pagination
+        currentPage={currentPageOfDocs}
+        pageSize={Number(pageSizeOfDocs)}
+        totalItems={totalDocsOfDocs}
+        onPageChange={handlePageChange}
+        onPageSizeChange={handlePageSizeChange}
+      />
       </Card>
 
       <Card className="overflow-hidden mb-6">
@@ -120,16 +163,16 @@ const Verification = () => {
               {approvedRequests.map((doctor) => (
                 <tr key={doctor.doctorId}>
                   <td className="px-6 py-4 text-sm text-gray-900">
-                    {doctor?.personalDetails.name}
+                    {doctor?.personalDetails?.name}
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-500">
-                    {doctor?.personalDetails.email}
+                    {doctor?.personalDetails?.email}
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-500">
-                    {doctor?.personalDetails.gender}
+                    {doctor?.personalDetails?.gender}
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-500">
-                    {doctor?.personalDetails.age}
+                    {doctor?.personalDetails?.age}
                   </td>
                   <td className="px-6 py-4 text-sm">
                     <button
@@ -146,6 +189,13 @@ const Verification = () => {
             </tbody>
           </table>
         </div>
+        <Pagination
+        currentPage={currentPageOfVerifiedDoctors}
+        pageSize={Number(pageSizeOfVerifiedDoctors)}
+        totalItems={totalDocsOfVerifiedDoctors}
+        onPageChange={handlePageChangeForVerifiedDoctors}
+        onPageSizeChange={handlePageSizeChangeForVerifiedDoctors}
+      />
       </Card>
     </div>
   );

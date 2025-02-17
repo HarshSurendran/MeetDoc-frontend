@@ -18,6 +18,7 @@ import errorHandler from '@/utils/errorHandler';
 import { FormData } from '../../types/doctorTypes';
 import { useNavigate } from 'react-router-dom';
 import { IComparisonData, IComparisonDataDto, IRevenueDataDto, ISingleData, IRevenueData } from '@/types/IAdminDashboardData';
+import Pagination from '../Pagination';
 
 
 const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -42,6 +43,9 @@ const AdminDashboard: React.FC = () => {
     getTotalData();
     setTotalRevenue(getTotalRevenuePerYear(revenueData, selectedYear));
   }, []);
+  const [currentPageOfDocs, setCurrentPageOfDocs] = useState(1);
+  const [pageSizeOfDocs, setPageSizeOfDocs] = useState('10'); 
+  const [totalDocsOfDocs, setTotalDocsOfDocs] = useState(0);
 
   useEffect(() => {
     if (!graphData) return;
@@ -52,14 +56,23 @@ const AdminDashboard: React.FC = () => {
 
   const getRequests = async () => {
     try {
-      const res = await getVerificationRequests();
-      const filteredData = res.data.filter(
-        (doc: FormData) => doc.isVerified === false
-      );
-      setVerificationRequests(filteredData);
+      const response = await getVerificationRequests(currentPageOfDocs, Number(pageSizeOfDocs));
+      if (response.status) {
+        setVerificationRequests(response.data.requests);
+        setTotalDocsOfDocs(response.data.totalDocs);
+      }
     } catch (error) {
       errorHandler(error);
     }
+  };
+
+  const handlePageChange = (page: number) => {
+    setCurrentPageOfDocs(page);
+  };
+
+  const handlePageSizeChange = (newPageSize: string) => {
+    setPageSizeOfDocs(newPageSize);
+    setCurrentPageOfDocs(1);
   };
 
   const transformRevenueData = (revenueData: IRevenueDataDto[]): IRevenueData[] => {
@@ -394,7 +407,14 @@ const AdminDashboard: React.FC = () => {
                 ))}
               </tbody>
             </table>
-          </div>
+            </div>
+            <Pagination
+              currentPage={currentPageOfDocs}
+              pageSize={Number(pageSizeOfDocs)}
+              totalItems={totalDocsOfDocs}
+              onPageChange={handlePageChange}
+              onPageSizeChange={handlePageSizeChange}
+            />
         </Card>
       )}
     </>
