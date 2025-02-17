@@ -31,13 +31,10 @@ import { addPatient, deletePatient, getAllPatients } from '@/services/user/user'
 import toast from 'react-hot-toast';
 import { ICreatePatient, IPatient } from '@/types';
 
-
-
 const PatientManagementPage = () => {
   const [familyMembers, setFamilyMembers] = useState<IPatient[]>([]);
   const [showAddForm, setShowAddForm] = useState(false);
 
-  console.log("This is family members", familyMembers);
   const form = useForm({
     defaultValues: {
       fullName: "",
@@ -47,22 +44,21 @@ const PatientManagementPage = () => {
     },
   });
     
-    useEffect(() => {
-      fetchPatients();
-    }, [])
-    
-    const fetchPatients = async () => {
-        try {
-            const response = await getAllPatients();
-            if (response?.status) {
-                console.log("Other patients", response.data.patients);
-                setFamilyMembers(response.data.patients);
-            }
-        
-      } catch (error) {
-          console.log(error);
-          errorHandler(error);
-      }
+  useEffect(() => {
+    fetchPatients();
+  }, [])
+  
+  const fetchPatients = async () => {
+      try {
+          const response = await getAllPatients();
+          if (response?.status) {
+              setFamilyMembers(response.data?.patients);
+          }
+      
+    } catch (error) {
+        console.log(error);
+        errorHandler(error);
+    }
   }
 
   const onSubmit = async (data: { fullName: string; dateOfBirth: string; relation: string; gender: string; }) => {

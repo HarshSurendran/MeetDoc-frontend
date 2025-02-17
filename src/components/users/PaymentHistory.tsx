@@ -5,7 +5,7 @@ import { BadgeInfo, Calendar, User } from 'lucide-react';
 import errorHandler from '@/utils/errorHandler';
 import { getPaymentHistory } from '@/services/user/user';
 import { Badge } from '../ui/badge';
-import { format, parseISO, set } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 import { IPaymentHistory } from '@/types';
 import Pagination from '../Pagination';
 

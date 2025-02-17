@@ -19,60 +19,41 @@ import { IReviewDisplay, IUpdateReview } from '@/types';
 import errorHandler from '@/utils/errorHandler';
 import { deleteReview, getYourReviews, updateReview } from '@/services/user/user';
 import toast from 'react-hot-toast';
+import Pagination from '@/components/Pagination';
 
-// interface Review {
-//   _id: string;
-//   for: {
-//     name: string;
-//     specialisation: string;
-//   };
-//   message: string;
-//   rating: number;
-//   createdAt: string;
-// }
 
 const UserReviewsPage: React.FC = () => {
-  const [reviews, setReviews] = useState<IReviewDisplay[]>([
-    // Placeholder data - replace with actual fetched reviews
-    // {
-    //   _id: '1',
-    //   for: {
-    //     name: 'Dr. Harsh Surendran',
-    //     specialisation: 'General Medicine'
-    //   },
-    //   message: 'Very helpful and professional doctor',
-    //   rating: 5,
-    //   createdAt: new Date().toISOString()
-    //   },
-    //   {
-    //     _id: '1',
-    //     for: {
-    //       name: 'Dr. Harsh Surendran',
-    //       specialisation: 'General Medicine'
-    //     },
-    //     message: 'Very helpful and professional doctor',
-    //     rating: 5,
-    //     createdAt: new Date().toISOString()
-    //   }
-  ]);
-
+  const [reviews, setReviews] = useState<IReviewDisplay[]>([]);
   const [editingReview, setEditingReview] = useState<IReviewDisplay | null>(null);
   const [deleteConfirmation, setDeleteConfirmation] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState('10'); 
+  const [totalDocs, setTotalDocs] = useState(0);
 
   useEffect(() => {
-      fetchReviews();
-  }, []);
+      fetchReviews(currentPage, Number(pageSize));
+  }, [currentPage, pageSize]);
 
-  const fetchReviews = async () => {
-      try {
-          const response = await getYourReviews();
-          if (response.status) {
-              setReviews(response.data.reviews);
-          }            
-      } catch (error) {
-          errorHandler(error);
+  const fetchReviews = async (page: number, limit: number) => {
+    try {
+      const response = await getYourReviews(page, limit);
+      if (response.status) {
+        setReviews(response.data.reviews);
+        setTotalDocs(response.data.totalDocs);
       }
-  }
+    } catch (error) {
+      errorHandler(error);
+    }
+  };
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  const handlePageSizeChange = (newPageSize: string) => {
+    setPageSize(newPageSize);
+    setCurrentPage(1);
+  };
 
   const handleEditReview = (review: IReviewDisplay) => {
     setEditingReview(review);
@@ -265,6 +246,14 @@ const UserReviewsPage: React.FC = () => {
           </div>
         </DialogContent>
       </Dialog>
+
+      <Pagination
+      currentPage={currentPage}
+      pageSize={Number(pageSize)}
+      totalItems={totalDocs}
+      onPageChange={handlePageChange}
+      onPageSizeChange={handlePageSizeChange}
+    />
     </div>
   );
 };

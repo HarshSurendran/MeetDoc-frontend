@@ -260,9 +260,9 @@ export const getReviews = async (doctorId: string) => {
   }
 }
 
-export const getYourReviews = async () => {
+export const getYourReviews = async (page: number, limit: number) => {
   try {
-    const response = await userAxiosInstance.get('users/reviews');
+    const response = await userAxiosInstance.get(`users/reviews?page=${page}&limit=${limit}`);
     if (response) {
       return response.data;
     }
