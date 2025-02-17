@@ -27,7 +27,7 @@ const UserReviewsPage: React.FC = () => {
   const [editingReview, setEditingReview] = useState<IReviewDisplay | null>(null);
   const [deleteConfirmation, setDeleteConfirmation] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState('10'); 
+  const [pageSize, setPageSize] = useState('5'); 
   const [totalDocs, setTotalDocs] = useState(0);
 
   useEffect(() => {

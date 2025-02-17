@@ -215,9 +215,9 @@ export const toggleIsRead = async (senderId: string, receiverId: string) => {
   }
 }
 
-export const fetchPrescriptions = async () => {
+export const fetchPrescriptions = async (page: number, limit: number) => {
   try {
-    const response = await userAxiosInstance.get('users/prescriptions');
+    const response = await userAxiosInstance.get(`users/prescriptions?page=${page}&limit=${limit}`);
     if (response) {
       return response.data;
     }
