@@ -114,10 +114,13 @@ class WebrtcSocketService {
 
     disconnect(payload: { target: string }) {
         if (this.socket) {
-            console.log('Disconnecting from WebSocket for webrtc');
+            console.log('Disconnecting from WebSocket for webrtc', payload);
             this.socket.emit('end-call', payload);
-            this.socket.disconnect();
-            this.socket = null;
+            setTimeout(() => {
+                console.log("Disconnecting from WebSocket for webrtc", this.socket?.id);
+                this.socket!.disconnect();
+                this.socket = null;
+            },100)
         };
     };
 };
