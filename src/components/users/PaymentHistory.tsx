@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { ScrollArea } from '../ui/scroll-area';
-import { BadgeInfo, Calendar, User } from 'lucide-react';
+import { BadgeInfo, Calendar, Landmark, User } from 'lucide-react';
 import errorHandler from '@/utils/errorHandler';
 import { getPaymentHistory } from '@/services/user/user';
 import { Badge } from '../ui/badge';
@@ -46,12 +46,13 @@ const PaymentHistory = () => {
    <div className="container mx-auto p-4">
       <Card className="w-full">
         <CardHeader>
-          <CardTitle className="text-2xl font-bold text-blue-800">
+          <CardTitle className="text-2xl font-bold text-blue-800 flex gap-2">
+            <Landmark className="h-8 w-8 text-blue-600" />
             Payment History
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <ScrollArea className="h-[600px] pr-4">
+          <ScrollArea className="h-[500px] pr-4">
             <div className="space-y-4">
               {payments.map((payment) => (
                 <Card 

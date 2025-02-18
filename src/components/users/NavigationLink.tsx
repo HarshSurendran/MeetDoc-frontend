@@ -28,7 +28,7 @@ const NavigationLink :React.FC<INavigationLinkProps> = ({ item, currentPath, set
             
       >
         <Icon className="h-5 w-5" />
-        <span>{item.name}</span>
+        <span >{item.name}</span>
       </Button>
     );
 };

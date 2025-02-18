@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Download, Eye } from 'lucide-react';
+import { Download, Eye, Hospital } from 'lucide-react';
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 import errorHandler from '@/utils/errorHandler';
 import { fetchPrescriptions } from '@/services/user/user';
@@ -111,16 +111,23 @@ const PrescriptionPage: React.FC = () => {
 
   return (
     <div className="container mx-auto p-4 bg-white min-h-screen">
+        <Card className="w-full">
+        <CardHeader>
+          <CardTitle className="text-2xl font-bold text-blue-800 flex gap-2">
+            <Hospital className="w-8 h-8 text-blue-600" />
+            Payment History
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
       <div className="grid md:grid-cols-[300px_1fr] gap-4">
         {/* Prescription List */}
         <div className="space-y-2">
-          <h2 className="text-2xl font-bold text-blue-600 mb-4">My Prescriptions</h2>
           {prescriptions.map(prescription => (
             <Card 
               key={prescription._id} 
               className={`cursor-pointer hover:bg-blue-50 transition-colors ${
                 selectedPrescription?._id === prescription._id ? 'border-blue-500 border-2' : ''
-              }`}
+                }`}
               onClick={() => setSelectedPrescription(prescription)}
             >
               <CardHeader>
@@ -136,7 +143,6 @@ const PrescriptionPage: React.FC = () => {
               </CardContent>
             </Card>
           ))}
-          
         </div>
 
         {/* Prescription Details */}
@@ -225,7 +231,9 @@ const PrescriptionPage: React.FC = () => {
             totalItems={totalDocs}
             onPageChange={handlePageChange}
             onPageSizeChange={handlePageSizeChange}
-          />
+      />
+      </CardContent>
+      </Card>
     </div>
   );
 };

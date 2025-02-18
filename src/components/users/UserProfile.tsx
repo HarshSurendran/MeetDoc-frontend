@@ -17,7 +17,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { format } from 'date-fns';
-import { Calendar as CalendarIcon, Camera } from 'lucide-react';
+import { Calendar as CalendarIcon, Camera, UserRoundPen } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/redux/store/appStore';
 import {
@@ -127,7 +127,8 @@ const UserProfile: React.FC = () => {
     <Card className="shadow-lg">
       <CardHeader className="border-b">
         <div className="flex justify-between items-center">
-          <CardTitle className="text-2xl text-blue-600">
+          <CardTitle className="text-2xl text-blue-800 font-bold flex gap-2" >
+            <UserRoundPen className="h-8 w-8 text-blue-600" />
             Profile Information
           </CardTitle>
           <Button

@@ -22,7 +22,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { logout } from '@/services/user/userAuth';
 import NavigationLink from '@/components/users/NavigationLink';
 import { useDispatch, useSelector } from 'react-redux';
@@ -38,21 +38,21 @@ const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
   { name: 'Appointments', href: '/appointments', icon: Calendar },
   { name: 'Payments', href: '/payments', icon: CreditCard },
-  { name: 'Chat', href: '/chat', icon: MessageCircleMore },
   { name: 'Prescriptions', href: '/prescription', icon: ClipboardPlus },
   { name: 'Your Reviews', href: '/reviews', icon: BellRing },
   { name: "Add Members", href: '/usermanagement', icon: Menu},
+  { name: 'Chat', href: '/chat', icon: MessageCircleMore },
   { name: 'Profile', href: '/profile', icon: User },
 ];
 
 const UserDashboardLayout = () => {
-  const [currentPath, setCurrentPath] = useState('/dashboard');
+  const location = useLocation();
+  const [currentPath, setCurrentPath] = useState(location.pathname);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const user = useSelector((state: RootState) => state.user.user);
+  const user = useSelector((state: RootState) => state.user?.user);
   const { notifications, removeNotification, removeAllNotifications } = useNotifications(user._id);
 
-    
   const handleLogout = async () => {
     try {
       const response = await logout(user._id);
@@ -72,8 +72,7 @@ const UserDashboardLayout = () => {
     if (notification.type === 'appointment') {
       navigate('/appointments');
     }
-
-  }
+  };
 
   const handleRemoveAllNotifications = async () => {
     try {
@@ -175,7 +174,7 @@ const UserDashboardLayout = () => {
       {/* Main Content Area */}
       <div className="flex">
         {/* Sidebar Navigation - Desktop */}
-        <aside className="hidden md:flex h-[calc(100vh-4rem)] w-64 flex-col border-r bg-white">
+        <aside className="hidden md:flex w-64 flex-col border-r bg-white">
           <nav className="flex-1 space-y-1 p-4">
             {navigation.map((item) => (
               <NavigationLink key={item.name} currentPath={currentPath} setCurrentPath={setCurrentPath} item={item} />

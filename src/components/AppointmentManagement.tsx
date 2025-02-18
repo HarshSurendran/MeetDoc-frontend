@@ -14,7 +14,7 @@ import {
   DialogTitle 
 } from '@/components/ui/dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Video, Calendar, Clock, User, Text, ClipboardPlus } from 'lucide-react';
+import { Video, Calendar, Clock, User, Text, ClipboardPlus, CalendarCheck2  } from 'lucide-react';
 import { BookingStatus, IAppointmentListProps, IBookedAppointmentType } from '@/types';
 import { getAppointment, getUpcomingAppointments, sendMessageApi } from '@/services/doctor/doctor';
 import { getUserAppointments } from '@/services/user/user';
@@ -66,7 +66,6 @@ const AppointmentManagement: React.FC<IAppointmentListProps> = ({
           const dateTimeB = convertDateTime(appointment2.date, appointment2.time);
           return dateTimeB - dateTimeA;
         });
-        console.log(sortedAppointments, 'Sorted Appointments');
         setAppointments(sortedAppointments);
       }
       return;
@@ -142,12 +141,13 @@ const AppointmentManagement: React.FC<IAppointmentListProps> = ({
     <div className="container mx-auto p-4">
       <Card className="w-full">
         <CardHeader>
-          <CardTitle className="text-2xl font-bold text-blue-800">
+          <CardTitle className="text-2xl font-bold text-blue-800 flex gap-2">
+            <CalendarCheck2  className="w-8 h-8 text-blue-600" />
             {userType === 'doctor' ? 'My Patient Appointments' : 'My Appointments'}
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <ScrollArea className="h-[600px] pr-4">
+          <ScrollArea className="h-[500px] pr-4">
             <div className="space-y-4">
               {appointments.map((appointment) => (
                 <Card
