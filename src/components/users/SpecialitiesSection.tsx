@@ -1,4 +1,4 @@
-
+import toast from "react-hot-toast";
 import { Button } from "../ui/button";
 
 const SpecialtiesSection = () => {
@@ -7,7 +7,7 @@ const SpecialtiesSection = () => {
     { name: "Gynecology", image: "heroimage2.avif" },
     { name: "Dermatology", image: "heroimage2.avif" },
     { name: "Psychiatry", image: "heroimage2.avif" },
-    { name: "Psychiatry", image: "heroimage2.avif" },
+    { name: "Neurology", image: "heroimage2.avif" },
   ];
 
   return (
@@ -15,11 +15,11 @@ const SpecialtiesSection = () => {
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-8">
           <h2 className="text-2xl font-bold">25+ Specialties</h2>
-          <Button variant="outline">View All Specialties</Button>
+          <Button variant="outline" onClick={() => toast.error("This option is not available now.")} >View All Specialties</Button>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 lg:grid-cols-5">
           {specialties.map((specialty, index) => (
-            <div key={index} className="flex flex-col items-center group cursor-pointer">
+            <div key={index} onClick={() => toast.error("This option is not available now.")} className="flex flex-col items-center group cursor-pointer">
               <div className="relative w-32 h-32 mb-4 rounded-full overflow-hidden transition-transform duration-300 group-hover:scale-105">
                 <img 
                   src={specialty.image} 

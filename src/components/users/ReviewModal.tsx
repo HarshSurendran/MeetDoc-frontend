@@ -9,8 +9,6 @@ import { useNavigate } from 'react-router-dom';
 import { sendReview } from '@/services/user/user';
 
 
-
-
 const ReviewModal: React.FC<IReviewModalProp> = ({doctorId, appointmentId}) => {
   const [rating, setRating] = useState(0);
   const [review, setReview] = useState('');
@@ -21,24 +19,24 @@ const ReviewModal: React.FC<IReviewModalProp> = ({doctorId, appointmentId}) => {
     setRating(selectedRating);
   };
 
-    const handleSubmit = async () => {
-        try {
-            const reviewData: ICreateReview = {
-                for: doctorId,
-                rating,
-                message: review,
-                appointmentId
-          }
-          console.log("review data", reviewData);
-            const response = await sendReview(reviewData);
-            if (response.status) {
-                toast.success('Review submitted successfully.');
-            }
-            navigate(`/prescription`);
-            console.log('Submitted:', { rating, review });
-        } catch (error) {
-            errorHandler(error);
+  const handleSubmit = async () => {
+      try {
+          const reviewData: ICreateReview = {
+              for: doctorId,
+              rating,
+              message: review,
+              appointmentId
         }
+        console.log("review data", reviewData);
+          const response = await sendReview(reviewData);
+          if (response.status) {
+              toast.success('Review submitted successfully.');
+          }
+          navigate(`/prescription`);
+          console.log('Submitted:', { rating, review });
+      } catch (error) {
+          errorHandler(error);
+      }
   };
 
   return (

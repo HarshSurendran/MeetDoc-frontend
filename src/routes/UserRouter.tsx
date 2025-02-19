@@ -8,6 +8,7 @@ import LoadingAnimation from '@/Pages/LoadingAnimation';
 const LandingPage = lazy(() => import('../Pages/user/LandingPage'));
 const LoginPage = lazy(() => import('../Pages/user/LoginPage'));
 const SignupPage = lazy(() => import('../Pages/user/SignupPage'));
+const AllDoctorsPage = lazy(()=> import('../Pages/user/AllDoctorsPage'));
 const OtpPage = lazy(() => import('../Pages/user/OtpPage'));
 const ForgotPasswordPage = lazy(() => import('../Pages/user/forgotPasswordPage'));
 const ResetPasswordPage = lazy(() => import('../Pages/user/ResetPasswordPage'));
@@ -38,6 +39,7 @@ const UserRouter = () => {
         <Route path="/signup" element={<PublicRoute component={SignupPage} />} />
         <Route path="/otp" element={<PublicRoute component={OtpPage} />} />
         <Route path="/doctordetail/:id" element={<PrivateRoute component={DoctorDetailPage} />} />
+        <Route path='/users/doctors' element={<PrivateRoute component={AllDoctorsPage} />} />
         <Route path="/users/payment" element={<PaymentRoute component={PaymentPage} />} />
         <Route path="/payment-success" element={<PaymentSuccessPage />} />
         <Route path="/subscriptionpayment/:subId" element={<SubscriptionPaymentPage />} />

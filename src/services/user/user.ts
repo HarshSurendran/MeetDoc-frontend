@@ -158,6 +158,19 @@ export const getDoctorsForLandingPage = async () => {
   }
 };
 
+export const getAllDoctors = async (page: number, limit: number) => {
+  try {
+    const response = await userAxiosInstance.get(`users/doctors?page=${page}&limit=${limit}`);
+    console.log(response,"This is the response from get all doctors");
+    if (response) {
+      return response.data;
+    }
+    return null;
+  } catch (error) {
+    apiErrorHandler(error);
+  }
+};
+
 export const getUserAppointments = async ( page:number, limit: number ) => {
   try {
     const response = await userAxiosInstance.get(`users/appointments?page=${page}&limit=${limit}`);

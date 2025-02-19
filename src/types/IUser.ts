@@ -83,8 +83,8 @@ export interface IDoctorDetails {
   _id: string,
   name: string,
   specialisation: string,
-  consultation: number,
   photo: string,
+  rating: number
 }
 
 export interface INavigationLinkProps {

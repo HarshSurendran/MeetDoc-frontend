@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { Button } from '../ui/button'
 import { useNavigate } from 'react-router-dom'
 
@@ -16,10 +17,10 @@ const HeaderPreLogin = () => {
           <div className="flex justify-between items-center h-16">
             <div className="font-bold text-xl text-blue-600">MeetDoc</div>
             <div className="hidden md:flex space-x-8">
-              <a href="#" className="text-gray-600 hover:text-blue-600">Home</a>
-              <a href="#" className="text-gray-600 hover:text-blue-600">Services</a>
-              <a href="#" className="text-gray-600 hover:text-blue-600">About</a>
-              <a href="#" className="text-gray-600 hover:text-blue-600">Contact</a>
+              <Link to="/" className="text-gray-600 hover:text-blue-600">Home</Link>
+              <Link to="/" className="text-gray-600 hover:text-blue-600">Services</Link>
+              <Link to="/" className="text-gray-600 hover:text-blue-600">About</Link>
+              <Link to="/" className="text-gray-600 hover:text-blue-600">Contact</Link>
             </div>
             <div className="flex items-center space-x-4">
               <Button variant="outline" onClick={handleLogin}>Login</Button>
