@@ -66,6 +66,7 @@ const AppointmentManagement: React.FC<IAppointmentListProps> = ({
           const dateTimeB = convertDateTime(appointment2.date, appointment2.time);
           return dateTimeB - dateTimeA;
         });
+        
         setAppointments(sortedAppointments);
       }
       return;

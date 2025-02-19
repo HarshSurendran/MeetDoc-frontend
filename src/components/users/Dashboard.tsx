@@ -45,7 +45,7 @@ const Dashboard = () => {
         const currentTime = new Date();
         const appointments = response.data.appointments
           .filter((doc: { startTime: string }) => {
-            return new Date(doc.startTime) > currentTime
+            return new Date(doc.startTime) >= currentTime
           })
         .sort((appointment1:DashboardAppointmentData, appointment2:DashboardAppointmentData) => new Date(appointment1.startTime).getTime() - new Date(appointment2.startTime).getTime());
         console.log("appointments", appointments)

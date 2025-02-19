@@ -33,6 +33,7 @@ import { RootState } from '@/redux/store/appStore';
 import useNotifications from '@/customhooks/useNotifications';
 import { INotification } from '@/types';
 import { markAllAsRead, markAsRead } from '@/services/user/user';
+import { Link } from 'react-router-dom';
 
 const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
@@ -109,8 +110,10 @@ const UserDashboardLayout = () => {
                 </div>
               </SheetContent>
             </Sheet>
-            <h2 className="text-xl font-bold text-blue-600">MeetDoc</h2>
+            <Link to="/" className=" text-xl font-bold text-blue-600 md:px-12">MeetDoc</Link>
           </div>
+
+             
 
           {/* User Actions */}
           <div className="flex items-center gap-4">
