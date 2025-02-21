@@ -11,7 +11,7 @@ import { DashboardAppointmentData } from '@/types';
 import UpcomingAppointments from './UpcomingAppointments';
 import { useSearchParams } from 'react-router-dom';
 import { addSubscriptionDetails} from '@/redux/slices/userSlice';
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 
 const Dashboard = () => {
   const [lastPayment, setLastPayment] = useState<{ price: string, date: string }>({

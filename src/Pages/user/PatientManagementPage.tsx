@@ -52,7 +52,7 @@ const PatientManagementPage = () => {
       try {
           const response = await getAllPatients();
           if (response?.status) {
-              setFamilyMembers(response.data?.patients);
+              setFamilyMembers(response?.data?.patients);
           }
       
     } catch (error) {
@@ -72,8 +72,8 @@ const PatientManagementPage = () => {
     // setFamilyMembers((prev) => [...prev, newMember]);
 
     const response = await addPatient(newMember);
-    if (response.status) {
-      setFamilyMembers( response.data.patients)
+    if (response?.status) {
+      setFamilyMembers( response?.data?.patients)
       toast.success('Patient added successfully');
     } else {
       toast.error('Failed to add patient, try again after sometime.');

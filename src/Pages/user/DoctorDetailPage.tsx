@@ -9,6 +9,7 @@ import toast from 'react-hot-toast';
 import { IDoctorProfile } from '@/types/IDoctor';
 import HeaderPostLogin from '@/components/users/HeaderPostLogin';
 import ReviewSection from '@/components/users/DoctorDetailView/ReviewSection';
+import Footer from '@/components/users/Footer';
 
 const DoctorDetailPage = () => {
   const [doctor, setDoctor] = useState<Partial<IDoctorProfile>>({});
@@ -23,14 +24,14 @@ const DoctorDetailPage = () => {
     try {
       if (doctorId) {
         const response = await fetchSingleDoctor(doctorId);
-        if (response.status) {
-          if (response.data.doctor.photo) {
+        if (response?.status) {
+          if (response?.data?.doctor?.photo) {
             const url = await getProfilePhoto(response.data.doctor.photo);
             response.data.doctor.photo = url;
           } else {
             response.data.doctor.photo = 'defaultprofilephoto.jpg';
           }
-          setDoctor(response.data.doctor);
+          setDoctor(response?.data?.doctor);
         }
       } else {
         toast.error('Doctor Id is not valid. Please go back and try again.');
@@ -120,6 +121,8 @@ const DoctorDetailPage = () => {
           </div>
         </div>
       </div>
+
+      <Footer />
     </div>
   );
 };

@@ -5,37 +5,41 @@ import { format } from 'date-fns';
 import errorHandler from '@/utils/errorHandler';
 import { IReviewDisplay, IReviewSectionProps } from '@/types';
 import { getReviews } from '@/services/user/user';
-
-
-
+import ReviewPagination from '../ReviewPagination';
 
 
 const ReviewSection: React.FC<IReviewSectionProps> = ({ doctorId }) => {
-    const [reviews, setReviews] = useState<IReviewDisplay[]>([]);
+  const [reviews, setReviews] = useState<IReviewDisplay[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalDocs, setTotalDocs] = useState(0);
 
     useEffect(() => {
-        fetchReviews();
-    }, []);
+        fetchReviews(currentPage);
+    }, [currentPage]);
 
-    const fetchReviews = async() => {
+    const fetchReviews = async(currentPage: number, limit = 5 ) => {
         try {
-            const response = await getReviews(doctorId);
-            if (response.status) {
-                setReviews(response.data.reviews);
+            const response = await getReviews(doctorId, currentPage, limit);
+            if (response?.status) {
+              setReviews(response?.data?.reviews);
+              setTotalDocs(response?.data?.totalDocs);
             }
         } catch (error) {
             errorHandler(error)
         }
-    }
+  }
 
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
   const averageRating = reviews.length > 0 
     ? (reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length).toFixed(1)
     : '0.0';
 
   return (
-    <Card className="lg:min-h-screen">
-      <CardContent className="p-6 space-y-4">
+    <Card className="lg:min-h-screen flex flex-col justify-between">
+      <CardContent className="p-6 space-y-8">
         <div className="flex justify-between items-center">
           <h2 className="text-2xl font-bold">Reviews</h2>
           <div className="flex items-center space-x-1">
@@ -50,7 +54,7 @@ const ReviewSection: React.FC<IReviewSectionProps> = ({ doctorId }) => {
             No reviews yet
           </div>
         ) : (
-          <div className="space-y-4">
+          <div className=" space-y-4">
             {reviews.map((review) => (
               <div 
                 key={review._id} 
@@ -88,6 +92,12 @@ const ReviewSection: React.FC<IReviewSectionProps> = ({ doctorId }) => {
           </div>
         )}
       </CardContent>
+      <ReviewPagination
+        currentPage={currentPage}
+        pageSize={5}
+        totalItems={totalDocs}
+        onPageChange={handlePageChange}
+      />
     </Card>
   );
 };

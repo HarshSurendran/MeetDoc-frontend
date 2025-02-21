@@ -261,9 +261,9 @@ export const sendReview = async (reviewData: ICreateReview) => {
   }
 }
 
-export const getReviews = async (doctorId: string) => {
+export const getReviews = async (doctorId: string, page: number, limit: number) => {
   try {
-    const response = await userAxiosInstance.get(`review/${doctorId}`);
+    const response = await userAxiosInstance.get(`review/${doctorId}?page=${page}&limit=${limit}`);
     if (response) {
       return response.data;
     }
