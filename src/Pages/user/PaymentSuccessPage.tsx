@@ -15,6 +15,8 @@ import {
 import { format } from 'date-fns';
 import { getBookingDetails } from '@/services/user/user';
 import { IAppointmentDetails } from '@/types';
+import LoadingAnimation from '../LoadingAnimation';
+import PaymentFailurePage from './PaymentFailurePage';
 
 
 
@@ -22,6 +24,8 @@ import { IAppointmentDetails } from '@/types';
 const PaymentSuccessPage: React.FC = () => {
   const [searchParams] = useSearchParams();
   const paymentIntentId = searchParams.get('payment_intent');
+  const redirectStatus = searchParams.get('redirect_status');
+  const [paymentFailed, setPaymentFailed] = useState(false);
   const [appointmentDetails, setAppointmentDetails] = useState<IAppointmentDetails>({
     doctorName: "",
     specialisation: "",
@@ -37,22 +41,35 @@ const PaymentSuccessPage: React.FC = () => {
     
     
     useEffect(() => {
-        if (paymentIntentId) {
-          setTimeout(() => {
-            fetchAppointmentDetails();
-          }, 500) 
+      if (paymentIntentId) {
+          if(redirectStatus === 'succeeded') {
+            setTimeout(() => {
+              fetchAppointmentDetails();
+            }, 500);
+          } else {
+            setPaymentFailed(true);            
+          }
         }
     }, []);
 
   const fetchAppointmentDetails = async () => {
     if (paymentIntentId) {
       const response = await getBookingDetails(paymentIntentId);
-      if (response.status) {
+      console.log("response", response);
+      if (response?.status) {
         setAppointmentDetails(response.data.bookingDetails);
+      } else {
+        setPaymentFailed(true);
       }
     }
+  };
 
-    }
+  const retryPaymentFunction = () => {
+    console.log("retryPayment clicked")
+    navigate(`/users/payment`);
+  }
+
+
         
 
   return (
@@ -131,7 +148,7 @@ const PaymentSuccessPage: React.FC = () => {
                       <CheckCircle className="w-5 h-5 text-green-600 mt-1" />
                       <div>
                         <h3 className="font-medium">Payment Status</h3>
-                        <p className="text-gray-600">Paid: ${appointmentDetails.fee}</p>
+                        <p className="text-gray-600">Paid: ₹{appointmentDetails.fee}</p>
                         <p className="text-sm text-green-600">Payment Successful</p>
                       </div>
                     </div>
@@ -190,7 +207,7 @@ const PaymentSuccessPage: React.FC = () => {
             </div>
           </div>
         </div>
-        : <p className="">Loading</p>}
+        : paymentFailed ? <PaymentFailurePage failureReason='Bank not responding' retryPayment={retryPaymentFunction} /> : <LoadingAnimation />}
   
       </>
 )};

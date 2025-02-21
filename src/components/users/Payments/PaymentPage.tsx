@@ -19,7 +19,6 @@ const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PKEY);
 const PaymentPage: React.FC = () => {
     const [clientSecret, setClientSecret] = useState("");
     const paymentDetails = useSelector((state: RootState) => state.payment.payment);
-    console.log(paymentDetails)
     const navigate = useNavigate();
     const dispatch = useDispatch();
     
