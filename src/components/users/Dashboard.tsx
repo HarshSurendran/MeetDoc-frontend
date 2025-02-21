@@ -11,7 +11,7 @@ import { DashboardAppointmentData } from '@/types';
 import UpcomingAppointments from './UpcomingAppointments';
 import { useSearchParams } from 'react-router-dom';
 import { addSubscriptionDetails} from '@/redux/slices/userSlice';
-import toast from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
 
 const Dashboard = () => {
   const [lastPayment, setLastPayment] = useState<{ price: string, date: string }>({
@@ -37,10 +37,11 @@ const Dashboard = () => {
   useEffect(() => {
     fetchData();
     if (hasPaymentIntent) {
-      console.log("Entered has payment intent fetching user");
-      getUser();
       if(paymentStatus === 'succeeded') {
+        getUser();
         toast.success('Congrats! Payment successful.');
+      } else {
+        toast.error('Payment failed. Try again after some time.');
       }
     }
   }, [searchParams]);
@@ -55,7 +56,6 @@ const Dashboard = () => {
     try {
       const response = await getUserData(user._id);
       if (response.status) {
-        console.log("recieved user updating subscription details in store")
         dispatch(addSubscriptionDetails(response.data));
       }
     } catch (error) {

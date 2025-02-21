@@ -25,6 +25,7 @@ import toast from 'react-hot-toast';
 import { setAppointmentId } from '@/redux/slices/doctorSlice';
 import Pagination from './Pagination';
 import { format , toZonedTime } from 'date-fns-tz';
+import errorHandler from '@/utils/errorHandler';
 
 
 
@@ -68,45 +69,48 @@ const AppointmentManagement: React.FC<IAppointmentListProps> = ({
     }
   };
 
-  const fetchAppointments = async (page: number, limit: number) => {
-    if (userType === 'patient') {
-      const response = await getUserAppointments(page, limit);
-      if (response?.status) {
-        setTotalDocs(response?.data.totalDocs);
-        const sortedAppointments = response?.data.appointments.sort((appointment1:IBookedAppointmentType, appointment2:IBookedAppointmentType) => {
-          const dateTimeA = convertDateTime(appointment1.date, appointment1.time);
-          const dateTimeB = convertDateTime(appointment2.date, appointment2.time);
-          return dateTimeB - dateTimeA;
-        });
-        const sortedAppointments1 = sortedAppointments.map((appointments: IBookedAppointmentType) => {
-          const { localDate, localTime } = convertToIST(appointments.date);
-          console.log("local dAte and time", localDate, localTime);
+  const fetchAppointments = async (page: number, limit: number) => {    
+    try {
+      if (userType === 'patient') {
+        const response = await getUserAppointments(page, limit);
+        if (response?.status) {
+          setTotalDocs(response?.data.totalDocs);
+          const sortedAppointments = response?.data.appointments.sort((appointment1:IBookedAppointmentType, appointment2:IBookedAppointmentType) => {
+            const dateTimeA = convertDateTime(appointment1.date, appointment1.time);
+            const dateTimeB = convertDateTime(appointment2.date, appointment2.time);
+            return dateTimeB - dateTimeA;
+          });
+          const sortedAppointments1 = sortedAppointments.map((appointments: IBookedAppointmentType) => {
+            const { localDate, localTime } = convertToIST(appointments.date);
+            console.log("local dAte and time", localDate, localTime);
+            return {
+              ...appointments,
+              date: localDate,
+              time: localTime
+            };
+          })
+          console.log(sortedAppointments1, "sortedAppointments1");
+          
+          setAppointments(sortedAppointments1);
+        }
+        return;
+      }
+      const response = await getUpcomingAppointments(page, limit);    
+      if (response.status) {
+        console.log(response.data.appointments, "appointments");
+        const appointments = response.data.appointments.map((appointments: IBookedAppointmentType) => {
+          const { localDate, localTime } = convertToIST(appointments.date)
           return {
             ...appointments,
             date: localDate,
             time: localTime
           };
         })
-        console.log(sortedAppointments1, "sortedAppointments1");
-        
-        setAppointments(sortedAppointments1);
+        setAppointments(appointments);
+        setTotalDocs(response.data.totalDocs);
       }
-      return;
-    }
-    const response = await getUpcomingAppointments(page, limit);    
-    if (response.status) {
-      console.log(response.data.appointments, "appointments");
-      const appointments = response.data.appointments.map((appointments: IBookedAppointmentType) => {
-        const { localDate, localTime } = convertToIST(appointments.date);
-        console.log("local dAte and time", localDate, localTime);
-        return {
-          ...appointments,
-          date: localDate,
-          time: localTime
-        };
-      })
-      setAppointments(appointments);
-      setTotalDocs(response.data.totalDocs);
+    } catch (error) {
+      errorHandler(error);      
     }
   }
 

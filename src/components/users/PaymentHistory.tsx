@@ -23,8 +23,8 @@ const PaymentHistory = () => {
   const fetchPayments = async (page: number, limit: number) => {
     try {
       const response = await getPaymentHistory(page, limit);
-      if (response.status) {
-          setTotalDocs(response.data.totalDocs);
+      if (response?.status) {
+          setTotalDocs(response?.data?.totalDocs);
           const sortedPayment = response.data.payments.sort((a: IPaymentHistory, b: IPaymentHistory) => new Date(b.bookingTime).getTime() - new Date(a.bookingTime).getTime());
           setPayments(sortedPayment);
       }
