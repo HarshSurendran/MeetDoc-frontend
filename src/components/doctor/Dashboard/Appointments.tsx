@@ -23,6 +23,7 @@ import { AppDispatch, RootState } from '@/redux/store/appStore';
 import toast from 'react-hot-toast';
 import { setAppointmentId } from '@/redux/slices/doctorSlice';
 import Pagination from '@/components/Pagination';
+import { format, toZonedTime } from 'date-fns-tz';
 
 const Appointments: React.FC = () => {
   const [appointments, setAppointments] = useState<IBookedAppointmentType[]>([]);
@@ -51,10 +52,29 @@ const Appointments: React.FC = () => {
     return new Date(year, month - 1, day, hours, minutes).getTime();
   };
 
+  const convertToIST = (utcDateString: string) => {
+    const timeZone = "Asia/Kolkata";
+    const istDate = toZonedTime(utcDateString, timeZone);
+    const localDate = format(istDate, "dd-MM-yyyy", { timeZone });
+    const localTime = format(istDate, "hh:mm a", { timeZone });
+    return {
+      localDate,
+      localTime
+    }
+  };
+
   const fetchAppointments = async (page: number, limit: number) => {   
     const response = await getAppointments(page, limit);    
     if (response.status) {
-      setAppointments(response.data.appointments);
+       const appointments = response.data.appointments.map((appointments: IBookedAppointmentType) => {
+        const { localDate, localTime } = convertToIST(appointments.date);
+        return {
+          ...appointments,
+          date: localDate,
+          time: localTime
+        };
+      })
+      setAppointments(appointments);
       setTotalDocs(response.data.totalDocs)
     }
   }

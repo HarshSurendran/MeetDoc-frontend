@@ -24,6 +24,7 @@ import { AppDispatch, RootState } from '@/redux/store/appStore';
 import toast from 'react-hot-toast';
 import { setAppointmentId } from '@/redux/slices/doctorSlice';
 import Pagination from './Pagination';
+import { format , toZonedTime } from 'date-fns-tz';
 
 
 
@@ -56,26 +57,55 @@ const AppointmentManagement: React.FC<IAppointmentListProps> = ({
     return new Date(year, month - 1, day, hours, minutes).getTime();
   };
 
+  const convertToIST = (utcDateString: string) => {
+    const timeZone = "Asia/Kolkata";
+    const istDate = toZonedTime(utcDateString, timeZone);
+    const localDate = format(istDate, "dd-MM-yyyy", { timeZone });
+    const localTime = format(istDate, "hh:mm a", { timeZone });
+    return {
+      localDate,
+      localTime
+    }
+  };
+
   const fetchAppointments = async (page: number, limit: number) => {
     if (userType === 'patient') {
       const response = await getUserAppointments(page, limit);
-      if (response.status) {
-        setTotalDocs(response?.data?.totalDocs);
-        const sortedAppointments = response?.data?.appointments.sort((appointment1:IBookedAppointmentType, appointment2:IBookedAppointmentType) => {
+      if (response?.status) {
+        setTotalDocs(response?.data.totalDocs);
+        const sortedAppointments = response?.data.appointments.sort((appointment1:IBookedAppointmentType, appointment2:IBookedAppointmentType) => {
           const dateTimeA = convertDateTime(appointment1.date, appointment1.time);
           const dateTimeB = convertDateTime(appointment2.date, appointment2.time);
           return dateTimeB - dateTimeA;
         });
-        console.log(sortedAppointments, "sortedAppointments")
+        const sortedAppointments1 = sortedAppointments.map((appointments: IBookedAppointmentType) => {
+          const { localDate, localTime } = convertToIST(appointments.date);
+          console.log("local dAte and time", localDate, localTime);
+          return {
+            ...appointments,
+            date: localDate,
+            time: localTime
+          };
+        })
+        console.log(sortedAppointments1, "sortedAppointments1");
         
-        setAppointments(sortedAppointments);
+        setAppointments(sortedAppointments1);
       }
       return;
     }
     const response = await getUpcomingAppointments(page, limit);    
     if (response.status) {
       console.log(response.data.appointments, "appointments");
-      setAppointments(response.data.appointments);
+      const appointments = response.data.appointments.map((appointments: IBookedAppointmentType) => {
+        const { localDate, localTime } = convertToIST(appointments.date);
+        console.log("local dAte and time", localDate, localTime);
+        return {
+          ...appointments,
+          date: localDate,
+          time: localTime
+        };
+      })
+      setAppointments(appointments);
       setTotalDocs(response.data.totalDocs);
     }
   }
@@ -100,7 +130,7 @@ const AppointmentManagement: React.FC<IAppointmentListProps> = ({
     // const now = new Date();
     // const diffInMinutes = (appointmentTime- now.getTime()) / (1000 * 60);
     // return diffInMinutes <= 15 && diffInMinutes >= -appointment.duration;
-    console.log(appointment);
+    // console.log(appointment);
     return true
   };
 
