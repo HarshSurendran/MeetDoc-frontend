@@ -8,7 +8,8 @@ import { useState } from "react";
 
 const SubscriptionPaymentForm: React.FC<{    
     onBack: () => void;
-  }> = ({ onBack }) => {
+    price: number
+  }> = ({ onBack, price}) => {
     const stripe = useStripe();
     const elements = useElements();
     const [isLoading, setIsLoading] = useState(false);
@@ -17,25 +18,20 @@ const SubscriptionPaymentForm: React.FC<{
     
     const handleSubmit = async (e: React.FormEvent) => {
       e.preventDefault();
-      
       if (!stripe || !elements) {
         return;
       }
-  
       setIsLoading(true);
       setPaymentError(null);
-  
       const { error } = await stripe.confirmPayment({
         elements,
         confirmParams: {
           return_url: `${window.location.origin}/dashboard`,
         },
       });
-  
       if (error) {
         setPaymentError(error.message ?? 'An error occurred with your payment');
       }
-      
       setIsLoading(false);
     };
   
@@ -51,8 +47,7 @@ const SubscriptionPaymentForm: React.FC<{
             Back
           </Button>
   
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Payment Form Section */}
+          <div className="grid grid-cols-1 ">
             <div className="md:col-span-2">
               <Card>
                 <CardHeader>
@@ -87,7 +82,7 @@ const SubscriptionPaymentForm: React.FC<{
                       ) : (
                         <span className="flex items-center">
                           <CreditCard className="mr-2 h-4 w-4" />
-                          Pay ₹ 1000
+                          Pay ₹ {price}
                         </span>
                       )}
                     </Button>
@@ -99,61 +94,6 @@ const SubscriptionPaymentForm: React.FC<{
                   </div>
                 </CardContent>
               </Card>
-            </div>
-  
-            {/* Order Summary Section */}
-            <div className="md:col-span-1">
-              {/* <Card>
-                <CardHeader>
-                  <CardTitle>Appointment Summary</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div>
-                    <h4 className="font-medium text-gray-700">Doctor</h4>
-                    <p className="text-sm text-gray-600">Dr. {appointmentDetails.doctorName}</p>
-                    <p className="text-sm text-gray-500">{appointmentDetails.specialisation}</p>
-                  </div>
-
-                  
-  
-                  <div>
-                    <h4 className="font-medium text-gray-700">Date & Time</h4>
-                    <p className="text-sm text-gray-600">
-                      {format(appointmentDetails.appointmentDate, 'MMMM d, yyyy')}
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      {format(appointmentDetails.startTime, 'h:mm a')} - {format(appointmentDetails.endTime, 'h:mm a')}
-                    </p>
-                  </div>
-  
-                  <Separator />
-  
-                  <div className="pt-2">
-                    <div className="flex justify-between items-center font-medium">
-                      <span>Consultation Fee</span>
-                      <span>₹{appointmentDetails.fee}</span>
-                    </div>
-                  </div>
-  
-                 
-                  <div className="mt-6 bg-blue-50 p-4 rounded-lg">
-                    <h4 className="font-medium text-blue-800 mb-2">What's Included</h4>
-                    <ul className="space-y-2">
-                      {[
-                        'Video consultation',
-                        'Digital prescription',
-                        'Follow-up messages',
-                        '24/7 support'
-                      ].map((benefit, index) => (
-                        <li key={index} className="flex items-center text-sm text-blue-700">
-                          <CheckCircle className="h-4 w-4 mr-2 text-blue-600" />
-                          {benefit}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </CardContent>
-              </Card> */}
             </div>
           </div>
         </div>

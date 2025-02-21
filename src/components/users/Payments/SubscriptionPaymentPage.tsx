@@ -11,6 +11,7 @@ import SubscriptionPaymentForm from './SubscriptionPaymentForm';
 import { ISubscriptionScheme } from '@/types';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store/appStore';
+import LoadingAnimation from '@/Pages/LoadingAnimation';
 
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PKEY);
@@ -35,7 +36,6 @@ const SubscriptionPaymentPage: React.FC = () => {
         try {
             const response = await getSubscriptionDetails(sub);
             if (response.status) {
-                console.log("Fot subscriptionDetails", response.data);
                 setSubscription(response.data.scheme)
             } else {
                 toast.error('Error fetching subscription details.');
@@ -84,9 +84,10 @@ const SubscriptionPaymentPage: React.FC = () => {
 
     return (
         <>
-            {clientSecret.length == 0 ? <p>Loading</p> : <Elements stripe={stripePromise} options={options}>
+            {clientSecret.length == 0 ? <LoadingAnimation /> : <Elements stripe={stripePromise} options={options}>
                 <SubscriptionPaymentForm
                     onBack={onBack}
+                    price={subscription?.price||1000}
                 />
             </Elements >}
         </>

@@ -153,7 +153,7 @@ const UserDashboardLayout = () => {
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="pl-1 relative h-10 w-16 rounded-full focus-visible:ring-0 hover:bg-white">
                   <img
-                    src={user.photo || "defaultprofilephoto.png"}
+                    src={user.photo || "defaultprofilephoto.jpg"}
                     alt="User"
                     className="rounded-full"
                   />

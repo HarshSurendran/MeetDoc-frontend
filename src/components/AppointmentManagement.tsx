@@ -66,6 +66,7 @@ const AppointmentManagement: React.FC<IAppointmentListProps> = ({
           const dateTimeB = convertDateTime(appointment2.date, appointment2.time);
           return dateTimeB - dateTimeA;
         });
+        console.log(sortedAppointments, "sortedAppointments")
         
         setAppointments(sortedAppointments);
       }
@@ -73,6 +74,7 @@ const AppointmentManagement: React.FC<IAppointmentListProps> = ({
     }
     const response = await getUpcomingAppointments(page, limit);    
     if (response.status) {
+      console.log(response.data.appointments, "appointments");
       setAppointments(response.data.appointments);
       setTotalDocs(response.data.totalDocs);
     }

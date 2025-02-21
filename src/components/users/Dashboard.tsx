@@ -2,13 +2,16 @@ import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 import { Calendar, CreditCard, FileText } from 'lucide-react'
 import errorHandler from '@/utils/errorHandler';
-import { getLastPayment, getSubscriptionDetails, getUpcomingAppointments } from '@/services/user/user';
+import { getLastPayment, getSubscriptionDetails, getUpcomingAppointments, getUserData } from '@/services/user/user';
 import { format, parseISO} from 'date-fns';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/redux/store/appStore';
 import PremiumSubscription from './PremiumSubscription';
 import { DashboardAppointmentData } from '@/types';
 import UpcomingAppointments from './UpcomingAppointments';
+import { useSearchParams } from 'react-router-dom';
+import { addSubscriptionDetails} from '@/redux/slices/userSlice';
+import toast from 'react-hot-toast';
 
 const Dashboard = () => {
   const [lastPayment, setLastPayment] = useState<{ price: string, date: string }>({
@@ -24,21 +27,48 @@ const Dashboard = () => {
     discount: 0,
   });
   const [detailedAppointments, setDetailedAppointments] = useState<DashboardAppointmentData[]>([]);
+  const [searchParams] = useSearchParams();
+  const hasPaymentIntent = searchParams.has('payment_intent');
+  const paymentStatus = searchParams.get('redirect_status');
+  const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.user.user);
+  
 
   useEffect(() => {
     fetchData();
-  }, []);
+    if (hasPaymentIntent) {
+      console.log("Entered has payment intent fetching user");
+      getUser();
+      if(paymentStatus === 'succeeded') {
+        toast.success('Congrats! Payment successful.');
+      }
+    }
+  }, [searchParams]);
+
+  useEffect(() => {
+    if (user.isSubscribed) {
+      getSubscription(user.subscriptionId);
+    }
+  }, [user]);
+
+  const getUser = async () => {
+    try {
+      const response = await getUserData(user._id);
+      if (response.status) {
+        console.log("recieved user updating subscription details in store")
+        dispatch(addSubscriptionDetails(response.data));
+      }
+    } catch (error) {
+      errorHandler(error);
+    }
+  }
 
   const fetchData = async () => {
     await getPaymentData();
     await getAppointmentData();
-    if (user.isSubscribed) {
-      await getSubscription(user.subscriptionId);
-    }
   }
 
-  const getAppointmentData = async () => {
+  const getAppointmentData = async () => {  
     try {
       const response = await getUpcomingAppointments();
       if (response.status) {
@@ -62,12 +92,13 @@ const Dashboard = () => {
   const getPaymentData = async () => {
     try {
       const response = await getLastPayment();
-      if(response.status){
-        setLastPayment({ price: response.data.lastPayment.amount, date: format(parseISO(response.data.lastPayment.bookingTime), "dd MMM yyyy") });
+      if (response.status) {
+        console.log("last payument", response.data);
+        setLastPayment({ price: response.data?.lastPayment?.amount, date: format(parseISO(response.data.lastPayment?.bookingTime), "dd MMM yyyy") });
       }
 
     } catch (error) {
-      errorHandler(error);
+      console.log(error);
     }
   }
 

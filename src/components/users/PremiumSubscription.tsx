@@ -33,7 +33,7 @@ const PremiumSubscription = () => {
   const navigate = useNavigate();
   const handleSubscribe = (scheme: ISubscriptionScheme) => {     
     if (userId) {
-      navigate(`subscriptionpayment/${scheme._id}`)
+      navigate(`/subscriptionpayment/${scheme._id}`)
     } else {
       navigate('/login')
     }

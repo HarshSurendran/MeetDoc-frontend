@@ -69,8 +69,12 @@ const userSlice = createSlice({
       };
       state.isAuthenticated = false;
     },
+    addSubscriptionDetails: (state, action) => {
+      state.user.isSubscribed = action.payload.isSubscribed;
+      state.user.subscriptionId = action.payload.subscriptionId;
+    },
   },
 });
 
-export const { addUser, toggleAuthentication, resetUser, addPhoto } = userSlice.actions;
+export const { addUser, toggleAuthentication, resetUser, addPhoto, addSubscriptionDetails } = userSlice.actions;
 export default userSlice.reducer;
