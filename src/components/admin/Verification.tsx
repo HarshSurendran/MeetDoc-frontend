@@ -1,10 +1,11 @@
-import { Card } from '@mui/material';
+
 import React, { useEffect, useState } from 'react';
 import { FormData } from '../../types/doctorTypes';
 import { getVerificationRequests, getVerifiedDoctors } from '@/services/admin/admin';
 import errorHandler from '@/utils/errorHandler';
 import { useNavigate } from 'react-router-dom';
 import Pagination from '../Pagination';
+import { Card } from '../ui/card';
 
 const Verification = () => {
   const [pendingRequests, setpendingRequests] = React.useState<FormData[]>([]);

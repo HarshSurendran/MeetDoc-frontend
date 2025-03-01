@@ -1,5 +1,4 @@
 import { Route, Routes } from "react-router-dom";
-import AdminLoginPage from "../Pages/admin/AdminLoginPage";
 import PrivateRoute from "../hocs/admins/PrivateRoute"
 import PublicRoute from "../hocs/admins/PublicRoute";
 import AdminLayout from "../Pages/admin/AdminLayout";
@@ -10,11 +9,12 @@ import DoctorVerificationPage from "@/Pages/admin/DoctorVerificationPage";
 import Verification from "@/components/admin/Verification";
 import AdminErrorPage from "@/Pages/admin/AdminErrorPage";
 import SubscriptionManagement from "@/components/admin/SubscriptionManagement";
+import AdminLogin from "@/Pages/admin/AdminLogin";
 
 const AdminRouter = () => {
   return (
     <Routes>
-      <Route path="/login" element={<PublicRoute component={AdminLoginPage} />} />
+      <Route path="/login" element={<PublicRoute component={AdminLogin} />} />
       <Route element={<PrivateRoute component={AdminLayout} />} >
         <Route index path="/dashboard" element={<AdminMainContent />} /> 
         <Route path="doctors" element={<h1>Doctors</h1>} />
