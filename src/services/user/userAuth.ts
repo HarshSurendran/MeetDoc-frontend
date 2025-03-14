@@ -80,6 +80,18 @@ export const verifyOtp = async (
   }
 };
 
+export const resendOtp = async (data: {}) => {
+  try {
+    const response = await userAxiosInstance.post('/auth/resend_otp', data);
+    if (response) {
+      return response.data;
+    }    
+  } catch (error) {
+    apiErrorHandler(error);
+    return Promise.reject();
+  }
+}
+
 export const sendGoogleToken = async (
   token: CredentialResponse
 ): Promise<AxiosResponse | undefined> => {

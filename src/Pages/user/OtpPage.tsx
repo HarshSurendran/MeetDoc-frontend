@@ -7,9 +7,10 @@ import  {
 } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import errorHandler from '../../utils/errorHandler';
-import { verifyOtp } from '../../services/user/userAuth';
+import { resendOtp, verifyOtp } from '../../services/user/userAuth';
 import { useDispatch } from 'react-redux';
 import { addUser, toggleAuthentication } from '../../redux/slices/userSlice';
+import toast from 'react-hot-toast';
 
 const OtpPage = () => {
   const [otp, setOtp] = useState<string[]>(new Array(6).fill(''));
@@ -148,10 +149,23 @@ const OtpPage = () => {
     }
   };
 
-  const handleResend = () => {
+  const handleResend = async () => {
     if (!isActive) {
       console.log('Resending OTP');
       startTimer();
+    }
+    try {
+      formData.role = 'user';
+      const response = await resendOtp(formData);
+      if (response.status) {
+        toast.success('OTP resent successfully');
+      } else {
+        toast.error('Failed to resend OTP');
+      }
+      
+    } catch (error) {
+      setError('Failed to resend OTP');
+      errorHandler(error);
     }
   };
 
