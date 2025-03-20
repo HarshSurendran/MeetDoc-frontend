@@ -104,6 +104,17 @@ export const updateSlot = async (slotId: string, body: Partial<ISlot>) => {
   }
 };
 
+export const checkSlotStatus = async (slotId: string) => {
+  try {
+    const response = await userAxiosInstance.get(`users/slots/status/${slotId}`);
+    if (response) {
+      return response.data;
+    }
+  } catch (error) {
+    apiErrorHandler(error);
+  }
+}
+
 export const createPaymentIntent = async (
   slotId: string,
   userId: string,

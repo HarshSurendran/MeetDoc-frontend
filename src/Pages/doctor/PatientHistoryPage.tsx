@@ -37,7 +37,7 @@ const MedicalHistory: React.FC = () => {
             const response = await getMedicalHistory(userId);
             if (response.status) {
               console.log("medical history", response.data);
-              setPrescriptions(response.data.medicalHistory);
+              setPrescriptions(response.data.medicalHistory?.prescriptions);
             }
         } catch (error) {
             errorHandler(error)

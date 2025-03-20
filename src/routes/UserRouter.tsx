@@ -41,7 +41,7 @@ const UserRouter = () => {
         <Route path="/doctordetail/:id" element={<PrivateRoute component={DoctorDetailPage} />} />
         <Route path='/users/doctors' element={<PrivateRoute component={AllDoctorsPage} />} />
         <Route path="/users/payment" element={<PaymentRoute component={PaymentPage} />} />
-        <Route path="/payment-success" element={<PaymentSuccessPage />} />
+        <Route path="/payment-success" element={<PrivateRoute component={PaymentSuccessPage}/> } />
         <Route path="/subscriptionpayment/:subId" element={<SubscriptionPaymentPage />} />
         
         <Route element={<PrivateRoute component={UserDashboardLayout} />}>

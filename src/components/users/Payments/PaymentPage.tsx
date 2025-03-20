@@ -4,13 +4,14 @@ import {
   Elements,
 } from '@stripe/react-stripe-js';
 import PaymentForm from './PaymentForm';
-import { createPaymentIntent, updateSlot } from '@/services/user/user';
+import { checkSlotStatus, createPaymentIntent, updateSlot } from '@/services/user/user';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/redux/store/appStore';
 import errorHandler from '@/utils/errorHandler';
 import { useNavigate } from 'react-router-dom';
 import { resetPayment} from '@/redux/slices/paymentSlice';
 import LoadingAnimation from '@/Pages/LoadingAnimation';
+import toast from 'react-hot-toast';
 
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PKEY);
@@ -24,9 +25,27 @@ const PaymentPage: React.FC = () => {
     
 
     useEffect(() => {
+        checkSlotAvailability();
         block();
         getClientSecret();
     }, []);
+
+    const checkSlotAvailability = async () => {
+        try {
+            const response = await checkSlotStatus(paymentDetails.slotId);
+            if (response.status) {
+                if (response.data.status == "Pending") {
+                    toast.error("Sorry! This slot is being booked by someone else.");
+                    navigate(-1);
+                } else if (response.data.status == "Booked") {
+                    toast.error("Sorry! This slot is already booked.");
+                    navigate(-1);
+                }
+            }
+        } catch (error) {
+            errorHandler(error);
+        }
+    }
 
     const block = async () => {
         try {

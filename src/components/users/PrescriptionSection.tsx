@@ -136,7 +136,7 @@ const PrescriptionPage: React.FC = () => {
               <CardContent>
                 <p className="text-sm text-gray-600">Patient: {prescription.prescriptionFor || prescription.patientId.name}</p>
                 <p className="text-sm text-gray-600"> Dr. {prescription.doctorId.name}</p>
-                <p className="text-sm text-gray-600">Date: {format(new Date(prescription.followUpDate), 'MMM dd, yyyy')}</p>
+                <p className="text-sm text-gray-600">Date: {format(new Date(prescription.createdAt), 'MMM dd, yyyy')}</p>
                 <p className="text-sm text-gray-600">
                   Medications: {prescription.medications.map(m => m.medicationName).join(', ')}
                 </p>
@@ -170,7 +170,7 @@ const PrescriptionPage: React.FC = () => {
                 </div>
                 <div>
                   <p className="font-semibold text-blue-700">Date</p>
-                  <p>{format(new Date(selectedPrescription.followUpDate), 'MMM dd, yyyy')}</p>
+                  <p>{format(new Date(selectedPrescription.createdAt), 'MMM dd, yyyy')}</p>
                   </div>
                   </div>
 
