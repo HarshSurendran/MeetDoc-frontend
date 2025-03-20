@@ -40,7 +40,8 @@ export const logout = async (
   userId: string
 ): Promise<AxiosResponse | undefined> => {
   try {
-    const response = await userAxiosInstance.post('/auth/logout', userId);
+    const response = await userAxiosInstance.post('/auth/logout', { _id: userId })
+  ;
     return response.data;
   } catch (error) {
     apiErrorHandler(error);
