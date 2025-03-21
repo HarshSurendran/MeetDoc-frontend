@@ -99,7 +99,7 @@ const LoginPage : React.FC = () => {
 
           {/* Google Sign In Button */}
           <div className="space-y-4 ">
-            <div className="w-full mx-auto min-w-xs">
+            <div className="w-full flex justify-center min-w-xs">
               <GoogleLoginButton />
             </div>
             
