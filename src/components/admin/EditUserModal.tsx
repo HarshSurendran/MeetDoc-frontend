@@ -43,7 +43,7 @@ const EditUserModal: React.FC<IEditUserModalProps> = ({
       setFormData((prev) => ({
         ...prev,
         [parent]: {
-          ...prev[parent],
+          ...prev[parent as keyof IUser] as object,
           [child]: value,
         },
       }));
