@@ -104,8 +104,8 @@ const SideBar: React.FC<SideBarProps> = ({ isSidebarOpen }) => {
         { name: 'Dashboard', icon: <LayoutDashboard className="h-5 w-5" />, pathName: "/admin/dashboard" },
         { name: 'Users', icon: <Users className="h-5 w-5" />, pathName: "/admin/users" },
         { name: 'Doctors', icon: <GraduationCap className="h-5 w-5" />, pathName: "/admin/verification" },
-        { name: 'Appointments', icon: <Calendar className="h-5 w-5" />, pathName: "/admin/appointments" },
-        { name: 'Revenue', icon: <IndianRupee className="h-5 w-5" />, pathName: "/admin/revenue" },
+        // { name: 'Appointments', icon: <Calendar className="h-5 w-5" />, pathName: "/admin/appointments" },
+        // { name: 'Revenue', icon: <IndianRupee className="h-5 w-5" />, pathName: "/admin/revenue" },
         { name: 'Subscription', icon: <Sparkles className="h-5 w-5" />, pathName: "/admin/subscription" },
     ];
 

@@ -92,7 +92,7 @@ const SlotGeneration = () => {
         ) : undefined;
 
       const payload = {
-        doctorId: doctor._id, // Replace with actual doctor ID
+        doctorId: doctor._id, 
         startDate: form.startDate,
         endDate: form.endDate,
         startTime: startDateTime,
@@ -100,7 +100,7 @@ const SlotGeneration = () => {
         duration: form.duration
       };
 
-      // Handle submission to your API
+      
       console.log(payload);
       const response = await generateSlots(payload);
       if (response.status) {
