@@ -21,7 +21,9 @@ const DoctorsSection = () => {
   const user = useSelector((state: RootState) => state.user.isAuthenticated);
     
   useEffect(() => {
-    fetchDoctors();
+    if (user) {
+      fetchDoctors();
+    }
   }, [])
 
   const handleClick = () => {
